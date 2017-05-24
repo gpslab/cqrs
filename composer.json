@@ -1,0 +1,25 @@
+{
+    "name": "gpslab/cqra",
+    "license": "MIT",
+    "type": "library",
+    "homepage": "https://github.com/gpslab/cqra",
+    "description": "Infrastructure for creating CQRS applications",
+    "autoload": {
+        "psr-4": {
+            "GpsLab\\Component\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GpsLab\\Component\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*",
+        "scrutinizer/ocular": "~1.3",
+        "satooshi/php-coveralls": "^1.0"
+    }
+}

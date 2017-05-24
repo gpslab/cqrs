@@ -1,2 +1,1 @@
-# cqrs
-Infrastructure for creating CQRS applications.
+# Infrastructure for creating CQRS applications.
