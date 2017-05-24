@@ -1,8 +1,8 @@
 {
-    "name": "gpslab/cqra",
+    "name": "gpslab/cqrs",
     "license": "MIT",
     "type": "library",
-    "homepage": "https://github.com/gpslab/cqra",
+    "homepage": "https://github.com/gpslab/cqrs",
     "description": "Infrastructure for creating CQRS applications",
     "autoload": {
         "psr-4": {
