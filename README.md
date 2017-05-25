@@ -8,3 +8,55 @@
 [![License](https://img.shields.io/packagist/l/gpslab/cqrs.svg?maxAge=3600)](https://github.com/gpslab/cqrs)
 
 # Infrastructure for creating CQRS applications.
+
+![CQRS base scheme](CQRS_base_scheme.jpg)
+
+## Installation
+
+Pretty simple with [Composer](http://packagist.org), run:
+
+```sh
+composer require gpslab/cqrs
+```
+
+## Command
+
+* Create command
+* Bus
+  * Handler located bus
+    * Custom bus
+* Handler
+  * Locator
+    * Direct binding locator
+    * PSR-11 Container locator
+    * Symfony container locator
+  * Create handler
+  * Switch command handler
+* Queue
+  * Memory queue
+  * Memory unique queue
+  * Predis queue
+  * Predis unique queue
+* [Middleware](https://github.com/gpslab/middleware)
+* [Payload](https://github.com/gpslab/payload)
+
+## Query
+
+* Create query
+* Dispatcher
+  * Handler located dispatcher
+  * Custom dispatcher
+* Handler
+  * Locator
+    * Direct binding locator
+    * PSR-11 Container locator
+    * Symfony container locator
+  * Create handler
+  * Switch query handler
+* [Middleware](https://github.com/gpslab/middleware)
+* [Payload](https://github.com/gpslab/payload)
+* [Doctrine specification query](https://github.com/gpslab/specification-query)
+
+## License
+
+This bundle is under the [MIT license](http://opensource.org/licenses/MIT). See the complete license in the file: LICENSE
