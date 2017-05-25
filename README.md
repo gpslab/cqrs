@@ -24,14 +24,14 @@ composer require gpslab/cqrs
 * Create command
 * Bus
   * Handler located bus
-    * Custom bus
+  * Custom bus
 * Handler
+  * Create handler
+  * Switch command handler
   * Locator
     * Direct binding locator
     * PSR-11 Container locator
     * Symfony container locator
-  * Create handler
-  * Switch command handler
 * Queue
   * Memory queue
   * Memory unique queue
@@ -47,12 +47,12 @@ composer require gpslab/cqrs
   * Handler located dispatcher
   * Custom dispatcher
 * Handler
+  * Create handler
+  * Switch query handler
   * Locator
     * Direct binding locator
     * PSR-11 Container locator
     * Symfony container locator
-  * Create handler
-  * Switch query handler
 * [Middleware](https://github.com/gpslab/middleware)
 * [Payload](https://github.com/gpslab/payload)
 * [Doctrine specification query](https://github.com/gpslab/specification-query)
