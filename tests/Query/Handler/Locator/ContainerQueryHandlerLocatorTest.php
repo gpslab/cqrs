@@ -8,7 +8,7 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\tests\Query\Handler\Locator;
+namespace GpsLab\Component\Tests\Query\Handler\Locator;
 
 use GpsLab\Component\Query\Handler\Locator\ContainerQueryHandlerLocator;
 use GpsLab\Component\Query\Handler\QueryHandler;

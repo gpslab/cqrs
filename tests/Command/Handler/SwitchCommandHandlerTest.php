@@ -8,7 +8,7 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\tests\Command\Handler;
+namespace GpsLab\Component\Tests\Command\Handler;
 
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\Handler\CreateContactHandler;

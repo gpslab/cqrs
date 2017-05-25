@@ -8,7 +8,7 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\tests\Query\Dispatcher;
+namespace GpsLab\Component\Tests\Query\Dispatcher;
 
 use GpsLab\Component\Query\Dispatcher\HandlerLocatedQueryDispatcher;
 use GpsLab\Component\Query\Query;

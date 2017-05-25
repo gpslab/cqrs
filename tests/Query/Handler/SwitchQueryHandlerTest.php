@@ -8,7 +8,7 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\tests\Query\Handler;
+namespace GpsLab\Component\Tests\Query\Handler;
 
 use GpsLab\Component\Tests\Fixture\Query\ContactByIdentity;
 use GpsLab\Component\Tests\Fixture\Query\ContactByNameQuery;
