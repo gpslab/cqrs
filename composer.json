@@ -18,7 +18,8 @@
         "php": ">=5.5.0"
     },
     "require-dev": {
-        "psr/container": "1.0.0",
+        "psr/container": "~1.0",
+        "psr/log": "~1.0",
         "symfony/dependency-injection": "~2.3|~3.0",
         "symfony/serializer": "~2.3|~3.0",
         "predis/predis": "~1.0|~1.1",
