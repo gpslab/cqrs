@@ -28,13 +28,10 @@ class MemoryCommandQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testQueue()
     {
-        $create = new CreateContact();
-        $update = new UpdateContactCommand();
-
         $queue = [
-            $create,
-            $update,
-            $create, // duplicate
+            new CreateContact(),
+            new UpdateContactCommand(),
+            new CreateContact(), // duplicate
         ];
 
         foreach ($queue as $command) {

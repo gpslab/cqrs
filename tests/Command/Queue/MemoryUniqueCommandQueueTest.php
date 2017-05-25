@@ -28,20 +28,17 @@ class MemoryUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testQueue()
     {
-        $create = new CreateContact();
-        $update = new UpdateContactCommand();
-
         $queue = [
-            $create,
-            $update,
-            $create, // duplicate
-            $update, // duplicate
-            $update, // duplicate
-            $create, // duplicate
+            new CreateContact(),
+            new UpdateContactCommand(),
+            new CreateContact(),        // duplicate
+            new UpdateContactCommand(), // duplicate
+            new UpdateContactCommand(), // duplicate
+            new CreateContact(),        // duplicate
         ];
         $expected = [
-            $create,
-            $update,
+            new CreateContact(),
+            new UpdateContactCommand(),
         ];
 
         foreach ($queue as $command) {
