@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ContainerAwareCommandHandlerLocator implements CommandHandlerLocator, ContainerAwareInterface
+class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
