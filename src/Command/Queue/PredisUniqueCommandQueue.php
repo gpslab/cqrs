@@ -13,7 +13,7 @@ namespace GpsLab\Component\Command\Queue;
 use GpsLab\Component\Command\Command;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class PredisUniqueCommandQueue implements CommandQueue
 {
@@ -26,7 +26,7 @@ class PredisUniqueCommandQueue implements CommandQueue
     private $client;
 
     /**
-     * @var Serializer
+     * @var SerializerInterface
      */
     private $serializer;
 
@@ -36,11 +36,11 @@ class PredisUniqueCommandQueue implements CommandQueue
     private $logger;
 
     /**
-     * @param Client          $client
-     * @param Serializer      $serializer
-     * @param LoggerInterface $logger
+     * @param Client              $client
+     * @param SerializerInterface $serializer
+     * @param LoggerInterface     $logger
      */
-    public function __construct(Client $client, Serializer $serializer, LoggerInterface $logger)
+    public function __construct(Client $client, SerializerInterface $serializer, LoggerInterface $logger)
     {
         $this->client = $client;
         $this->serializer = $serializer;
@@ -56,7 +56,7 @@ class PredisUniqueCommandQueue implements CommandQueue
      */
     public function push(Command $command)
     {
-        $value = $this->serializer->normalize($command, self::FORMAT);
+        $value = $this->serializer->serialize($command, self::FORMAT);
 
         // remove exists command and push it again
         $this->client->lrem(self::LIST_KEY, 0, $value);
@@ -78,7 +78,7 @@ class PredisUniqueCommandQueue implements CommandQueue
         }
 
         try {
-            return $this->serializer->denormalize($value, Command::class, self::FORMAT);
+            return $this->serializer->deserialize($value, Command::class, self::FORMAT);
         } catch (\Exception $e) {
             // it's a critical error
             // it is necessary to react quickly to it
