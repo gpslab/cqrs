@@ -72,18 +72,18 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
             ;
 
             $this->client
-                ->expects($this->at($i*2))
+                ->expects($this->at($i * 2))
                 ->method('__call')
                 ->with('lrem', ['unique_commands', 0, $value])
                 ->will($this->returnValue(1))
             ;
             $this->client
-                ->expects($this->at((($i+1)*2)-1))
+                ->expects($this->at((($i + 1) * 2) - 1))
                 ->method('__call')
                 ->with('rpush', ['unique_commands', [$value]])
                 ->will($this->returnValue(1))
             ;
-            $i++;
+            ++$i;
         }
 
         foreach ($queue as $command) {
@@ -106,7 +106,7 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
             $this->serializer
                 ->expects($this->at($i))
                 ->method('deserialize')
-                ->with($value, Command::class ,'predis')
+                ->with($value, Command::class, 'predis')
                 ->will($this->returnValue($command))
             ;
 
@@ -116,7 +116,7 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
                 ->with('lpop', ['unique_commands'])
                 ->will($this->returnValue($value))
             ;
-            $i++;
+            ++$i;
         }
         $this->client
             ->expects($this->at($i))
@@ -157,7 +157,7 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->serializer
             ->expects($this->once())
             ->method('deserialize')
-            ->with($value, Command::class ,'predis')
+            ->with($value, Command::class, 'predis')
             ->will($this->throwException($exception))
         ;
 

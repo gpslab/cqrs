@@ -74,7 +74,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
                 ->with('rpush', ['commands', [$value]])
                 ->will($this->returnValue(1))
             ;
-            $i++;
+            ++$i;
         }
 
         foreach ($queue as $command) {
@@ -97,7 +97,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
             $this->serializer
                 ->expects($this->at($i))
                 ->method('deserialize')
-                ->with($value, Command::class ,'predis')
+                ->with($value, Command::class, 'predis')
                 ->will($this->returnValue($command))
             ;
 
@@ -107,7 +107,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
                 ->with('lpop', ['commands'])
                 ->will($this->returnValue($value))
             ;
-            $i++;
+            ++$i;
         }
         $this->client
             ->expects($this->at($i))
@@ -148,7 +148,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->serializer
             ->expects($this->once())
             ->method('deserialize')
-            ->with($value, Command::class ,'predis')
+            ->with($value, Command::class, 'predis')
             ->will($this->throwException($exception))
         ;
 
