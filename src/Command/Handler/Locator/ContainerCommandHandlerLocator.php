@@ -8,11 +8,10 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Command\Locator\Handler;
+namespace GpsLab\Component\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Handler\CommandHandler;
-use GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator;
 use Psr\Container\ContainerInterface;
 
 class ContainerCommandHandlerLocator implements CommandHandlerLocator
