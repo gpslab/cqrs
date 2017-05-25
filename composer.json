@@ -18,6 +18,10 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
+        "psr/container": "1.0.0",
+        "symfony/dependency-injection": "~2.3|~3.0",
+        "symfony/serializer": "~2.3|~3.0",
+        "predis/predis": "~1.0|~1.1",
         "phpunit/phpunit": "4.8.*",
         "friendsofphp/php-cs-fixer": "~2.2",
         "scrutinizer/ocular": "~1.3",
