@@ -11,7 +11,9 @@ EOF;
 return PhpCsFixer\Config::create()
     ->setRules([
         '@Symfony' => true,
-        'array_syntax' => ['syntax' => 'short'],
+        'array_syntax' => [
+            'syntax' => 'short',
+        ],
         'header_comment' => [
             'commentType' => 'PHPDoc',
             'header' => $header,
