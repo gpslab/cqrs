@@ -3,3 +3,7 @@ imports:
 
 tools:
     external_code_coverage: true
+
+checks:
+    php:
+        duplication: false
