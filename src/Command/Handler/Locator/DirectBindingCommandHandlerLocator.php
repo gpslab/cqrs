@@ -1,9 +1,11 @@
 <?php
 
 /**
- * Carousel project.
+ * GpsLab component.
  *
- * @author Peter Gribanov <PGribanov@1tv.com>
+ * @author    Peter Gribanov <info@peter-gribanov.ru>
+ * @copyright Copyright (c) 2011, Peter Gribanov
+ * @license   http://opensource.org/licenses/MIT
  */
 
 namespace GpsLab\Component\Command\Handler\Locator;
