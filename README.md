@@ -33,6 +33,7 @@ composer require gpslab/cqrs
     * PSR-11 Container locator
     * Symfony container locator
 * Queue
+  * Custom queue
   * Memory queue
   * Memory unique queue
   * Predis queue
