@@ -4,6 +4,14 @@
     "type": "library",
     "homepage": "https://github.com/gpslab/cqrs",
     "description": "Infrastructure for creating CQRS applications",
+    "keywords": [
+        "infrastructure",
+        "cqrs",
+        "psr-3",
+        "psr-11",
+        "predis",
+        "symfony"
+    ],
     "autoload": {
         "psr-4": {
             "GpsLab\\Component\\": "src/"
