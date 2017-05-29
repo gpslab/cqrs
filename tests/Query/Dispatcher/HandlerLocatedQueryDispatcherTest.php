@@ -15,7 +15,7 @@ use GpsLab\Component\Query\Query;
 use GpsLab\Component\Query\Handler\QueryHandler;
 use GpsLab\Component\Query\Handler\Locator\QueryHandlerLocator;
 
-class HandlerLocatedCommandBusTest extends \PHPUnit_Framework_TestCase
+class HandlerLocatedQueryDispatcherTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|QueryHandlerLocator
