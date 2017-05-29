@@ -35,7 +35,7 @@ class HandlerLocatedQueryDispatcher implements QueryDispatcher
      *
      * @return mixed
      */
-    public function dispatch(Query $query)
+    public function handle(Query $query)
     {
         $handler = $this->locator->getQueryHandler($query);
 

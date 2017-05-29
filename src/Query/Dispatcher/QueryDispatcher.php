@@ -19,5 +19,5 @@ interface QueryDispatcher
      *
      * @return mixed
      */
-    public function dispatch(Query $query);
+    public function handle(Query $query);
 }

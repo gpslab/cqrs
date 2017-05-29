@@ -62,7 +62,7 @@ class HandlerLocatedCommandBusTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($data))
         ;
 
-        $this->assertEquals($data, $this->bus->dispatch($this->query));
+        $this->assertEquals($data, $this->bus->handle($this->query));
     }
 
     /**
@@ -77,6 +77,6 @@ class HandlerLocatedCommandBusTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(null))
         ;
 
-        $this->bus->dispatch($this->query);
+        $this->bus->handle($this->query);
     }
 }
