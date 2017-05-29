@@ -8,14 +8,14 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Query\Dispatcher;
+namespace GpsLab\Component\Query\Bus;
 
 use GpsLab\Component\Query\Exception\HandlerNotFoundException;
 use GpsLab\Component\Query\Handler\Locator\QueryHandlerLocator;
 use GpsLab\Component\Query\Handler\QueryHandler;
 use GpsLab\Component\Query\Query;
 
-class HandlerLocatedQueryDispatcher implements QueryDispatcher
+class HandlerLocatedQueryBus implements QueryBus
 {
     /**
      * @var QueryHandlerLocator

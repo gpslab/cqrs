@@ -8,14 +8,14 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Tests\Query\Dispatcher;
+namespace GpsLab\Component\Tests\Query\Bus;
 
-use GpsLab\Component\Query\Dispatcher\HandlerLocatedQueryDispatcher;
+use GpsLab\Component\Query\Bus\HandlerLocatedQueryBus;
 use GpsLab\Component\Query\Query;
 use GpsLab\Component\Query\Handler\QueryHandler;
 use GpsLab\Component\Query\Handler\Locator\QueryHandlerLocator;
 
-class HandlerLocatedQueryDispatcherTest extends \PHPUnit_Framework_TestCase
+class HandlerLocatedQueryBusTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|QueryHandlerLocator
@@ -33,7 +33,7 @@ class HandlerLocatedQueryDispatcherTest extends \PHPUnit_Framework_TestCase
     private $handler;
 
     /**
-     * @var HandlerLocatedQueryDispatcher
+     * @var HandlerLocatedQueryBus
      */
     private $bus;
 
@@ -42,7 +42,7 @@ class HandlerLocatedQueryDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->handler = $this->getMock(QueryHandler::class);
         $this->query = $this->getMock(Query::class);
         $this->locator = $this->getMock(QueryHandlerLocator::class);
-        $this->bus = new HandlerLocatedQueryDispatcher($this->locator);
+        $this->bus = new HandlerLocatedQueryBus($this->locator);
     }
 
     public function testDispatch()

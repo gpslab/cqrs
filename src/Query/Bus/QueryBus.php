@@ -8,11 +8,11 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Query\Dispatcher;
+namespace GpsLab\Component\Query\Bus;
 
 use GpsLab\Component\Query\Query;
 
-interface QueryDispatcher
+interface QueryBus
 {
     /**
      * @param Query $query
