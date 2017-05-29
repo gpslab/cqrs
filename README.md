@@ -44,9 +44,9 @@ composer require gpslab/cqrs
 ## Query
 
 * Create query
-* Dispatcher
-  * Handler located dispatcher
-  * Custom dispatcher
+* Bus
+  * Handler located bus
+  * Custom bus
 * Handler
   * Create handler
   * Switch query handler
