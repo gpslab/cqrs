@@ -9,7 +9,7 @@
 
 # Infrastructure for creating CQRS applications.
 
-![CQRS base scheme](CQRS_base_scheme.jpg)
+![CQRS base scheme](cqrs_schema.png)
 
 ## Installation
 
