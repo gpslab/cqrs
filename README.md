@@ -21,7 +21,7 @@ composer require gpslab/cqrs
 
 ## Command
 
-* Create command
+* [Simple usage](docs/command/simple_usage.md)
 * Bus
   * Handler located bus
   * Custom bus
@@ -43,7 +43,7 @@ composer require gpslab/cqrs
 
 ## Query
 
-* Create query
+* Simple usage
 * Bus
   * Handler located bus
   * Custom bus
