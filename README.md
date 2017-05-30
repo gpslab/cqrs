@@ -23,11 +23,9 @@ composer require gpslab/cqrs
 
 * [Simple usage](docs/command/simple_usage.md)
 * Bus
-  * Handler located bus
-  * Custom bus
 * Handler
-  * Create handler
-  * Switch command handler
+  * [Create handler](docs/command/handler.md)
+  * [Switch command handler](docs/command/switch_handler.md)
   * Locator
     * Direct binding locator
     * PSR-11 Container locator
