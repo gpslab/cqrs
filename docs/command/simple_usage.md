@@ -133,6 +133,8 @@ $command->new_name = $new_name;
 $bus->handle($command);
 ```
 
+For the asynchronous handle a command you can use `CommandQueue`.
+
 > **Note**
 >
 > To monitor the execution of commands, you can use [middleware](https://github.com/gpslab/middleware).
