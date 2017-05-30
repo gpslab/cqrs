@@ -12,16 +12,16 @@ namespace GpsLab\Component\Tests\Command\Handler;
 
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\Handler\CreateContactHandler;
-use GpsLab\Component\Tests\Fixture\Command\Handler\UpdateContactHandler;
-use GpsLab\Component\Tests\Fixture\Command\UpdateContactCommand;
+use GpsLab\Component\Tests\Fixture\Command\Handler\RenameContactHandler;
+use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 
 class SwitchCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testSwitch()
     {
-        $command = new UpdateContactCommand();
+        $command = new RenameContactCommand();
 
-        $handler = new UpdateContactHandler();
+        $handler = new RenameContactHandler();
         $handler->handle($command);
 
         $this->assertEquals($command, $handler->command());

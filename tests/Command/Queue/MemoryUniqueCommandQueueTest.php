@@ -12,7 +12,7 @@ namespace GpsLab\Component\Tests\Command\Queue;
 
 use GpsLab\Component\Command\Queue\MemoryUniqueCommandQueue;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
-use GpsLab\Component\Tests\Fixture\Command\UpdateContactCommand;
+use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 
 class MemoryUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,15 +30,15 @@ class MemoryUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
     {
         $queue = [
             new CreateContact(),
-            new UpdateContactCommand(),
+            new RenameContactCommand(),
             new CreateContact(),        // duplicate
-            new UpdateContactCommand(), // duplicate
-            new UpdateContactCommand(), // duplicate
+            new RenameContactCommand(), // duplicate
+            new RenameContactCommand(), // duplicate
             new CreateContact(),        // duplicate
         ];
         $expected = [
             new CreateContact(),
-            new UpdateContactCommand(),
+            new RenameContactCommand(),
         ];
 
         foreach ($queue as $command) {

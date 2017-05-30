@@ -12,6 +12,6 @@ namespace GpsLab\Component\Tests\Fixture\Command;
 
 use GpsLab\Component\Command\Command;
 
-class UpdateContactCommand implements Command
+class RenameContactCommand implements Command
 {
 }

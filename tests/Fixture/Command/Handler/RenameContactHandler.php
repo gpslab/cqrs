@@ -11,25 +11,25 @@
 namespace GpsLab\Component\Tests\Fixture\Command\Handler;
 
 use GpsLab\Component\Command\Handler\SwitchCommandHandler;
-use GpsLab\Component\Tests\Fixture\Command\UpdateContactCommand;
+use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 
-class UpdateContactHandler extends SwitchCommandHandler
+class RenameContactHandler extends SwitchCommandHandler
 {
     /**
-     * @var UpdateContactCommand|null
+     * @var RenameContactCommand|null
      */
     private $command;
 
     /**
-     * @param UpdateContactCommand $command
+     * @param RenameContactCommand $command
      */
-    protected function handleUpdateContact(UpdateContactCommand $command)
+    protected function handleUpdateContact(RenameContactCommand $command)
     {
         $this->command = $command;
     }
 
     /**
-     * @return UpdateContactCommand|null
+     * @return RenameContactCommand|null
      */
     public function command()
     {

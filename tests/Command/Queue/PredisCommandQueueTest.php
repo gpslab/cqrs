@@ -13,7 +13,7 @@ namespace GpsLab\Component\Tests\Command\Queue;
 use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Queue\PredisCommandQueue;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
-use GpsLab\Component\Tests\Fixture\Command\UpdateContactCommand;
+use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -52,9 +52,9 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
     public function testPushQueue()
     {
         $queue = [
-            new UpdateContactCommand(),
+            new RenameContactCommand(),
             new CreateContact(),
-            new UpdateContactCommand(), // duplicate
+            new RenameContactCommand(), // duplicate
         ];
 
         $i = 0;
@@ -85,9 +85,9 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
     public function testPopQueue()
     {
         $queue = [
-            new UpdateContactCommand(),
+            new RenameContactCommand(),
             new CreateContact(),
-            new UpdateContactCommand(), // duplicate
+            new RenameContactCommand(), // duplicate
         ];
 
         $i = 0;
@@ -129,7 +129,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
     public function testFailedDeserialize()
     {
         $exception = new \Exception('foo');
-        $command = new UpdateContactCommand();
+        $command = new RenameContactCommand();
         $value = spl_object_hash($command);
 
         $this->client
