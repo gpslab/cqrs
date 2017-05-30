@@ -89,7 +89,7 @@ To not check the type of command, you can use the switch:
 
 ```php
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\CommandHandler;
+use GpsLab\Component\Command\Handler\SwitchCommandHandler;
 use Doctrine\ORM\EntityManagerInterface;
 
 class RenameArticleHandler extends SwitchCommandHandler

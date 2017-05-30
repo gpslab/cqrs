@@ -43,7 +43,7 @@ composer require gpslab/cqrs
 
 ## Query
 
-* Simple usage
+* [Simple usage](docs/query/simple_usage.md)
 * Bus
   * Handler located bus
   * Custom bus
