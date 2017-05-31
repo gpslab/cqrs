@@ -6,4 +6,14 @@ The command bus is designed to handle commands. It's a
 You can use `HandlerLocatedCommandBus`. This bus use `CommandHandlerLocator` for search the handler for specific
 command.
 
+```php
+$locator = new DirectBindingCommandHandlerLocator();
+$bus = new HandlerLocatedCommandBus($locator);
+
+$command = new RenameArticleCommand();
+$command->new_name = $new_name;
+
+$bus->handle($command);
+```
+
 You can create custom bus implementing the interface `CommandBus`.
