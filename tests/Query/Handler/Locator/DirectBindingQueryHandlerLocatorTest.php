@@ -39,11 +39,11 @@ class DirectBindingQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator = new DirectBindingQueryHandlerLocator();
     }
 
-    public function testGetQueryHandler()
+    public function testFindHandler()
     {
         $this->locator->registerHandler(get_class($this->query), $this->handler);
 
-        $handler = $this->locator->getQueryHandler($this->query);
+        $handler = $this->locator->findHandler($this->query);
         $this->assertEquals($this->handler, $handler);
     }
 
@@ -51,7 +51,7 @@ class DirectBindingQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->locator->registerHandler('foo', $this->handler);
 
-        $handler = $this->locator->getQueryHandler($this->query);
+        $handler = $this->locator->findHandler($this->query);
         $this->assertNull($handler);
     }
 }

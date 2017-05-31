@@ -46,7 +46,7 @@ class ContainerQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator = new ContainerQueryHandlerLocator($this->container);
     }
 
-    public function testGetQueryHandler()
+    public function testFindHandler()
     {
         $service = 'foo';
 
@@ -59,11 +59,11 @@ class ContainerQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         $this->locator->registerService(get_class($this->query), $service);
 
-        $handler = $this->locator->getQueryHandler($this->query);
+        $handler = $this->locator->findHandler($this->query);
         $this->assertEquals($this->handler, $handler);
 
         // double call ContainerInterface::get()
-        $handler = $this->locator->getQueryHandler($this->query);
+        $handler = $this->locator->findHandler($this->query);
         $this->assertEquals($this->handler, $handler);
     }
 
@@ -80,7 +80,7 @@ class ContainerQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         $this->locator->registerService(get_class($this->query), $service);
 
-        $handler = $this->locator->getQueryHandler($this->query);
+        $handler = $this->locator->findHandler($this->query);
         $this->assertNull($handler);
     }
 
@@ -97,7 +97,7 @@ class ContainerQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         $this->locator->registerService(get_class($this->query), $service);
 
-        $handler = $this->locator->getQueryHandler($this->query);
+        $handler = $this->locator->findHandler($this->query);
         $this->assertNull($handler);
     }
 }

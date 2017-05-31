@@ -37,7 +37,7 @@ class HandlerLocatedQueryBus implements QueryBus
      */
     public function handle(Query $query)
     {
-        $handler = $this->locator->getQueryHandler($query);
+        $handler = $this->locator->findHandler($query);
 
         if (!($handler instanceof QueryHandler)) {
             throw HandlerNotFoundException::notFound($query);

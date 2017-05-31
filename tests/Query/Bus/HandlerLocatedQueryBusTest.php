@@ -49,7 +49,7 @@ class HandlerLocatedQueryBusTest extends \PHPUnit_Framework_TestCase
     {
         $this->locator
             ->expects($this->once())
-            ->method('getQueryHandler')
+            ->method('findHandler')
             ->with($this->query)
             ->will($this->returnValue($this->handler))
         ;
@@ -72,7 +72,7 @@ class HandlerLocatedQueryBusTest extends \PHPUnit_Framework_TestCase
     {
         $this->locator
             ->expects($this->once())
-            ->method('getQueryHandler')
+            ->method('findHandler')
             ->with($this->query)
             ->will($this->returnValue(null))
         ;

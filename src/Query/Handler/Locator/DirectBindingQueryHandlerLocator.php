@@ -36,7 +36,7 @@ class DirectBindingQueryHandlerLocator implements QueryHandlerLocator
      *
      * @return QueryHandler|null
      */
-    public function getQueryHandler(Query $query)
+    public function findHandler(Query $query)
     {
         $query_name = get_class($query);
 

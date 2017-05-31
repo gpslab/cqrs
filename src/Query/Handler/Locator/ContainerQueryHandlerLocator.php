@@ -39,7 +39,7 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
      *
      * @return QueryHandler|null
      */
-    public function getQueryHandler(Query $query)
+    public function findHandler(Query $query)
     {
         return $this->lazyLoad(get_class($query));
     }
