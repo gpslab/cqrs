@@ -1,4 +1,5 @@
-# Switch command handler
+Switch command handler
+======================
 
 Handler rename article command. For example we use [Doctrine ORM](https://github.com/doctrine/doctrine2).
 

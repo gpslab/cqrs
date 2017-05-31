@@ -1,4 +1,5 @@
-# Simple usage commands
+Simple usage commands
+=====================
 
 Commands, in the [CQRS](https://martinfowler.com/bliki/CQRS.html) approach, are designed to change the data in the
 application.

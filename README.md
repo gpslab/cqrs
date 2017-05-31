@@ -22,7 +22,7 @@ composer require gpslab/cqrs
 ## Command
 
 * [Simple usage](docs/command/simple_usage.md)
-* Bus
+* [Bus](docs/command/command_bus.md)
 * Handler
   * [Create handler](docs/command/handler.md)
   * [Switch command handler](docs/command/switch_handler.md)

@@ -1,4 +1,5 @@
-# Command handler
+Command handler
+===============
 
 Handler rename article command. For example we use [Doctrine ORM](https://github.com/doctrine/doctrine2).
 
@@ -65,6 +66,41 @@ class RegisterUserHandler implements CommandHandler
 
             // save new user
             $this->em->persist($user);
+        }
+    }
+}
+```
+
+You can handle many commands in one handler.
+
+```php
+```php
+use GpsLab\Component\Command\Command;
+use GpsLab\Component\Command\Handler\CommandHandler;
+use Doctrine\ORM\EntityManagerInterface;
+
+class ArticleHandler implements CommandHandler
+{
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
+    public function handle(Command $command)
+    {
+        switch (get_class($command)) {
+            case RenameArticleCommand::class:
+                // get article by id
+                $article = $this->em->getRepository(Article::class)->find($command->article_id);
+                $article->rename($command->new_name);
+                break;
+            case PublishArticleCommand::class:
+                // get article by id
+                $article = $this->em->getRepository(Article::class)->find($command->article_id);
+                $article->publish();
+                break;
         }
     }
 }
