@@ -46,7 +46,7 @@ class ContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator = new ContainerCommandHandlerLocator($this->container);
     }
 
-    public function testGetCommandHandler()
+    public function testFindHandler()
     {
         $service = 'foo';
 
@@ -59,11 +59,11 @@ class ContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         $this->locator->registerService(get_class($this->command), $service);
 
-        $handler = $this->locator->getCommandHandler($this->command);
+        $handler = $this->locator->findHandler($this->command);
         $this->assertEquals($this->handler, $handler);
 
         // double call ContainerInterface::get()
-        $handler = $this->locator->getCommandHandler($this->command);
+        $handler = $this->locator->findHandler($this->command);
         $this->assertEquals($this->handler, $handler);
     }
 
@@ -80,7 +80,7 @@ class ContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         $this->locator->registerService(get_class($this->command), $service);
 
-        $handler = $this->locator->getCommandHandler($this->command);
+        $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
     }
 
@@ -97,7 +97,7 @@ class ContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         $this->locator->registerService(get_class($this->command), $service);
 
-        $handler = $this->locator->getCommandHandler($this->command);
+        $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
     }
 }

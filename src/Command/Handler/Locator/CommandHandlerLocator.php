@@ -20,5 +20,5 @@ interface CommandHandlerLocator
      *
      * @return CommandHandler|null
      */
-    public function getCommandHandler(Command $command);
+    public function findHandler(Command $command);
 }

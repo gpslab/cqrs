@@ -30,7 +30,7 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
      *
      * @return CommandHandler|null
      */
-    public function getCommandHandler(Command $command)
+    public function findHandler(Command $command)
     {
         return $this->lazyLoad(get_class($command));
     }

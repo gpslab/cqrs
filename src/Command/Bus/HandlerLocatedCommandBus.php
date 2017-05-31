@@ -35,7 +35,7 @@ class HandlerLocatedCommandBus implements CommandBus
      */
     public function handle(Command $command)
     {
-        $handler = $this->locator->getCommandHandler($command);
+        $handler = $this->locator->findHandler($command);
 
         if (!($handler instanceof CommandHandler)) {
             throw HandlerNotFoundException::notFound($command);

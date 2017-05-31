@@ -36,7 +36,7 @@ class DirectBindingCommandHandlerLocator implements CommandHandlerLocator
      *
      * @return CommandHandler|null
      */
-    public function getCommandHandler(Command $command)
+    public function findHandler(Command $command)
     {
         $command_name = get_class($command);
 

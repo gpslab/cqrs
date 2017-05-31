@@ -46,7 +46,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestC
         $this->locator = new SymfonyContainerCommandHandlerLocator();
     }
 
-    public function testGetCommandHandler()
+    public function testFindHandler()
     {
         $this->locator->setContainer($this->container);
         $service = 'foo';
@@ -60,11 +60,11 @@ class SymfonyContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestC
 
         $this->locator->registerService(get_class($this->command), $service);
 
-        $handler = $this->locator->getCommandHandler($this->command);
+        $handler = $this->locator->findHandler($this->command);
         $this->assertEquals($this->handler, $handler);
 
         // double call ContainerInterface::get()
-        $handler = $this->locator->getCommandHandler($this->command);
+        $handler = $this->locator->findHandler($this->command);
         $this->assertEquals($this->handler, $handler);
     }
 
@@ -82,7 +82,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestC
 
         $this->locator->registerService(get_class($this->command), $service);
 
-        $handler = $this->locator->getCommandHandler($this->command);
+        $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
     }
 
@@ -100,7 +100,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestC
 
         $this->locator->registerService(get_class($this->command), $service);
 
-        $handler = $this->locator->getCommandHandler($this->command);
+        $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
     }
 
@@ -110,7 +110,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestC
 
         $this->locator->registerService(get_class($this->command), $service);
 
-        $handler = $this->locator->getCommandHandler($this->command);
+        $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
     }
 }

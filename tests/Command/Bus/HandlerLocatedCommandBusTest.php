@@ -49,7 +49,7 @@ class HandlerLocatedCommandBusTest extends \PHPUnit_Framework_TestCase
     {
         $this->locator
             ->expects($this->once())
-            ->method('getCommandHandler')
+            ->method('findHandler')
             ->with($this->command)
             ->will($this->returnValue($this->handler))
         ;
@@ -70,7 +70,7 @@ class HandlerLocatedCommandBusTest extends \PHPUnit_Framework_TestCase
     {
         $this->locator
             ->expects($this->once())
-            ->method('getCommandHandler')
+            ->method('findHandler')
             ->with($this->command)
             ->will($this->returnValue(null))
         ;

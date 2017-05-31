@@ -39,11 +39,11 @@ class DirectBindingCommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator = new DirectBindingCommandHandlerLocator();
     }
 
-    public function testGetCommandHandler()
+    public function testFindHandler()
     {
         $this->locator->registerHandler(get_class($this->command), $this->handler);
 
-        $handler = $this->locator->getCommandHandler($this->command);
+        $handler = $this->locator->findHandler($this->command);
         $this->assertEquals($this->handler, $handler);
     }
 
@@ -51,7 +51,7 @@ class DirectBindingCommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->locator->registerHandler('foo', $this->handler);
 
-        $handler = $this->locator->getCommandHandler($this->command);
+        $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
     }
 }
