@@ -23,7 +23,7 @@ class RenameContactHandler extends SwitchCommandHandler
     /**
      * @param RenameContactCommand $command
      */
-    protected function handleUpdateContact(RenameContactCommand $command)
+    protected function handleRenameContact(RenameContactCommand $command)
     {
         $this->command = $command;
     }
