@@ -21,7 +21,7 @@ trait SwitchQueryHandlerTrait
      */
     public function handle(Query $query)
     {
-        return call_user_func([$this, $this->getHandleMethod($query)], $query);
+        return call_user_func([$this, $this->makeHandleMethodName($query)], $query);
     }
 
     /**
@@ -29,7 +29,7 @@ trait SwitchQueryHandlerTrait
      *
      * @return string
      */
-    private function getHandleMethod(Query $query)
+    private function makeHandleMethodName(Query $query)
     {
         $class = get_class($query);
 

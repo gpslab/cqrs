@@ -19,7 +19,7 @@ trait SwitchCommandHandlerTrait
      */
     public function handle(Command $command)
     {
-        call_user_func([$this, $this->getHandleMethod($command)], $command);
+        call_user_func([$this, $this->makeHandleMethodName($command)], $command);
     }
 
     /**
@@ -27,7 +27,7 @@ trait SwitchCommandHandlerTrait
      *
      * @return string
      */
-    private function getHandleMethod(Command $command)
+    private function makeHandleMethodName(Command $command)
     {
         $class = get_class($command);
 
