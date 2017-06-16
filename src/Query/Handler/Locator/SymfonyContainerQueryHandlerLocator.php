@@ -20,7 +20,7 @@ class SymfonyContainerQueryHandlerLocator implements QueryHandlerLocator, Contai
     use ContainerAwareTrait;
 
     /**
-     * @var string[]
+     * @var array
      */
     private $query_handler_ids = [];
 
@@ -37,10 +37,11 @@ class SymfonyContainerQueryHandlerLocator implements QueryHandlerLocator, Contai
     /**
      * @param string $query_name
      * @param string $service
+     * @param string $method
      */
-    public function registerService($query_name, $service)
+    public function registerService($query_name, $service, $method = '__invoke')
     {
-        $this->query_handler_ids[$query_name] = $service;
+        $this->query_handler_ids[$query_name] = [$service, $method];
     }
 
     /**
@@ -51,10 +52,13 @@ class SymfonyContainerQueryHandlerLocator implements QueryHandlerLocator, Contai
     private function lazyLoad($query_name)
     {
         if ($this->container instanceof ContainerInterface && isset($this->query_handler_ids[$query_name])) {
-            $handler = $this->container->get($this->query_handler_ids[$query_name]);
+            list($service, $method) = $this->query_handler_ids[$query_name];
+            $handler = $this->container->get($service);
 
             if (is_callable($handler)) {
                 return $handler;
+            } elseif (is_callable([$handler, $method])) {
+                return [$handler, $method];
             }
         }
 

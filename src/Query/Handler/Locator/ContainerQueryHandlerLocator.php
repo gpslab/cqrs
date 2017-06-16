@@ -21,7 +21,7 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
     private $container;
 
     /**
-     * @var string[]
+     * @var array
      */
     private $query_handler_ids = [];
 
@@ -46,10 +46,11 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
     /**
      * @param string $query_name
      * @param string $service
+     * @param string $method
      */
-    public function registerService($query_name, $service)
+    public function registerService($query_name, $service, $method = '__invoke')
     {
-        $this->query_handler_ids[$query_name] = $service;
+        $this->query_handler_ids[$query_name] = [$service, $method];
     }
 
     /**
@@ -60,10 +61,13 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
     private function lazyLoad($query_name)
     {
         if (isset($this->query_handler_ids[$query_name])) {
-            $handler = $this->container->get($this->query_handler_ids[$query_name]);
+            list($service, $method) = $this->query_handler_ids[$query_name];
+            $handler = $this->container->get($service);
 
             if (is_callable($handler)) {
                 return $handler;
+            } elseif (is_callable([$handler, $method])) {
+                return [$handler, $method];
             }
         }
 

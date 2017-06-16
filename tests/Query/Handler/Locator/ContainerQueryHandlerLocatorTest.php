@@ -12,6 +12,8 @@ namespace GpsLab\Component\Tests\Query\Handler\Locator;
 
 use GpsLab\Component\Query\Handler\Locator\ContainerQueryHandlerLocator;
 use GpsLab\Component\Query\Query;
+use GpsLab\Component\Tests\Fixture\Query\ContactByIdentity;
+use GpsLab\Component\Tests\Fixture\Query\Handler\ContactByIdentityHandler;
 use Psr\Container\ContainerInterface;
 
 class ContainerQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
@@ -66,6 +68,34 @@ class ContainerQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($this->query);
         $this->assertEquals($this->handler, $handler);
+    }
+
+    public function testFindHandlerServiceInvoke()
+    {
+        $service = 'foo';
+        $query = new ContactByIdentity();
+        $handler_obj = new ContactByIdentityHandler();
+        $method = 'handleContactByIdentity';
+
+        $this->container
+            ->expects($this->exactly(2))
+            ->method('get')
+            ->with($service)
+            ->will($this->returnValue($handler_obj))
+        ;
+
+        $this->locator->registerService(ContactByIdentity::class, $service, $method);
+
+        $handler = $this->locator->findHandler($query);
+        $this->assertEquals([$handler_obj, $method], $handler);
+
+        // double call ContainerInterface::get()
+        $handler = $this->locator->findHandler($query);
+        $this->assertEquals([$handler_obj, $method], $handler);
+
+        // test exec handler
+        call_user_func($handler, $query);
+        $this->assertEquals($query, $handler_obj->query());
     }
 
     public function testNoQueryHandler()
