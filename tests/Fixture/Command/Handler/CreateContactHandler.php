@@ -10,10 +10,9 @@
 
 namespace GpsLab\Component\Tests\Fixture\Command\Handler;
 
-use GpsLab\Component\Command\Handler\SwitchCommandHandler;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 
-class CreateContactHandler extends SwitchCommandHandler
+class CreateContactHandler
 {
     /**
      * @var CreateContact|null
@@ -23,7 +22,7 @@ class CreateContactHandler extends SwitchCommandHandler
     /**
      * @param CreateContact $command
      */
-    protected function handleCreateContact(CreateContact $command)
+    public function handleCreateContact(CreateContact $command)
     {
         $this->command = $command;
     }

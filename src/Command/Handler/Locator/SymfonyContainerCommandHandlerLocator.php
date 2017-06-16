@@ -20,7 +20,7 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
     use ContainerAwareTrait;
 
     /**
-     * @var string[]
+     * @var array
      */
     private $command_handler_ids = [];
 
@@ -37,10 +37,11 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
     /**
      * @param string $command_name
      * @param string $service
+     * @param string $method
      */
-    public function registerService($command_name, $service)
+    public function registerService($command_name, $service, $method = '__invoke')
     {
-        $this->command_handler_ids[$command_name] = $service;
+        $this->command_handler_ids[$command_name] = [$service, $method];
     }
 
     /**
@@ -51,10 +52,13 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
     private function lazyLoad($command_name)
     {
         if ($this->container instanceof ContainerInterface && isset($this->command_handler_ids[$command_name])) {
-            $handler = $this->container->get($this->command_handler_ids[$command_name]);
+            list($service, $method) = $this->command_handler_ids[$command_name];
+            $handler = $this->container->get($service);
 
             if (is_callable($handler)) {
                 return $handler;
+            } elseif (is_callable([$handler, $method])) {
+                return [$handler, $method];
             }
         }
 

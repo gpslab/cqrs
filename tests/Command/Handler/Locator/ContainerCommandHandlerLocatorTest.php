@@ -12,6 +12,8 @@ namespace GpsLab\Component\Tests\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Handler\Locator\ContainerCommandHandlerLocator;
 use GpsLab\Component\Command\Command;
+use GpsLab\Component\Tests\Fixture\Command\CreateContact;
+use GpsLab\Component\Tests\Fixture\Command\Handler\CreateContactHandler;
 use Psr\Container\ContainerInterface;
 
 class ContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
@@ -66,6 +68,34 @@ class ContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($this->command);
         $this->assertEquals($this->handler, $handler);
+    }
+
+    public function testFindHandlerServiceInvoke()
+    {
+        $service = 'foo';
+        $command = new CreateContact();
+        $handler_obj = new CreateContactHandler();
+        $method = 'handleCreateContact';
+
+        $this->container
+            ->expects($this->exactly(2))
+            ->method('get')
+            ->with($service)
+            ->will($this->returnValue($handler_obj))
+        ;
+
+        $this->locator->registerService(CreateContact::class, $service, $method);
+
+        $handler = $this->locator->findHandler($command);
+        $this->assertEquals([$handler_obj, $method], $handler);
+
+        // double call ContainerInterface::get()
+        $handler = $this->locator->findHandler($command);
+        $this->assertEquals([$handler_obj, $method], $handler);
+
+        // test exec handler
+        call_user_func($handler, $command);
+        $this->assertEquals($command, $handler_obj->command());
     }
 
     public function testNoCommandHandler()
