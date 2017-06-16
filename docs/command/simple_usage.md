@@ -58,14 +58,14 @@ class RenameArticleCommand implements Command
 >
 > To simplify the filling of the team, you can use [payload](https://github.com/gpslab/payload).
 
-Now create a command handler. For example we use [Doctrine ORM](https://github.com/doctrine/doctrine2).
+You can use any implementations of [callable type](http://php.net/manual/en/language.types.callable.php) as a command
+handler. We recommend using public methods of classes as handlers. For example we use [Doctrine ORM](https://github.com/doctrine/doctrine2).
 
 ```php
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\CommandHandler;
 use Doctrine\ORM\EntityManagerInterface;
 
-class RenameArticleHandler implements CommandHandler
+class RenameArticleHandler
 {
     private $em;
 
@@ -74,36 +74,9 @@ class RenameArticleHandler implements CommandHandler
         $this->em = $em;
     }
 
-    public function handle(Command $command)
+    public function handleRenameArticle(RenameArticleCommand $command)
     {
-        // you need to make sure that this is the team that we expect
-        if ($command instanceof RenameArticleCommand) {
-            // get article by id
-            $article = $this->em->getRepository(Article::class)->find($command->article_id);
-            $article->rename($command->new_name);
-        }
-    }
-}
-```
-
-To not check the type of command, you can use the switch:
-
-```php
-use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\SwitchCommandHandler;
-use Doctrine\ORM\EntityManagerInterface;
-
-class RenameArticleHandler extends SwitchCommandHandler
-{
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
-
-    protected function handleRenameArticle(RenameArticleCommand $command)
-    {
+        // get article by id
         $article = $this->em->getRepository(Article::class)->find($command->article_id);
         $article->rename($command->new_name);
     }
@@ -118,7 +91,7 @@ use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
 
 // register command handler in handler locator
 $locator = new DirectBindingCommandHandlerLocator();
-$locator->registerHandler(RenameArticleCommand::class, new RenameArticleHandler($em));
+$locator->registerHandler(RenameArticleCommand::class, [new RenameArticleHandler($em), 'handleRenameArticle']);
 
 // create bus with command handler locator
 $bus = new HandlerLocatedCommandBus($locator);

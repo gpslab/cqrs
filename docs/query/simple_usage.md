@@ -44,14 +44,14 @@ class ArticleByIdentityQuery implements Query
 >
 > To simplify the filling of the team, you can use [payload](https://github.com/gpslab/payload).
 
-Now create a query handler. For example we use [Doctrine ORM](https://github.com/doctrine/doctrine2).
+You can use any implementations of [callable type](http://php.net/manual/en/language.types.callable.php) as a query
+handler. We recommend using public methods of classes as handlers. For example we use [Doctrine ORM](https://github.com/doctrine/doctrine2).
 
 ```php
 use GpsLab\Component\Query\Query;
-use GpsLab\Component\Query\Handler\QueryHandler;
 use Doctrine\ORM\EntityManagerInterface;
 
-class ArticleByIdentityHandler implements QueryHandler
+class ArticleByIdentityHandler
 {
     private $em;
 
@@ -60,37 +60,9 @@ class ArticleByIdentityHandler implements QueryHandler
         $this->em = $em;
     }
 
-    public function handle(Query $query)
+    public function handleArticleByIdentity(ArticleByIdentityQuery $query)
     {
-        // you need to make sure that this is the team that we expect
-        if ($query instanceof ArticleByIdentityQuery) {
-            return null;
-        }
-
         // get article by id
-        return $this->em->getRepository(Article::class)->find($query->article_id);
-    }
-}
-```
-
-To not check the type of query, you can use the switch:
-
-```php
-use GpsLab\Component\Query\Query;
-use GpsLab\Component\Query\Handler\SwitchQueryHandler;
-use Doctrine\ORM\EntityManagerInterface;
-
-class ArticleByIdentityHandler extends SwitchQueryHandler
-{
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
-
-    protected function handleArticleByIdentity(ArticleByIdentityQuery $query)
-    {
         return $this->em->getRepository(Article::class)->find($query->article_id);
     }
 }
@@ -104,7 +76,7 @@ use GpsLab\Component\Query\Handler\Locator\DirectBindingQueryHandlerLocator;
 
 // register query handler in handler locator
 $locator = new DirectBindingQueryHandlerLocator();
-$locator->registerHandler(RenameArticleCommand::class, new ArticleByIdentityHandler($em));
+$locator->registerHandler(ArticleByIdentityQuery::class, [new ArticleByIdentityHandler($em), 'handleArticleByIdentity']);
 
 // create bus with query handler locator
 $bus = new HandlerLocatedQueryBus($locator);
