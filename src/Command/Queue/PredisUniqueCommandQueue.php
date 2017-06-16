@@ -17,7 +17,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class PredisUniqueCommandQueue implements CommandQueue
 {
-    const LIST_KEY = 'unique_commands';
     const FORMAT = PredisCommandQueue::FORMAT;
 
     /**
@@ -36,15 +35,22 @@ class PredisUniqueCommandQueue implements CommandQueue
     private $logger;
 
     /**
+     * @var string
+     */
+    private $queue_name = '';
+
+    /**
      * @param Client              $client
      * @param SerializerInterface $serializer
      * @param LoggerInterface     $logger
+     * @param string              $queue_name
      */
-    public function __construct(Client $client, SerializerInterface $serializer, LoggerInterface $logger)
+    public function __construct(Client $client, SerializerInterface $serializer, LoggerInterface $logger, $queue_name)
     {
         $this->client = $client;
         $this->serializer = $serializer;
         $this->logger = $logger;
+        $this->queue_name = $queue_name;
     }
 
     /**
@@ -59,9 +65,9 @@ class PredisUniqueCommandQueue implements CommandQueue
         $value = $this->serializer->serialize($command, self::FORMAT);
 
         // remove exists command and push it again
-        $this->client->lrem(self::LIST_KEY, 0, $value);
+        $this->client->lrem($this->queue_name, 0, $value);
 
-        return (bool) $this->client->rpush(self::LIST_KEY, [$value]);
+        return (bool) $this->client->rpush($this->queue_name, [$value]);
     }
 
     /**
@@ -71,7 +77,7 @@ class PredisUniqueCommandQueue implements CommandQueue
      */
     public function pop()
     {
-        $value = $this->client->lpop(self::LIST_KEY);
+        $value = $this->client->lpop($this->queue_name);
 
         if (!$value) {
             return null;
@@ -85,7 +91,7 @@ class PredisUniqueCommandQueue implements CommandQueue
             $this->logger->critical('Failed denormalize a command in the Redis queue', [$value, $e->getMessage()]);
 
             // try denormalize in later
-            $this->client->rpush(self::LIST_KEY, [$value]);
+            $this->client->rpush($this->queue_name, [$value]);
 
             return null;
         }

@@ -17,7 +17,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class PredisCommandQueue implements CommandQueue
 {
-    const LIST_KEY = 'commands';
     const FORMAT = 'predis';
 
     /**
@@ -36,15 +35,22 @@ class PredisCommandQueue implements CommandQueue
     private $logger;
 
     /**
+     * @var string
+     */
+    private $queue_name = '';
+
+    /**
      * @param Client              $client
      * @param SerializerInterface $serializer
      * @param LoggerInterface     $logger
+     * @param string              $queue_name
      */
-    public function __construct(Client $client, SerializerInterface $serializer, LoggerInterface $logger)
+    public function __construct(Client $client, SerializerInterface $serializer, LoggerInterface $logger, $queue_name)
     {
         $this->client = $client;
         $this->serializer = $serializer;
         $this->logger = $logger;
+        $this->queue_name = $queue_name;
     }
 
     /**
@@ -58,7 +64,7 @@ class PredisCommandQueue implements CommandQueue
     {
         $value = $this->serializer->serialize($command, self::FORMAT);
 
-        return (bool) $this->client->rpush(self::LIST_KEY, [$value]);
+        return (bool) $this->client->rpush($this->queue_name, [$value]);
     }
 
     /**
@@ -68,7 +74,7 @@ class PredisCommandQueue implements CommandQueue
      */
     public function pop()
     {
-        $value = $this->client->lpop(self::LIST_KEY);
+        $value = $this->client->lpop($this->queue_name);
 
         if (!$value) {
             return null;
@@ -82,7 +88,7 @@ class PredisCommandQueue implements CommandQueue
             $this->logger->critical('Failed denormalize a command in the Redis queue', [$value, $e->getMessage()]);
 
             // try denormalize in later
-            $this->client->rpush(self::LIST_KEY, [$value]);
+            $this->client->rpush($this->queue_name, [$value]);
 
             return null;
         }
