@@ -7,7 +7,11 @@ You can use `HandlerLocatedCommandBus`. This bus use `CommandHandlerLocator` for
 command.
 
 ```php
+use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
+use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
+
 $locator = new DirectBindingCommandHandlerLocator();
+
 $bus = new HandlerLocatedCommandBus($locator);
 
 $command = new RenameArticleCommand();

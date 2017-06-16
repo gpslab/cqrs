@@ -40,13 +40,23 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
      */
     private $queue;
 
+    /**
+     * @var string
+     */
+    private $queue_name = 'unique_commands';
+
     protected function setUp()
     {
         $this->client = $this->getMock(Client::class);
         $this->serializer = $this->getMock(SerializerInterface::class);
         $this->logger = $this->getMock(LoggerInterface::class);
 
-        $this->queue = new PredisUniqueCommandQueue($this->client, $this->serializer, $this->logger);
+        $this->queue = new PredisUniqueCommandQueue(
+            $this->client,
+            $this->serializer,
+            $this->logger,
+            $this->queue_name
+        );
     }
 
     public function testPushQueue()
@@ -74,13 +84,13 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
             $this->client
                 ->expects($this->at($i * 2))
                 ->method('__call')
-                ->with('lrem', ['unique_commands', 0, $value])
+                ->with('lrem', [$this->queue_name, 0, $value])
                 ->will($this->returnValue(1))
             ;
             $this->client
                 ->expects($this->at((($i + 1) * 2) - 1))
                 ->method('__call')
-                ->with('rpush', ['unique_commands', [$value]])
+                ->with('rpush', [$this->queue_name, [$value]])
                 ->will($this->returnValue(1))
             ;
             ++$i;
@@ -113,7 +123,7 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
             $this->client
                 ->expects($this->at($i))
                 ->method('__call')
-                ->with('lpop', ['unique_commands'])
+                ->with('lpop', [$this->queue_name])
                 ->will($this->returnValue($value))
             ;
             ++$i;
@@ -121,7 +131,7 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->client
             ->expects($this->at($i))
             ->method('__call')
-            ->with('lpop', ['unique_commands'])
+            ->with('lpop', [$this->queue_name])
             ->will($this->returnValue(null))
         ;
 
@@ -144,13 +154,13 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->client
             ->expects($this->at(0))
             ->method('__call')
-            ->with('lpop', ['unique_commands'])
+            ->with('lpop', [$this->queue_name])
             ->will($this->returnValue($value))
         ;
         $this->client
             ->expects($this->at(1))
             ->method('__call')
-            ->with('rpush', ['unique_commands', [$value]])
+            ->with('rpush', [$this->queue_name, [$value]])
             ->will($this->returnValue(1))
         ;
 

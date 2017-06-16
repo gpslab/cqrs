@@ -40,13 +40,18 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
      */
     private $queue;
 
+    /**
+     * @var string
+     */
+    private $queue_name = 'commands';
+
     protected function setUp()
     {
         $this->client = $this->getMock(Client::class);
         $this->serializer = $this->getMock(SerializerInterface::class);
         $this->logger = $this->getMock(LoggerInterface::class);
 
-        $this->queue = new PredisCommandQueue($this->client, $this->serializer, $this->logger);
+        $this->queue = new PredisCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name);
     }
 
     public function testPushQueue()
@@ -71,7 +76,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
             $this->client
                 ->expects($this->at($i))
                 ->method('__call')
-                ->with('rpush', ['commands', [$value]])
+                ->with('rpush', [$this->queue_name, [$value]])
                 ->will($this->returnValue(1))
             ;
             ++$i;
@@ -104,7 +109,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
             $this->client
                 ->expects($this->at($i))
                 ->method('__call')
-                ->with('lpop', ['commands'])
+                ->with('lpop', [$this->queue_name])
                 ->will($this->returnValue($value))
             ;
             ++$i;
@@ -112,7 +117,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->client
             ->expects($this->at($i))
             ->method('__call')
-            ->with('lpop', ['commands'])
+            ->with('lpop', [$this->queue_name])
             ->will($this->returnValue(null))
         ;
 
@@ -135,13 +140,13 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->client
             ->expects($this->at(0))
             ->method('__call')
-            ->with('lpop', ['commands'])
+            ->with('lpop', [$this->queue_name])
             ->will($this->returnValue($value))
         ;
         $this->client
             ->expects($this->at(1))
             ->method('__call')
-            ->with('rpush', ['commands', [$value]])
+            ->with('rpush', [$this->queue_name, [$value]])
             ->will($this->returnValue(1))
         ;
 
