@@ -12,7 +12,6 @@ namespace GpsLab\Component\Tests\Command\Bus;
 
 use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\CommandHandler;
 use GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator;
 
 class HandlerLocatedCommandBusTest extends \PHPUnit_Framework_TestCase
@@ -28,18 +27,12 @@ class HandlerLocatedCommandBusTest extends \PHPUnit_Framework_TestCase
     private $command;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CommandHandler
-     */
-    private $handler;
-
-    /**
      * @var HandlerLocatedCommandBus
      */
     private $bus;
 
     protected function setUp()
     {
-        $this->handler = $this->getMock(CommandHandler::class);
         $this->command = $this->getMock(Command::class);
         $this->locator = $this->getMock(CommandHandlerLocator::class);
         $this->bus = new HandlerLocatedCommandBus($this->locator);
@@ -47,20 +40,20 @@ class HandlerLocatedCommandBusTest extends \PHPUnit_Framework_TestCase
 
     public function testHandle()
     {
+        $handled_command = null;
+        $handler = function (Command $command) use (&$handled_command) {
+            $handled_command = $command;
+        };
+
         $this->locator
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->command)
-            ->will($this->returnValue($this->handler))
-        ;
-
-        $this->handler
-            ->expects($this->once())
-            ->method('handle')
-            ->with($this->command)
+            ->will($this->returnValue($handler))
         ;
 
         $this->bus->handle($this->command);
+        $this->assertEquals($this->command, $handled_command);
     }
 
     /**

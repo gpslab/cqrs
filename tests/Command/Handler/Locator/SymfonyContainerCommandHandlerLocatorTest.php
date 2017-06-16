@@ -11,7 +11,6 @@
 namespace GpsLab\Component\Tests\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator;
-use GpsLab\Component\Command\Handler\CommandHandler;
 use GpsLab\Component\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -28,7 +27,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestC
     private $command;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CommandHandler
+     * @var callable
      */
     private $handler;
 
@@ -40,7 +39,9 @@ class SymfonyContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestC
     protected function setUp()
     {
         $this->command = $this->getMock(Command::class);
-        $this->handler = $this->getMock(CommandHandler::class);
+        $this->handler = function (Command $command) {
+            $this->assertEquals($command, $this->command);
+        };
         $this->container = $this->getMock(ContainerInterface::class);
 
         $this->locator = new SymfonyContainerCommandHandlerLocator();

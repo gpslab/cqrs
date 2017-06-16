@@ -11,7 +11,6 @@
 namespace GpsLab\Component\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\CommandHandler;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -28,7 +27,7 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
     /**
      * @param Command $command
      *
-     * @return CommandHandler|null
+     * @return callable|null
      */
     public function findHandler(Command $command)
     {
@@ -47,14 +46,14 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
     /**
      * @param $command_name
      *
-     * @return CommandHandler
+     * @return callable
      */
     private function lazyLoad($command_name)
     {
         if ($this->container instanceof ContainerInterface && isset($this->command_handler_ids[$command_name])) {
             $handler = $this->container->get($this->command_handler_ids[$command_name]);
 
-            if ($handler instanceof CommandHandler) {
+            if (is_callable($handler)) {
                 return $handler;
             }
         }

@@ -11,14 +11,13 @@
 namespace GpsLab\Component\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\CommandHandler;
 
 interface CommandHandlerLocator
 {
     /**
      * @param Command $command
      *
-     * @return CommandHandler|null
+     * @return callable|null
      */
     public function findHandler(Command $command);
 }

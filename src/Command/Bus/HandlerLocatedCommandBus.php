@@ -11,7 +11,6 @@
 namespace GpsLab\Component\Command\Bus;
 
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\CommandHandler;
 use GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator;
 use GpsLab\Component\Command\Exception\HandlerNotFoundException;
 
@@ -37,10 +36,10 @@ class HandlerLocatedCommandBus implements CommandBus
     {
         $handler = $this->locator->findHandler($command);
 
-        if (!($handler instanceof CommandHandler)) {
+        if (!is_callable($handler)) {
             throw HandlerNotFoundException::notFound($command);
         }
 
-        $handler->handle($command);
+        call_user_func($handler, $command);
     }
 }

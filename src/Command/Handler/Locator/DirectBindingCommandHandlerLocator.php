@@ -10,23 +10,22 @@
 
 namespace GpsLab\Component\Command\Handler\Locator;
 
-use GpsLab\Component\Command\Handler\CommandHandler;
 use GpsLab\Component\Command\Command;
 
 class DirectBindingCommandHandlerLocator implements CommandHandlerLocator
 {
     /**
-     * @var CommandHandler[]
+     * @var callable[]
      */
     private $handlers = [];
 
     /**
      * Bind command handler to concrete command by class name.
      *
-     * @param string         $command_name
-     * @param CommandHandler $handler
+     * @param string   $command_name
+     * @param callable $handler
      */
-    public function registerHandler($command_name, CommandHandler $handler)
+    public function registerHandler($command_name, callable $handler)
     {
         $this->handlers[$command_name] = $handler;
     }
@@ -34,7 +33,7 @@ class DirectBindingCommandHandlerLocator implements CommandHandlerLocator
     /**
      * @param Command $command
      *
-     * @return CommandHandler|null
+     * @return callable|null
      */
     public function findHandler(Command $command)
     {
