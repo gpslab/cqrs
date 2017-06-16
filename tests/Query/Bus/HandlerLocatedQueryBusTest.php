@@ -52,6 +52,7 @@ class HandlerLocatedQueryBusTest extends \PHPUnit_Framework_TestCase
         $handled_query = null;
         $handler = function (Query $query) use (&$handled_query, $data) {
             $handled_query = $query;
+
             return $data;
         };
         $this->locator
