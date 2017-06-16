@@ -21,7 +21,7 @@ composer require gpslab/cqrs
 
 ## Command
 
-* [Simple usage](docs/command/simple_usage.md)
+* **[Simple usage](docs/command/simple_usage.md)**
 * [Bus](docs/command/command_bus.md)
 * Handler
   * [Create handler](docs/command/handler.md)
@@ -40,7 +40,7 @@ composer require gpslab/cqrs
 
 ## Query
 
-* [Simple usage](docs/query/simple_usage.md)
+* **[Simple usage](docs/query/simple_usage.md)**
 * [Bus](docs/query/query_bus.md)
 * Handler
   * [Create handler](docs/query/handler.md)
