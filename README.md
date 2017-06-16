@@ -41,9 +41,7 @@ composer require gpslab/cqrs
 ## Query
 
 * [Simple usage](docs/query/simple_usage.md)
-* Bus
-  * Handler located bus
-  * Custom bus
+* [Bus](docs/query/query_bus.md)
 * Handler
   * [Create handler](docs/query/handler.md)
   * Locator
