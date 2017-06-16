@@ -45,7 +45,7 @@ composer require gpslab/cqrs
   * Handler located bus
   * Custom bus
 * Handler
-  * Create handler
+  * [Create handler](docs/query/handler.md)
   * Locator
     * Direct binding locator
     * PSR-11 Container locator
