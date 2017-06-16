@@ -26,9 +26,9 @@ composer require gpslab/cqrs
 * Handler
   * [Create handler](docs/command/handler.md)
   * Locator
-    * Direct binding locator
-    * PSR-11 Container locator
-    * Symfony container locator
+    * [Direct binding locator](docs/command/locator/direct_binding.md)
+    * [PSR-11 Container locator](docs/command/locator/psr-11_container.md) *([PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md))*
+    * [Symfony container locator](docs/command/locator/symfony_container.md) *(Symfony 3.3 [implements](http://symfony.com/blog/new-in-symfony-3-3-psr-11-containers) a [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md))*
 * Queue
   * Custom queue
   * Memory queue
@@ -46,8 +46,8 @@ composer require gpslab/cqrs
   * [Create handler](docs/query/handler.md)
   * Locator
     * Direct binding locator
-    * PSR-11 Container locator
-    * Symfony container locator
+    * PSR-11 Container locator *([PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md))*
+    * Symfony container locator *(Symfony 3.3 [implements](http://symfony.com/blog/new-in-symfony-3-3-psr-11-containers) a [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md))*
 * [Middleware](https://github.com/gpslab/middleware)
 * [Payload](https://github.com/gpslab/payload)
 * [Doctrine specification query](https://github.com/gpslab/specification-query)
