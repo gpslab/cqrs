@@ -6,6 +6,8 @@ Locator is needed for search the handler of handled command.
 It's a implementation of locator `CommandHandlerLocator` for
 [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md) container.
 
+## Anonymous function
+
 Example register the [anonymous function](http://php.net/manual/en/functions.anonymous.php) as a command handler:
 
 ```php
@@ -14,14 +16,16 @@ $handler = function (RenameArticleCommand $command) {
 };
 
 // example of registr handler in PSR-11 container
-// container on request $container->get('acme.demo.article.command_handler.rename') must return $handler
+// container on request $container->get('acme.demo.command.handler.article.rename') must return $handler
 //$container = new Container();
-//$container->set('acme.demo.article.command_handler.rename', $handler);
+//$container->set('acme.demo.command.handler.article.rename', $handler);
 
 // register command handler service in handler locator
 $locator = new ContainerCommandHandlerLocator($container);
-$locator->registerService(RenameArticleCommand::class, 'acme.demo.article.command_handler.rename');
+$locator->registerService(RenameArticleCommand::class, 'acme.demo.command.handler.article.rename');
 ```
+
+## Called object
 
 Example register the [called object](http://php.net/manual/en/language.oop5.magic.php#object.invoke) as a command handler:
 
@@ -35,14 +39,16 @@ class RenameArticleHandler
 }
 
 // example of registr handler in PSR-11 container
-// container on request $container->get('acme.demo.article.command_handler.rename') must return $handler
+// container on request $container->get('acme.demo.command.handler.article.rename') must return $handler
 //$container = new Container();
-//$container->set('acme.demo.article.command_handler.rename', new RenameArticleHandler());
+//$container->set('acme.demo.command.handler.article.rename', new RenameArticleHandler());
 
 // register command handler service in handler locator
 $locator = new ContainerCommandHandlerLocator($container);
-$locator->registerService(RenameArticleCommand::class, 'acme.demo.article.command_handler.rename');
+$locator->registerService(RenameArticleCommand::class, 'acme.demo.command.handler.article.rename');
 ```
+
+## Method of class
 
 Example register the public method of class as a command handler:
 
@@ -56,11 +62,11 @@ class RenameArticleHandler
 }
 
 // example of registr handler in PSR-11 container
-// container on request $container->get('acme.demo.article.command_handler.rename') must return $handler
+// container on request $container->get('acme.demo.command.handler.article.rename') must return $handler
 //$container = new Container();
-//$container->set('acme.demo.article.command_handler.rename', new RenameArticleHandler());
+//$container->set('acme.demo.command.handler.article.rename', new RenameArticleHandler());
 
 // register command handler service in handler locator
 $locator = new ContainerCommandHandlerLocator($container);
-$locator->registerService(RenameArticleCommand::class, 'acme.demo.article.command_handler.rename', 'handleRenameArticle');
+$locator->registerService(RenameArticleCommand::class, 'acme.demo.command.handler.article.rename', 'handleRenameArticle');
 ```
