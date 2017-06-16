@@ -1,4 +1,5 @@
-# Simple usage queries
+Simple usage queries
+====================
 
 Query, in the [CQRS](https://martinfowler.com/bliki/CQRS.html) approach, are designed to get the data in the
 application.

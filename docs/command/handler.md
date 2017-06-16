@@ -1,110 +1,100 @@
 Command handler
 ===============
 
-Handler rename article command. For example we use [Doctrine ORM](https://github.com/doctrine/doctrine2).
+You can use any implementations of [callable type](http://php.net/manual/en/language.types.callable.php) as a command
+handler.
+
+The command handler can be a [anonymous function](http://php.net/manual/en/functions.anonymous.php):
 
 ```php
-use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\CommandHandler;
-use Doctrine\ORM\EntityManagerInterface;
+$handler = function (RenameArticleCommand $command) {
+    // do something
+};
 
-class RenameArticleHandler implements CommandHandler
-{
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
-
-    public function handle(Command $command)
-    {
-        // you need to make sure that this is the team that we expect
-        if ($command instanceof RenameArticleCommand) {
-            // get article by id
-            $article = $this->em->getRepository(Article::class)->find($command->article_id);
-            $article->rename($command->new_name);
-        }
-    }
-}
+// register command handler in handler locator
+$locator = new DirectBindingCommandHandlerLocator();
+$locator->registerHandler(RenameArticleCommand::class, $handler);
 ```
 
-Handler register new user command.
+It can be a some function:
 
 ```php
-use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\CommandHandler;
-use Doctrine\ORM\EntityManagerInterface;
-
-class RegisterUserHandler implements CommandHandler
+function RenameArticleHandler(RenameArticleCommand $command)
 {
-    private $em;
+    // do something
+}
 
-    private $generator;
+// register command handler in handler locator
+$locator = new DirectBindingCommandHandlerLocator();
+$locator->registerHandler(RenameArticleCommand::class, 'RenameArticleHandler');
+```
 
-    private $hasher;
+It can be a [called object](http://php.net/manual/en/language.oop5.magic.php#object.invoke):
 
-    public function __construct(
-        EntityManagerInterface $em,
-        UserIdentityGenerator $generator,
-        PasswordHasher $hasher
-    ) {
-        $this->em = $em;
-        $this->generator = $generator;
-        $this->hasher = $hasher;
-    }
-
-    public function handle(Command $command)
+```php
+class RenameArticleHandler
+{
+    public function __invoke(RenameArticleCommand $command)
     {
-        // you need to make sure that this is the team that we expect
-        if ($command instanceof RegisterUserCommand) {
-            $user = new User(
-                $this->generator->nextIdentity(),
-                $command->email,
-                $this->hasher->hash($command->password)
-            );
-
-            // save new user
-            $this->em->persist($user);
-        }
+        // do something
     }
 }
+
+// register command handler in handler locator
+$locator = new DirectBindingCommandHandlerLocator();
+$locator->registerHandler(RenameArticleCommand::class, new RenameArticleHandler());
+```
+
+It can be a static method of class:
+
+```php
+class RenameArticleHandler
+{
+    public static function handleRenameArticle(RenameArticleCommand $command)
+    {
+        // do something
+    }
+}
+
+// register command handler in handler locator
+$locator = new DirectBindingCommandHandlerLocator();
+$locator->registerHandler(RenameArticleCommand::class, 'RenameArticleHandler::handleRenameArticle');
+```
+
+It can be a public method of class:
+
+```php
+class RenameArticleHandler
+{
+    public function handleRenameArticle(RenameArticleCommand $command)
+    {
+        // do something
+    }
+}
+
+// register command handler in handler locator
+$locator = new DirectBindingCommandHandlerLocator();
+$locator->registerHandler(RenameArticleCommand::class, [new RenameArticleHandler(), 'handleRenameArticle']);
 ```
 
 You can handle many commands in one handler.
 
 ```php
-```php
-use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\CommandHandler;
-use Doctrine\ORM\EntityManagerInterface;
-
-class ArticleHandler implements CommandHandler
+class ArticleHandler
 {
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
+    public function handleRenameArticle(RenameArticleCommand $command)
     {
-        $this->em = $em;
+        // do something
     }
 
-    public function handle(Command $command)
+    public function handlePublishArticle(PublishArticleCommand $command)
     {
-        switch (get_class($command)) {
-            case RenameArticleCommand::class:
-                // get article by id
-                $article = $this->em->getRepository(Article::class)->find($command->article_id);
-                $article->rename($command->new_name);
-                break;
-            case PublishArticleCommand::class:
-                // get article by id
-                $article = $this->em->getRepository(Article::class)->find($command->article_id);
-                $article->publish();
-                break;
-        }
+        // do something
     }
 }
-```
 
-You can use `SwitchCommandHandler` or `SwitchCommandHandlerTrait` for optimize handle commands. See how to use
-[switch](switch_handler.md).
+// register command handler in handler locator
+$locator = new DirectBindingCommandHandlerLocator();
+$locator->registerHandler(RenameArticleCommand::class, [new ArticleHandler(), 'handleRenameArticle']);
+$locator->registerHandler(PublishArticleCommand::class, [new ArticleHandler(), 'handlePublishArticle']);
+```
