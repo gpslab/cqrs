@@ -10,10 +10,9 @@
 
 namespace GpsLab\Component\Tests\Fixture\Query\Handler;
 
-use GpsLab\Component\Query\Handler\SwitchQueryHandler;
 use GpsLab\Component\Tests\Fixture\Query\ContactByNameQuery;
 
-class ContactByNameHandler extends SwitchQueryHandler
+class ContactByNameHandler
 {
     /**
      * @var ContactByNameQuery|null
@@ -23,7 +22,7 @@ class ContactByNameHandler extends SwitchQueryHandler
     /**
      * @param ContactByNameQuery $query
      */
-    protected function handleContactByName(ContactByNameQuery $query)
+    public function handleContactByName(ContactByNameQuery $query)
     {
         $this->query = $query;
     }

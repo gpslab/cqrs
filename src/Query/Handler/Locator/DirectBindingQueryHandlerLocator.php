@@ -10,23 +10,22 @@
 
 namespace GpsLab\Component\Query\Handler\Locator;
 
-use GpsLab\Component\Query\Handler\QueryHandler;
 use GpsLab\Component\Query\Query;
 
 class DirectBindingQueryHandlerLocator implements QueryHandlerLocator
 {
     /**
-     * @var QueryHandler[]
+     * @var callable[]
      */
     private $handlers = [];
 
     /**
      * Bind query handler to concrete query by class name.
      *
-     * @param string       $query_name
-     * @param QueryHandler $handler
+     * @param string   $query_name
+     * @param callable $handler
      */
-    public function registerHandler($query_name, QueryHandler $handler)
+    public function registerHandler($query_name, callable $handler)
     {
         $this->handlers[$query_name] = $handler;
     }
@@ -34,7 +33,7 @@ class DirectBindingQueryHandlerLocator implements QueryHandlerLocator
     /**
      * @param Query $query
      *
-     * @return QueryHandler|null
+     * @return callable|null
      */
     public function findHandler(Query $query)
     {

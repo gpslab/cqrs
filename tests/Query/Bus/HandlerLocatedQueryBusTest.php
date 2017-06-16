@@ -12,7 +12,6 @@ namespace GpsLab\Component\Tests\Query\Bus;
 
 use GpsLab\Component\Query\Bus\HandlerLocatedQueryBus;
 use GpsLab\Component\Query\Query;
-use GpsLab\Component\Query\Handler\QueryHandler;
 use GpsLab\Component\Query\Handler\Locator\QueryHandlerLocator;
 
 class HandlerLocatedQueryBusTest extends \PHPUnit_Framework_TestCase
@@ -28,7 +27,7 @@ class HandlerLocatedQueryBusTest extends \PHPUnit_Framework_TestCase
     private $query;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|QueryHandler
+     * @var callable
      */
     private $handler;
 
@@ -39,30 +38,31 @@ class HandlerLocatedQueryBusTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->handler = $this->getMock(QueryHandler::class);
         $this->query = $this->getMock(Query::class);
+        $this->handler = function (Query $query) {
+            $this->assertEquals($this->query, $query);
+        };
         $this->locator = $this->getMock(QueryHandlerLocator::class);
         $this->bus = new HandlerLocatedQueryBus($this->locator);
     }
 
     public function testDispatch()
     {
+        $data = 'foo';
+        $handled_query = null;
+        $handler = function (Query $query) use (&$handled_query, $data) {
+            $handled_query = $query;
+            return $data;
+        };
         $this->locator
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->query)
-            ->will($this->returnValue($this->handler))
-        ;
-
-        $data = 'foo';
-        $this->handler
-            ->expects($this->once())
-            ->method('handle')
-            ->with($this->query)
-            ->will($this->returnValue($data))
+            ->will($this->returnValue($handler))
         ;
 
         $this->assertEquals($data, $this->bus->handle($this->query));
+        $this->assertEquals($this->query, $handled_query);
     }
 
     /**

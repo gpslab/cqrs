@@ -11,7 +11,6 @@
 namespace GpsLab\Component\Tests\Query\Handler\Locator;
 
 use GpsLab\Component\Query\Handler\Locator\DirectBindingQueryHandlerLocator;
-use GpsLab\Component\Query\Handler\QueryHandler;
 use GpsLab\Component\Query\Query;
 
 class DirectBindingQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
@@ -22,7 +21,7 @@ class DirectBindingQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     private $query;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|QueryHandler
+     * @var callable
      */
     private $handler;
 
@@ -34,7 +33,9 @@ class DirectBindingQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->query = $this->getMock(Query::class);
-        $this->handler = $this->getMock(QueryHandler::class);
+        $this->handler = function (Query $query) {
+            $this->assertEquals($query, $this->query);
+        };
 
         $this->locator = new DirectBindingQueryHandlerLocator();
     }

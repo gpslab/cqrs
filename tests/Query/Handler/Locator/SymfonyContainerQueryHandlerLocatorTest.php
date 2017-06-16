@@ -11,7 +11,6 @@
 namespace GpsLab\Component\Tests\Query\Handler\Locator;
 
 use GpsLab\Component\Query\Handler\Locator\SymfonyContainerQueryHandlerLocator;
-use GpsLab\Component\Query\Handler\QueryHandler;
 use GpsLab\Component\Query\Query;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -28,7 +27,7 @@ class SymfonyContainerQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCas
     private $query;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|QueryHandler
+     * @var callable
      */
     private $handler;
 
@@ -40,7 +39,9 @@ class SymfonyContainerQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCas
     protected function setUp()
     {
         $this->query = $this->getMock(Query::class);
-        $this->handler = $this->getMock(QueryHandler::class);
+        $this->handler = function (Query $query) {
+            $this->assertEquals($query, $this->query);
+        };
         $this->container = $this->getMock(ContainerInterface::class);
 
         $this->locator = new SymfonyContainerQueryHandlerLocator();

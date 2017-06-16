@@ -12,7 +12,6 @@ namespace GpsLab\Component\Query\Bus;
 
 use GpsLab\Component\Query\Exception\HandlerNotFoundException;
 use GpsLab\Component\Query\Handler\Locator\QueryHandlerLocator;
-use GpsLab\Component\Query\Handler\QueryHandler;
 use GpsLab\Component\Query\Query;
 
 class HandlerLocatedQueryBus implements QueryBus
@@ -39,10 +38,10 @@ class HandlerLocatedQueryBus implements QueryBus
     {
         $handler = $this->locator->findHandler($query);
 
-        if (!($handler instanceof QueryHandler)) {
+        if (!is_callable($handler)) {
             throw HandlerNotFoundException::notFound($query);
         }
 
-        return $handler->handle($query);
+        return call_user_func($handler, $query);
     }
 }

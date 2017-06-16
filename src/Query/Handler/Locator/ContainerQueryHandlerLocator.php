@@ -10,7 +10,6 @@
 
 namespace GpsLab\Component\Query\Handler\Locator;
 
-use GpsLab\Component\Query\Handler\QueryHandler;
 use GpsLab\Component\Query\Query;
 use Psr\Container\ContainerInterface;
 
@@ -37,7 +36,7 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
     /**
      * @param Query $query
      *
-     * @return QueryHandler|null
+     * @return callable|null
      */
     public function findHandler(Query $query)
     {
@@ -56,14 +55,14 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
     /**
      * @param $query_name
      *
-     * @return QueryHandler
+     * @return callable
      */
     private function lazyLoad($query_name)
     {
         if (isset($this->query_handler_ids[$query_name])) {
             $handler = $this->container->get($this->query_handler_ids[$query_name]);
 
-            if ($handler instanceof QueryHandler) {
+            if (is_callable($handler)) {
                 return $handler;
             }
         }
