@@ -24,9 +24,9 @@ interface CommandQueue
     public function push(Command $command);
 
     /**
-     * Pop command from queue. Return NULL if queue is empty.
+     * Pull command from queue. Return NULL if queue is empty.
      *
      * @return Command|null
      */
-    public function pop();
+    public function pull();
 }

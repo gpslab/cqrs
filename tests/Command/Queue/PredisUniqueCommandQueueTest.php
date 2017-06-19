@@ -137,7 +137,7 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
 
         $expected = array_reverse($queue);
         $i = count($expected);
-        while ($command = $this->queue->pop()) {
+        while ($command = $this->queue->pull()) {
             $this->assertEquals($expected[--$i], $command);
         }
 
@@ -178,6 +178,6 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1))
         ;
 
-        $this->assertNull($this->queue->pop());
+        $this->assertNull($this->queue->pull());
     }
 }

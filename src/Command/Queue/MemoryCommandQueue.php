@@ -38,7 +38,7 @@ class MemoryCommandQueue implements CommandQueue
      *
      * @return Command|null
      */
-    public function pop()
+    public function pull()
     {
         return array_shift($this->commands);
     }

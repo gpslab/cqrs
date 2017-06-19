@@ -44,7 +44,7 @@ $bus = new HandlerLocatedCommandBus($locator);
 $queue_name = 'article_queue';
 $queue = new PredisCommandQueue($predis, $serializer, $logger, $queue_name);
 
-while ($command = $queue->pop()) {
+while ($command = $queue->pull()) {
     $bus->handle($command);
 }
 ```

@@ -46,7 +46,7 @@ class MemoryUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
         }
 
         $i = count($expected);
-        while ($command = $this->queue->pop()) {
+        while ($command = $this->queue->pull()) {
             $this->assertEquals($expected[--$i], $command);
         }
 

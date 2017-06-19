@@ -40,7 +40,7 @@ class MemoryCommandQueueTest extends \PHPUnit_Framework_TestCase
 
         $expected = array_reverse($queue);
         $i = count($expected);
-        while ($command = $this->queue->pop()) {
+        while ($command = $this->queue->pull()) {
             $this->assertEquals($expected[--$i], $command);
         }
 

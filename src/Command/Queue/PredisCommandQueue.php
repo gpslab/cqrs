@@ -72,7 +72,7 @@ class PredisCommandQueue implements CommandQueue
      *
      * @return Command|null
      */
-    public function pop()
+    public function pull()
     {
         $value = $this->client->lpop($this->queue_name);
 

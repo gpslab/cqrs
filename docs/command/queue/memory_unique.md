@@ -20,7 +20,7 @@ $queue->push($command);
 
 
 // in latter
-while ($command = $queue->pop()) {
+while ($command = $queue->pull()) {
     $bus->handle($command);
 }
 ```
