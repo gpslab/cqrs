@@ -17,7 +17,7 @@ class ExecutingCommandQueue implements CommandQueue
     /**
      * @var callable|null
      */
-    private $callback;
+    private $handler;
 
     /**
      * Publish command to queue.
@@ -28,9 +28,9 @@ class ExecutingCommandQueue implements CommandQueue
      */
     public function publish(Command $command)
     {
-        // absence of a subscriber is not a error
-        if (is_callable($this->callback)) {
-            call_user_func($this->callback, $command);
+        // absence of a handler is not a error
+        if (is_callable($this->handler)) {
+            call_user_func($this->handler, $command);
         }
 
         return true;
@@ -39,10 +39,10 @@ class ExecutingCommandQueue implements CommandQueue
     /**
      * Subscribe on command queue.
      *
-     * @param callable $callback
+     * @param callable $handler
      */
-    public function subscribe(callable $callback)
+    public function subscribe(callable $handler)
     {
-        $this->callback = $callback;
+        $this->handler = $handler;
     }
 }

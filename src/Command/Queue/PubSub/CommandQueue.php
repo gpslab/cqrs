@@ -29,7 +29,7 @@ interface CommandQueue
     /**
      * Subscribe on command queue.
      *
-     * @param callable $callback
+     * @param callable $handler
      */
-    public function subscribe(callable $callback);
+    public function subscribe(callable $handler);
 }
