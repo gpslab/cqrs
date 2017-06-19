@@ -12,7 +12,7 @@ namespace GpsLab\Component\Command\Queue\PubSub;
 
 use GpsLab\Component\Command\Command;
 
-class MemoryCommandQueue implements CommandQueue
+class ExecutingCommandQueue implements CommandQueue
 {
     /**
      * @var callable|null
@@ -20,7 +20,7 @@ class MemoryCommandQueue implements CommandQueue
     private $callback;
 
     /**
-     * Push command to queue.
+     * Publish command to queue.
      *
      * @param Command $command
      *
@@ -28,7 +28,7 @@ class MemoryCommandQueue implements CommandQueue
      */
     public function publish(Command $command)
     {
-        // absence of a subscriber is not an error
+        // absence of a subscriber is not a error
         if (is_callable($this->callback)) {
             call_user_func($this->callback, $command);
         }

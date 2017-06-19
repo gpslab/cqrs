@@ -11,9 +11,9 @@
 namespace GpsLab\Component\Tests\Command\Queue\PubSub;
 
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Queue\PubSub\MemoryCommandQueue;
+use GpsLab\Component\Command\Queue\PubSub\ExecutingCommandQueue;
 
-class MemoryCommandQueueTest extends \PHPUnit_Framework_TestCase
+class ExecutingCommandQueueTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Command
@@ -21,14 +21,14 @@ class MemoryCommandQueueTest extends \PHPUnit_Framework_TestCase
     private $command;
 
     /**
-     * @var MemoryCommandQueue
+     * @var ExecutingCommandQueue
      */
     private $queue;
 
     protected function setUp()
     {
         $this->command = $this->getMock(Command::class);
-        $this->queue = new MemoryCommandQueue();
+        $this->queue = new ExecutingCommandQueue();
     }
 
     public function testPublish()
