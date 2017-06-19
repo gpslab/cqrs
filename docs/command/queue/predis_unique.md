@@ -1,7 +1,7 @@
 Predis unique queue
 ===================
 
-It works just like the [Predis queue](predis_queue.md), but it only allows storing unique commands. All duplicates will
+It works just like the [Predis queue](predis.md), but it only allows storing unique commands. All duplicates will
 be ignored.
 
 Example usage:

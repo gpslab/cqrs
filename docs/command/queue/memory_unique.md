@@ -1,7 +1,7 @@
 Memory unique queue
 ===================
 
-It works just like the [Memory queue](memory_queue.md), but it only allows storing unique commands. All duplicates will
+It works just like the [Memory queue](memory.md), but it only allows storing unique commands. All duplicates will
 be ignored.
 
 ```php
