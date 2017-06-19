@@ -23,7 +23,7 @@ $queue->push($command);
 
 
 // in latter
-whele ($command = $queue->pop()) {
+while ($command = $queue->pop()) {
     $bus->handle($command);
 }
 ```

@@ -33,8 +33,8 @@ composer require gpslab/cqrs
   * Custom queue
   * [Memory queue](docs/command/queue/memory_queue.md)
   * [Memory unique queue](docs/command/queue/memory_unique_queue.md)
-  * Predis queue
-  * Predis unique queue
+  * [Predis queue](docs/command/queue/predis_queue.md)
+  * [Predis unique queue](docs/command/queue/predis_unique_queue.md)
 * [Middleware](https://github.com/gpslab/middleware)
 * [Payload](https://github.com/gpslab/payload)
 
