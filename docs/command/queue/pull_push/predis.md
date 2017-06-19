@@ -23,7 +23,7 @@ react quickly to the problem and the message is placed again at the end of the q
 Example usage:
 
 ```php
-use GpsLab\Component\Command\Queue\PredisCommandQueue;
+use GpsLab\Component\Command\Queue\PullPush\PredisCommandQueue;
 use Symfony\Component\Serializer\Serializer;
 use Predis\Client;
 
@@ -46,7 +46,7 @@ In latter
 ```php
 use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
 use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
-use GpsLab\Component\Command\Queue\PredisCommandQueue;
+use GpsLab\Component\Command\Queue\PullPush\PredisCommandQueue;
 use Symfony\Component\Serializer\Serializer;
 use Predis\Client;
 

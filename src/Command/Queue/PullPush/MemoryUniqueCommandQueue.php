@@ -8,7 +8,7 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Command\Queue;
+namespace GpsLab\Component\Command\Queue\PullPush;
 
 use GpsLab\Component\Command\Command;
 

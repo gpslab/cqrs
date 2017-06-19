@@ -8,17 +8,17 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Tests\Command\Queue;
+namespace GpsLab\Component\Tests\Command\Queue\PullPush;
 
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Queue\PredisCommandQueue;
+use GpsLab\Component\Command\Queue\PullPush\PredisUniqueCommandQueue;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
+class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Client
@@ -36,14 +36,14 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var PredisCommandQueue
+     * @var PredisUniqueCommandQueue
      */
     private $queue;
 
     /**
      * @var string
      */
-    private $queue_name = 'commands';
+    private $queue_name = 'unique_commands';
 
     protected function setUp()
     {
@@ -51,7 +51,12 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->serializer = $this->getMock(SerializerInterface::class);
         $this->logger = $this->getMock(LoggerInterface::class);
 
-        $this->queue = new PredisCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name);
+        $this->queue = new PredisUniqueCommandQueue(
+            $this->client,
+            $this->serializer,
+            $this->logger,
+            $this->queue_name
+        );
     }
 
     public function testPushQueue()
@@ -59,6 +64,9 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
         $queue = [
             new RenameContactCommand(),
             new CreateContact(),
+            new RenameContactCommand(), // duplicate
+            new RenameContactCommand(), // duplicate
+            new CreateContact(), // duplicate
             new RenameContactCommand(), // duplicate
         ];
 
@@ -74,7 +82,13 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
             ;
 
             $this->client
-                ->expects($this->at($i))
+                ->expects($this->at($i * 2))
+                ->method('__call')
+                ->with('lrem', [$this->queue_name, 0, $value])
+                ->will($this->returnValue(1))
+            ;
+            $this->client
+                ->expects($this->at((($i + 1) * 2) - 1))
                 ->method('__call')
                 ->with('rpush', [$this->queue_name, [$value]])
                 ->will($this->returnValue(1))

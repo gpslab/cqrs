@@ -10,7 +10,7 @@ script execution.
 ```php
 use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
 use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
-use GpsLab\Component\Command\Queue\MemoryCommandQueue;
+use GpsLab\Component\Command\Queue\PullPush\MemoryCommandQueue;
 
 $locator = new DirectBindingCommandHandlerLocator();
 $bus = new HandlerLocatedCommandBus($locator);

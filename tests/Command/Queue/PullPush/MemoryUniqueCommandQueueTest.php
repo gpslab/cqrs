@@ -8,9 +8,9 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Tests\Command\Queue;
+namespace GpsLab\Component\Tests\Command\Queue\PullPush;
 
-use GpsLab\Component\Command\Queue\MemoryUniqueCommandQueue;
+use GpsLab\Component\Command\Queue\PullPush\MemoryUniqueCommandQueue;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 

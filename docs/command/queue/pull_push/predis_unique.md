@@ -7,7 +7,7 @@ be ignored.
 Example usage:
 
 ```php
-use GpsLab\Component\Command\Queue\PredisCommandQueue;
+use GpsLab\Component\Command\Queue\PullPush\PredisUniqueCommandQueue;
 use Symfony\Component\Serializer\Serializer;
 use Predis\Client;
 
@@ -16,7 +16,7 @@ use Predis\Client;
 //$serializer = new Serializer(); // Symfony serializer
 //$logger = new Logger(); // PSR-3 logger
 $queue_name = 'article_queue';
-$queue = new PredisCommandQueue($predis, $serializer, $logger, $queue_name);
+$queue = new PredisUniqueCommandQueue($predis, $serializer, $logger, $queue_name);
 
 // make command
 $command = new RenameArticleCommand();
@@ -30,7 +30,7 @@ In latter
 ```php
 use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
 use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
-use GpsLab\Component\Command\Queue\PredisCommandQueue;
+use GpsLab\Component\Command\Queue\PullPush\PredisUniqueCommandQueue;
 use Symfony\Component\Serializer\Serializer;
 use Predis\Client;
 
@@ -42,7 +42,7 @@ $bus = new HandlerLocatedCommandBus($locator);
 //$serializer = new Serializer(); // Symfony serializer
 //$logger = new Logger(); // PSR-3 logger
 $queue_name = 'article_queue';
-$queue = new PredisCommandQueue($predis, $serializer, $logger, $queue_name);
+$queue = new PredisUniqueCommandQueue($predis, $serializer, $logger, $queue_name);
 
 while ($command = $queue->pull()) {
     $bus->handle($command);

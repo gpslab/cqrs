@@ -8,16 +8,16 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Command\Queue;
+namespace GpsLab\Component\Command\Queue\PullPush;
 
 use GpsLab\Component\Command\Command;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class PredisCommandQueue implements CommandQueue
+class PredisUniqueCommandQueue implements CommandQueue
 {
-    const FORMAT = 'predis';
+    const FORMAT = PredisCommandQueue::FORMAT;
 
     /**
      * @var Client
@@ -63,6 +63,9 @@ class PredisCommandQueue implements CommandQueue
     public function push(Command $command)
     {
         $value = $this->serializer->serialize($command, self::FORMAT);
+
+        // remove exists command and push it again
+        $this->client->lrem($this->queue_name, 0, $value);
 
         return (bool) $this->client->rpush($this->queue_name, [$value]);
     }
