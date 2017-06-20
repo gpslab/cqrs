@@ -13,7 +13,7 @@ namespace GpsLab\Component\Command\Queue\PubSub;
 use GpsLab\Component\Command\Command;
 
 /**
- * Publish and Subscribe command queue
+ * Publish and Subscribe command queue.
  */
 interface CommandQueue
 {

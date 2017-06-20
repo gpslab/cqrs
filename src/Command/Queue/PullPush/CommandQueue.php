@@ -13,7 +13,7 @@ namespace GpsLab\Component\Command\Queue\PullPush;
 use GpsLab\Component\Command\Command;
 
 /**
- * Push and Pull command queue
+ * Push and Pull command queue.
  */
 interface CommandQueue
 {
