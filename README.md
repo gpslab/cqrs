@@ -37,6 +37,7 @@ composer require gpslab/cqrs
     * [Predis unique queue](docs/command/queue/pull_push/predis_unique.md)
   * Pub/Sub
     * [Executing queue](docs/command/queue/pub_sub/executing.md)
+    * [Predis queue](docs/command/queue/pub_sub/predis.md)
 * [Middleware](https://github.com/gpslab/middleware)
 * [Payload](https://github.com/gpslab/payload)
 

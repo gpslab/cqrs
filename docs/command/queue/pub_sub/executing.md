@@ -29,5 +29,5 @@ $queue->subscribe(function(RenameArticleCommand $command) use ($bus) {
 $command = new RenameArticleCommand();
 $command->new_name = $new_name;
 
-$queue->push($command);
+$queue->publish($command);
 ```
