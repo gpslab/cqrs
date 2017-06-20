@@ -32,8 +32,7 @@ matrix:
         - php: 5.5
           env: PREDIS_VERSION=1.1.*
         - php: 5.6
-          env: PUBSUB_PREDIS_VERSION=2.0.*
-          env: COVERAGE=1
+          env: PUBSUB_PREDIS_VERSION=2.0.* COVERAGE=1
     allow_failures:
         - php: hhvm
 
