@@ -16,3 +16,10 @@ The implementation of such a queue is very simple, but it has a number of shortc
 * Load increase.
 
 To solve these problems, we recommend using a [Pub/Sub](../pull_push/pull_push.md) queue.
+
+You can use one of the existing queues:
+
+* [Memory queue](memory.md)
+* [Memory unique queue](memory_unique.md)
+* [Predis queue](predis.md)
+* [Predis unique queue](predis_unique.md)
