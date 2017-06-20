@@ -4,7 +4,6 @@ Predis queue
 Queues are designed to distribute the load and delay execution of commands or transfer their execution to separate
 processes.
 
-
 The queue stores events in [Redis](https://redis.io/), using the [Predis](https://github.com/nrk/predis) library to
 access it.
 
