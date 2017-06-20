@@ -50,6 +50,10 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        if (!class_exists(RedisPubSubAdapter::class)) {
+            $this->markTestSkipped('php-pubsub-redis is not installed.');
+        }
+
         $this->command = $this->getMock(Command::class);
         $this->serializer = $this->getMock(SerializerInterface::class);
         $this->logger = $this->getMock(LoggerInterface::class);
