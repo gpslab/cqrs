@@ -20,24 +20,11 @@ class RenameArticleCommandSerializer implements NormalizerInterface, Denormalize
             (?<new_name>.+      # new article name
         $/x';
 
-    /**
-     * @param mixed       $data
-     * @param string|null $format
-     *
-     * @return bool
-     */
     public function supportsNormalization($data, $format = null)
     {
         return $data instanceof RenameArticleCommand && $format == PredisCommandQueue::FORMAT;
     }
 
-    /**
-     * @param RenameArticleCommand $object
-     * @param string|null          $format
-     * @param array                $context
-     *
-     * @return string
-     */
     public function normalize($object, $format = null, array $context = [])
     {
         return sprintf(
@@ -48,14 +35,6 @@ class RenameArticleCommandSerializer implements NormalizerInterface, Denormalize
         );
     }
 
-    /**
-     * @param string      $data
-     * @param string      $class
-     * @param string|null $format
-     * @param array       $context
-     *
-     * @return RenameArticleCommand
-     */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
         if (!preg_match(self::REGEXP, $data, $match)) {
@@ -69,13 +48,6 @@ class RenameArticleCommandSerializer implements NormalizerInterface, Denormalize
         );
     }
 
-    /**
-     * @param string      $data
-     * @param string      $type
-     * @param string|null $format
-     *
-     * @return bool
-     */
     public function supportsDenormalization($data, $type, $format = null)
     {
         return
