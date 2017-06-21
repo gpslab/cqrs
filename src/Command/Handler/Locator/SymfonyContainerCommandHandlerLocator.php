@@ -45,9 +45,9 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
     }
 
     /**
-     * @param $command_name
+     * @param string $command_name
      *
-     * @return callable
+     * @return callable|null
      */
     private function lazyLoad($command_name)
     {
@@ -57,7 +57,9 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
 
             if (is_callable($handler)) {
                 return $handler;
-            } elseif (is_callable([$handler, $method])) {
+            }
+
+            if (is_callable([$handler, $method])) {
                 return [$handler, $method];
             }
         }

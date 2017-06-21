@@ -54,9 +54,9 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
     }
 
     /**
-     * @param $command_name
+     * @param string $command_name
      *
-     * @return callable
+     * @return callable|null
      */
     private function lazyLoad($command_name)
     {
@@ -66,7 +66,9 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
 
             if (is_callable($handler)) {
                 return $handler;
-            } elseif (is_callable([$handler, $method])) {
+            }
+
+            if (is_callable([$handler, $method])) {
                 return [$handler, $method];
             }
         }
