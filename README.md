@@ -40,7 +40,7 @@ composer require gpslab/cqrs
     * [Predis queue](docs/command/queue/pub_sub/predis.md)
   * Serialize command
     * [Optimized serializer](docs/command/queue/serialize/optimized.md)
-    * Payload serializer
+    * [Payload serializer](docs/command/queue/serialize/payload.md)
 * [Middleware](https://github.com/gpslab/middleware)
 * [Payload](https://github.com/gpslab/payload)
 
