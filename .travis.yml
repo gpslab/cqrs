@@ -2,13 +2,6 @@ language: php
 
 sudo: false
 
-php:
-    - 7.1
-    - 7.0
-    - 5.6
-    - 5.5
-    - hhvm
-
 notifications:
     email: deploy@peter-gribanov.ru
 
@@ -19,6 +12,10 @@ branches:
 matrix:
     fast_finish: true
     include:
+        - php: 7.1
+        - php: 7.0
+        - php: 5.6
+        - php: 5.5
         - php: 5.5
           env: SYMFONY_VERSION=2.7.*
         - php: 5.5
@@ -31,8 +28,10 @@ matrix:
           env: PREDIS_VERSION=1.1.*
         - php: 5.6
           env: PUBSUB_PREDIS_VERSION=2.0.*
-    allow_failures:
         - php: hhvm
+          sudo: required
+          dist: trusty
+          group: edge
 
 before_install:
     - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
