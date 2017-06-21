@@ -36,9 +36,8 @@ matrix:
 
 before_install:
     - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-    - composer self-update
 
-before_script:
+install:
     - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --dev --no-update; fi;
     - if [ "$PREDIS_VERSION" != "" ]; then composer require "predis/predis:${PREDIS_VERSION}" --dev --no-update; fi;
     - if [ "$PUBSUB_PREDIS_VERSION" != "" ]; then composer require "superbalist/php-pubsub-redis:${PUBSUB_PREDIS_VERSION}" --dev --no-update; fi;
