@@ -39,11 +39,6 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var PredisCommandQueue
-     */
-    private $queue;
-
-    /**
      * @var string
      */
     private $queue_name = 'commands';
@@ -62,18 +57,43 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock()
         ;
-
-        $this->queue = new PredisCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name);
     }
 
-    public function testPublish()
+    /**
+     * @param string $format
+     *
+     * @return PredisCommandQueue
+     */
+    private function queue($format)
+    {
+        return new PredisCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name, $format);
+    }
+
+    /**
+     * @return array
+     */
+    public function formats()
+    {
+        return [
+            [null, 'predis'],
+            ['json', 'json'],
+        ];
+    }
+
+    /**
+     * @dataProvider formats
+     *
+     * @param string $format
+     * @param string $expected_format
+     */
+    public function testPublish($format, $expected_format)
     {
         $massage = 'foo';
 
         $this->serializer
             ->expects($this->once())
             ->method('serialize')
-            ->with($this->command, 'predis')
+            ->with($this->command, $expected_format)
             ->will($this->returnValue($massage))
         ;
 
@@ -83,10 +103,16 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
             ->with($this->queue_name, $massage)
         ;
 
-        $this->assertTrue($this->queue->publish($this->command));
+        $this->assertTrue($this->queue($format)->publish($this->command));
     }
 
-    public function testSubscribe()
+    /**
+     * @dataProvider formats
+     *
+     * @param string $format
+     * @param string $expected_format
+     */
+    public function testSubscribe($format, $expected_format)
     {
         $subscriber_called = false;
         $handler = function ($command) use (&$subscriber_called) {
@@ -98,7 +124,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->will($this->returnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
+            ->will($this->returnCallback(function ($queue_name, $handler_wrapper) use ($handler, $expected_format) {
                 $this->assertEquals($this->queue_name, $queue_name);
                 $this->assertTrue(is_callable($handler_wrapper));
 
@@ -106,7 +132,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
                 $this->serializer
                     ->expects($this->once())
                     ->method('deserialize')
-                    ->with($message, Command::class, 'predis')
+                    ->with($message, Command::class, $expected_format)
                     ->will($this->returnValue($this->command))
                 ;
 
@@ -114,12 +140,18 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $this->queue->subscribe($handler);
+        $this->queue($format)->subscribe($handler);
 
         $this->assertTrue($subscriber_called);
     }
 
-    public function testSubscribeFailure()
+    /**
+     * @dataProvider formats
+     *
+     * @param string $format
+     * @param string $expected_format
+     */
+    public function testSubscribeFailure($format, $expected_format)
     {
         $subscriber_called = false;
         $handler = function ($command) use (&$subscriber_called) {
@@ -131,7 +163,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->will($this->returnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
+            ->will($this->returnCallback(function ($queue_name, $handler_wrapper) use ($handler, $expected_format) {
                 $this->assertEquals($this->queue_name, $queue_name);
                 $this->assertTrue(is_callable($handler_wrapper));
 
@@ -140,7 +172,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
                 $this->serializer
                     ->expects($this->once())
                     ->method('deserialize')
-                    ->with($message, Command::class, 'predis')
+                    ->with($message, Command::class, $expected_format)
                     ->will($this->throwException($exception))
                 ;
 
@@ -163,15 +195,19 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $this->queue->subscribe($handler);
+        $this->queue($format)->subscribe($handler);
 
         $this->assertFalse($subscriber_called);
     }
 
     /**
      * @expectedException \Exception
+     * @dataProvider formats
+     *
+     * @param string $format
+     * @param string $expected_format
      */
-    public function testSubscribeHandlerFailure()
+    public function testSubscribeHandlerFailure($format, $expected_format)
     {
         $exception = new \Exception('bar');
         $handler = function ($command) use ($exception) {
@@ -183,7 +219,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->will($this->returnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
+            ->will($this->returnCallback(function ($queue_name, $handler_wrapper) use ($handler, $expected_format) {
                 $this->assertEquals($this->queue_name, $queue_name);
                 $this->assertTrue(is_callable($handler_wrapper));
 
@@ -191,7 +227,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
                 $this->serializer
                     ->expects($this->once())
                     ->method('deserialize')
-                    ->with($message, Command::class, 'predis')
+                    ->with($message, Command::class, $expected_format)
                     ->will($this->returnValue($this->command))
                 ;
 
@@ -199,6 +235,6 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $this->queue->subscribe($handler);
+        $this->queue($format)->subscribe($handler);
     }
 }

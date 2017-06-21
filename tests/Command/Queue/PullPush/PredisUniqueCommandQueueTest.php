@@ -36,11 +36,6 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var PredisUniqueCommandQueue
-     */
-    private $queue;
-
-    /**
      * @var string
      */
     private $queue_name = 'unique_commands';
@@ -50,16 +45,42 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->client = $this->getMock(Client::class);
         $this->serializer = $this->getMock(SerializerInterface::class);
         $this->logger = $this->getMock(LoggerInterface::class);
+    }
 
-        $this->queue = new PredisUniqueCommandQueue(
+    /**
+     * @param string $format
+     *
+     * @return PredisUniqueCommandQueue
+     */
+    private function queue($format)
+    {
+        return new PredisUniqueCommandQueue(
             $this->client,
             $this->serializer,
             $this->logger,
-            $this->queue_name
+            $this->queue_name,
+            $format
         );
     }
 
-    public function testPushQueue()
+    /**
+     * @return array
+     */
+    public function formats()
+    {
+        return [
+            [null, 'predis'],
+            ['json', 'json'],
+        ];
+    }
+
+    /**
+     * @dataProvider formats
+     *
+     * @param string $format
+     * @param string $expected_format
+     */
+    public function testPushQueue($format, $expected_format)
     {
         $queue = [
             new RenameContactCommand(),
@@ -77,7 +98,7 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
             $this->serializer
                 ->expects($this->at($i))
                 ->method('serialize')
-                ->with($command, 'predis')
+                ->with($command, $expected_format)
                 ->will($this->returnValue($value))
             ;
 
@@ -97,11 +118,17 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
         }
 
         foreach ($queue as $command) {
-            $this->assertTrue($this->queue->push($command));
+            $this->assertTrue($this->queue($format)->push($command));
         }
     }
 
-    public function testPopQueue()
+    /**
+     * @dataProvider formats
+     *
+     * @param string $format
+     * @param string $expected_format
+     */
+    public function testPopQueue($format, $expected_format)
     {
         $queue = [
             new RenameContactCommand(),
@@ -116,7 +143,7 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
             $this->serializer
                 ->expects($this->at($i))
                 ->method('deserialize')
-                ->with($value, Command::class, 'predis')
+                ->with($value, Command::class, $expected_format)
                 ->will($this->returnValue($command))
             ;
 
@@ -137,7 +164,7 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
 
         $expected = array_reverse($queue);
         $i = count($expected);
-        while ($command = $this->queue->pull()) {
+        while ($command = $this->queue($format)->pull()) {
             $this->assertEquals($expected[--$i], $command);
         }
 
@@ -145,7 +172,13 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($command, 'No commands in queue');
     }
 
-    public function testFailedDeserialize()
+    /**
+     * @dataProvider formats
+     *
+     * @param string $format
+     * @param string $expected_format
+     */
+    public function testFailedDeserialize($format, $expected_format)
     {
         $exception = new \Exception('foo');
         $command = new RenameContactCommand();
@@ -167,7 +200,7 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->serializer
             ->expects($this->once())
             ->method('deserialize')
-            ->with($value, Command::class, 'predis')
+            ->with($value, Command::class, $expected_format)
             ->will($this->throwException($exception))
         ;
 
@@ -178,6 +211,6 @@ class PredisUniqueCommandQueueTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1))
         ;
 
-        $this->assertNull($this->queue->pull());
+        $this->assertNull($this->queue($format)->pull());
     }
 }

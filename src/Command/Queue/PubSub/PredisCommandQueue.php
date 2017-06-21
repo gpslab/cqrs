@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class PredisCommandQueue implements CommandQueue
 {
-    const FORMAT = 'predis';
+    const DEFAULT_FORMAT = 'predis';
 
     /**
      * @var RedisPubSubAdapter
@@ -40,21 +40,29 @@ class PredisCommandQueue implements CommandQueue
     private $queue_name = '';
 
     /**
+     * @var string
+     */
+    private $format = '';
+
+    /**
      * @param RedisPubSubAdapter  $client
      * @param SerializerInterface $serializer
      * @param LoggerInterface     $logger
      * @param string              $queue_name
+     * @param string|null         $format
      */
     public function __construct(
         RedisPubSubAdapter $client,
         SerializerInterface $serializer,
         LoggerInterface $logger,
-        $queue_name
+        $queue_name,
+        $format = null
     ) {
         $this->client = $client;
         $this->serializer = $serializer;
         $this->logger = $logger;
         $this->queue_name = $queue_name;
+        $this->format = $format ?: self::DEFAULT_FORMAT;
     }
 
     /**
@@ -66,7 +74,7 @@ class PredisCommandQueue implements CommandQueue
      */
     public function publish(Command $command)
     {
-        $massage = $this->serializer->serialize($command, self::FORMAT);
+        $massage = $this->serializer->serialize($command, $this->format);
         $this->client->publish($this->queue_name, $massage);
 
         return true;
@@ -81,7 +89,7 @@ class PredisCommandQueue implements CommandQueue
     {
         $this->client->subscribe($this->queue_name, function ($message) use ($handler) {
             try {
-                $command = $this->serializer->deserialize($message, Command::class, self::FORMAT);
+                $command = $this->serializer->deserialize($message, Command::class, $this->format);
             } catch (\Exception $e) { // catch only deserialize exception
                 // it's a critical error
                 // it is necessary to react quickly to it

@@ -15,7 +15,7 @@ composer require superbalist/php-pubsub-redis
 
 This queue uses a [serializer](https://symfony.com/doc/current/components/serializer.html) to convert command objects
 to strings and back while waiting for the transport of objects across the Redis. The serializer uses the `predis`
-format. You can make messages more optimal for a Redis than JSON.
+format as a default. You can change format if you need. You can make messages more optimal for a Redis than JSON.
 
 If the message could not be deserialized, then a critical message is written to the log so that the administrator can
 react quickly to the problem and the message is placed again at the end of the queue, so as not to lose it.
@@ -36,7 +36,8 @@ use Predis\Client;
 //$serializer = new Serializer(); // Symfony serializer
 //$logger = new Logger(); // PSR-3 logger
 $queue_name = 'article_queue';
-$queue = new PredisCommandQueue($predis, $serializer, $logger, $queue_name);
+$format = 'json'; // default: predis
+$queue = new PredisCommandQueue($predis, $serializer, $logger, $queue_name, $format);
 
 
 $command = new RenameArticleCommand();
@@ -63,7 +64,8 @@ $bus = new HandlerLocatedCommandBus($locator);
 //$serializer = new Serializer(); // Symfony serializer
 //$logger = new Logger(); // PSR-3 logger
 $queue_name = 'article_queue';
-$queue = new PredisCommandQueue($predis, $serializer, $logger, $queue_name);
+$format = 'json'; // default: predis
+$queue = new PredisCommandQueue($predis, $serializer, $logger, $queue_name, $format);
 
 
 $queue->subscribe(function(RenameArticleCommand $command) use ($bus) {

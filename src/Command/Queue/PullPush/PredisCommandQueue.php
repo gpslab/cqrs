@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class PredisCommandQueue implements CommandQueue
 {
-    const FORMAT = 'predis';
+    const DEFAULT_FORMAT = 'predis';
 
     /**
      * @var Client
@@ -40,17 +40,29 @@ class PredisCommandQueue implements CommandQueue
     private $queue_name = '';
 
     /**
+     * @var string
+     */
+    private $format = '';
+
+    /**
      * @param Client              $client
      * @param SerializerInterface $serializer
      * @param LoggerInterface     $logger
      * @param string              $queue_name
+     * @param string|null         $format
      */
-    public function __construct(Client $client, SerializerInterface $serializer, LoggerInterface $logger, $queue_name)
-    {
+    public function __construct(
+        Client $client,
+        SerializerInterface $serializer,
+        LoggerInterface $logger,
+        $queue_name,
+        $format = null
+    ) {
         $this->client = $client;
         $this->serializer = $serializer;
         $this->logger = $logger;
         $this->queue_name = $queue_name;
+        $this->format = $format ?: self::DEFAULT_FORMAT;
     }
 
     /**
@@ -62,7 +74,7 @@ class PredisCommandQueue implements CommandQueue
      */
     public function push(Command $command)
     {
-        $value = $this->serializer->serialize($command, self::FORMAT);
+        $value = $this->serializer->serialize($command, $this->format);
 
         return (bool) $this->client->rpush($this->queue_name, [$value]);
     }
@@ -81,7 +93,7 @@ class PredisCommandQueue implements CommandQueue
         }
 
         try {
-            return $this->serializer->deserialize($value, Command::class, self::FORMAT);
+            return $this->serializer->deserialize($value, Command::class, $this->format);
         } catch (\Exception $e) {
             // it's a critical error
             // it is necessary to react quickly to it

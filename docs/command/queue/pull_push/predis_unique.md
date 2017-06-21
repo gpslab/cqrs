@@ -16,7 +16,8 @@ use Predis\Client;
 //$serializer = new Serializer(); // Symfony serializer
 //$logger = new Logger(); // PSR-3 logger
 $queue_name = 'article_queue';
-$queue = new PredisUniqueCommandQueue($predis, $serializer, $logger, $queue_name);
+$format = 'json'; // default: predis
+$queue = new PredisUniqueCommandQueue($predis, $serializer, $logger, $queue_name, $format);
 
 // make command
 $command = new RenameArticleCommand();
@@ -42,7 +43,8 @@ $bus = new HandlerLocatedCommandBus($locator);
 //$serializer = new Serializer(); // Symfony serializer
 //$logger = new Logger(); // PSR-3 logger
 $queue_name = 'article_queue';
-$queue = new PredisUniqueCommandQueue($predis, $serializer, $logger, $queue_name);
+$format = 'json'; // default: predis
+$queue = new PredisUniqueCommandQueue($predis, $serializer, $logger, $queue_name, $format);
 
 while ($command = $queue->pull()) {
     $bus->handle($command);
