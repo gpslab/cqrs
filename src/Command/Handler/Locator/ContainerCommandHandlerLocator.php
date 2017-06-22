@@ -45,8 +45,9 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
         if (!isset($this->command_handler_ids[$command_name])) {
             return null;
         }
+        list($service, $method) = $this->command_handler_ids[$command_name];
 
-        return $this->resolve($this->command_handler_ids[$command_name]);
+        return $this->resolve($this->container->get($service), $method);
     }
 
     /**
@@ -60,14 +61,13 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
     }
 
     /**
-     * @param array $handler
+     * @param mixed  $service
+     * @param string $method
      *
      * @return callable|null
      */
-    private function resolve(array $handler)
+    private function resolve($service, $method)
     {
-        list($service, $method) = $handler;
-
         if (is_callable($service)) {
             return $service;
         }

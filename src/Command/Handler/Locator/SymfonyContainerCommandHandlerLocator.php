@@ -33,11 +33,12 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
     {
         $command_name = get_class($command);
 
-        if (!($this->container instanceof ContainerInterface || !isset($this->command_handler_ids[$command_name]))) {
+        if (!($this->container instanceof ContainerInterface) || !isset($this->command_handler_ids[$command_name])) {
             return null;
         }
+        list($service, $method) = $this->command_handler_ids[$command_name];
 
-        return $this->resolve($this->command_handler_ids[$command_name]);
+        return $this->resolve($this->container->get($service), $method);
     }
 
     /**
@@ -51,14 +52,13 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
     }
 
     /**
-     * @param array $handler
+     * @param mixed  $service
+     * @param string $method
      *
      * @return callable|null
      */
-    private function resolve(array $handler)
+    private function resolve($service, $method)
     {
-        list($service, $method) = $handler;
-
         if (is_callable($service)) {
             return $service;
         }
