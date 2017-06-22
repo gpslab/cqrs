@@ -61,4 +61,3 @@ $queue->subscribe(function(RenameArticleCommand $command) use ($bus) {
     $bus->handle($command);
 });
 ```
-
