@@ -62,13 +62,27 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
     {
         if (isset($this->query_handler_ids[$query_name])) {
             list($service, $method) = $this->query_handler_ids[$query_name];
-            $handler = $this->container->get($service);
 
-            if (is_callable($handler)) {
-                return $handler;
-            } elseif (is_callable([$handler, $method])) {
-                return [$handler, $method];
-            }
+            return $this->resolve($this->container->get($service), $method);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param mixed  $service
+     * @param string $method
+     *
+     * @return callable|null
+     */
+    private function resolve($service, $method)
+    {
+        if (is_callable($service)) {
+            return $service;
+        }
+
+        if (is_callable([$service, $method])) {
+            return [$service, $method];
         }
 
         return null;
