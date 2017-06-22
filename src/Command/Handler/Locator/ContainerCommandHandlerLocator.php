@@ -40,7 +40,13 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
      */
     public function findHandler(Command $command)
     {
-        return $this->lazyLoad(get_class($command));
+        $command_name = get_class($command);
+
+        if (!isset($this->command_handler_ids[$command_name])) {
+            return null;
+        }
+
+        return $this->resolve($this->command_handler_ids[$command_name]);
     }
 
     /**
@@ -54,23 +60,20 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
     }
 
     /**
-     * @param string $command_name
+     * @param array $handler
      *
      * @return callable|null
      */
-    private function lazyLoad($command_name)
+    private function resolve(array $handler)
     {
-        if (isset($this->command_handler_ids[$command_name])) {
-            list($service, $method) = $this->command_handler_ids[$command_name];
-            $handler = $this->container->get($service);
+        list($service, $method) = $handler;
 
-            if (is_callable($handler)) {
-                return $handler;
-            }
+        if (is_callable($service)) {
+            return $service;
+        }
 
-            if (is_callable([$handler, $method])) {
-                return [$handler, $method];
-            }
+        if (is_callable([$service, $method])) {
+            return [$service, $method];
         }
 
         return null;
