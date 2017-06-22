@@ -31,14 +31,7 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
      */
     public function findHandler(Command $command)
     {
-        $command_name = get_class($command);
-
-        if (!($this->container instanceof ContainerInterface) || !isset($this->command_handler_ids[$command_name])) {
-            return null;
-        }
-        list($service, $method) = $this->command_handler_ids[$command_name];
-
-        return $this->resolve($this->container->get($service), $method);
+        return $this->lazyLoad(get_class($command));
     }
 
     /**
@@ -49,6 +42,22 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
     public function registerService($command_name, $service, $method = '__invoke')
     {
         $this->command_handler_ids[$command_name] = [$service, $method];
+    }
+
+    /**
+     * @param string $command_name
+     *
+     * @return callable|null
+     */
+    private function lazyLoad($command_name)
+    {
+        if ($this->container instanceof ContainerInterface && isset($this->command_handler_ids[$command_name])) {
+            list($service, $method) = $this->command_handler_ids[$command_name];
+
+            return $this->resolve($this->container->get($service), $method);
+        }
+
+        return null;
     }
 
     /**
