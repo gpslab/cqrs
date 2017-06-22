@@ -79,3 +79,4 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
         return null;
     }
 }
+
