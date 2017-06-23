@@ -115,6 +115,12 @@ class ContainerQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($handler);
     }
 
+    public function testNoAnyCommandHandler()
+    {
+        $handler = $this->locator->findHandler($this->query);
+        $this->assertNull($handler);
+    }
+
     public function testHandlerIsNotAQueryHandler()
     {
         $service = 'foo';

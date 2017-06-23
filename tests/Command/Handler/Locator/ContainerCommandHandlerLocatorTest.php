@@ -115,6 +115,12 @@ class ContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($handler);
     }
 
+    public function testNoAnyCommandHandler()
+    {
+        $handler = $this->locator->findHandler($this->command);
+        $this->assertNull($handler);
+    }
+
     public function testHandlerIsNotACommandHandler()
     {
         $service = 'foo';

@@ -136,6 +136,13 @@ class SymfonyContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestC
         $this->assertNull($handler);
     }
 
+    public function testNoAnyCommandHandler()
+    {
+        $this->locator->setContainer($this->container);
+        $handler = $this->locator->findHandler($this->command);
+        $this->assertNull($handler);
+    }
+
     public function testNoContainer()
     {
         $service = 'foo';
