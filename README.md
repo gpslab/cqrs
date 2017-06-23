@@ -11,7 +11,7 @@
 
 Infrastructure for creating [CQRS](https://martinfowler.com/bliki/CQRS.html) applications.
 
-![CQRS base scheme](cqrs_schema.png)
+<p align="center"><img src="cqrs_schema.png" alt="CQRS base scheme"></p>
 
 ## Installation
 
