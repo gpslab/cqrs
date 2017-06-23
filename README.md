@@ -7,7 +7,9 @@
 [![StyleCI](https://styleci.io/repos/92310135/shield?branch=master)](https://styleci.io/repos/92310135)
 [![License](https://img.shields.io/packagist/l/gpslab/cqrs.svg?maxAge=3600)](https://github.com/gpslab/cqrs)
 
-# Infrastructure for creating CQRS applications.
+# CQRS
+
+Infrastructure for creating [CQRS](https://martinfowler.com/bliki/CQRS.html) applications.
 
 ![CQRS base scheme](cqrs_schema.png)
 
