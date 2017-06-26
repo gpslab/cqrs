@@ -8,14 +8,14 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Command\Queue\PubSub;
+namespace GpsLab\Component\Command\Queue\Subscribe;
 
 use GpsLab\Component\Command\Command;
 use Psr\Log\LoggerInterface;
 use Superbalist\PubSub\Redis\RedisPubSubAdapter;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class PredisCommandQueue implements CommandQueue
+class PredisSubscribeCommandQueue implements SubscribeCommandQueue
 {
     const DEFAULT_FORMAT = 'predis';
 

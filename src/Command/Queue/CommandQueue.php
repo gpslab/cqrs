@@ -8,28 +8,18 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Command\Queue\PullPush;
+namespace GpsLab\Component\Command\Queue;
 
 use GpsLab\Component\Command\Command;
 
-/**
- * Push and Pull command queue.
- */
 interface CommandQueue
 {
     /**
-     * Push command to queue.
+     * Publish command to queue.
      *
      * @param Command $command
      *
      * @return bool
      */
-    public function push(Command $command);
-
-    /**
-     * Pull command from queue. Return NULL if queue is empty.
-     *
-     * @return Command|null
-     */
-    public function pull();
+    public function publish(Command $command);
 }

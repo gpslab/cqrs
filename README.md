@@ -32,14 +32,14 @@ composer require gpslab/cqrs
     * [PSR-11 Container locator](docs/command/locator/psr-11_container.md) *([PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md))*
     * [Symfony container locator](docs/command/locator/symfony_container.md) *(Symfony 3.3 [implements](http://symfony.com/blog/new-in-symfony-3-3-psr-11-containers) a [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md))*
 * Queue
-  * [Pull/Push](docs/command/queue/pull_push/pull_push.md)
-    * [Memory queue](docs/command/queue/pull_push/memory.md)
-    * [Memory unique queue](docs/command/queue/pull_push/memory_unique.md)
-    * [Predis queue](docs/command/queue/pull_push/predis.md)
-    * [Predis unique queue](docs/command/queue/pull_push/predis_unique.md)
-  * [Pub/Sub](docs/command/queue/pub_sub/pub_sub.md)
-    * [Executing queue](docs/command/queue/pub_sub/executing.md)
-    * [Predis queue](docs/command/queue/pub_sub/predis.md)
+  * [Pull](docs/command/queue/pull/pull.md)
+    * [Memory queue](docs/command/queue/pull/memory.md)
+    * [Memory unique queue](docs/command/queue/pull/memory_unique.md)
+    * [Predis queue](docs/command/queue/pull/predis.md)
+    * [Predis unique queue](docs/command/queue/pull/predis_unique.md)
+  * [Subscribe](docs/command/queue/subscribe/subscribe.md)
+    * [Executing queue](docs/command/queue/subscribe/executing.md)
+    * [Predis queue](docs/command/queue/subscribe/predis.md)
   * Serialize command
     * [Optimized serializer](docs/command/queue/serialize/optimized.md)
     * [Payload serializer](docs/command/queue/serialize/payload.md)

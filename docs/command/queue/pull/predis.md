@@ -10,7 +10,7 @@ access it.
 Predis must be installed separately with [Composer](http://packagist.org):
 
 ```
-composer require superbalist/php-pubsub-redis
+composer require predis/predis
 ```
 
 This queue uses a [serializer](https://symfony.com/doc/current/components/serializer.html) to convert command objects
@@ -20,26 +20,22 @@ format as a default. You can change format if you need. You can make messages mo
 If the message could not be deserialized, then a critical message is written to the log so that the administrator can
 react quickly to the problem and the message is placed again at the end of the queue, so as not to lose it.
 
-You can use any implementations of [callable type](http://php.net/manual/en/language.types.callable.php) as a queue
-subscriber.
-
 Configure queue:
 
 ```php
-use GpsLab\Component\Command\Queue\PubSub\PredisCommandQueue;
+use GpsLab\Component\Command\Queue\Pull\PredisPullCommandQueue;
 use Symfony\Component\Serializer\Serializer;
-use Superbalist\PubSub\Redis\RedisPubSubAdapter;
 use Predis\Client;
 
-//$predis = new RedisPubSubAdapter(new Client('tcp://10.0.0.1:6379')); // Predis client
+//$predis = new Client('tcp://10.0.0.1:6379'); // Predis client
 //$serializer = new Serializer(); // Symfony serializer
 //$logger = new Logger(); // PSR-3 logger
 $queue_name = 'article_queue';
 $format = 'json'; // default: predis
-$queue = new PredisCommandQueue($predis, $serializer, $logger, $queue_name, $format);
+$queue = new PredisPullCommandQueue($predis, $serializer, $logger, $queue_name, $format);
 ```
 
-Make command and push it into queue:
+Make command and publish it into queue:
 
 ```php
 $command = new RenameArticleCommand();
@@ -57,7 +53,7 @@ use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
 $locator = new DirectBindingCommandHandlerLocator();
 $bus = new HandlerLocatedCommandBus($locator);
 
-$queue->subscribe(function(RenameArticleCommand $command) use ($bus) {
+while ($command = $queue->pull()) {
     $bus->handle($command);
-});
+}
 ```

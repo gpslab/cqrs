@@ -5,7 +5,7 @@ Example Serializer/Deserializer for command `RenameArticleCommand`:
 
 ```php
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Queue\PullPush\PredisCommandQueue;
+use GpsLab\Component\Command\Queue\Pull\PredisPullCommandQueue;
 use Symfony\Component\Serializer\Exception\UnsupportedException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -22,7 +22,7 @@ class RenameArticleCommandSerializer implements NormalizerInterface, Denormalize
 
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof RenameArticleCommand && $format == PredisCommandQueue::FORMAT;
+        return $data instanceof RenameArticleCommand && $format == PredisPullCommandQueue::FORMAT;
     }
 
     public function normalize($object, $format = null, array $context = [])

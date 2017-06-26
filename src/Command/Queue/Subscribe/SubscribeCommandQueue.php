@@ -8,24 +8,15 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Command\Queue\PubSub;
+namespace GpsLab\Component\Command\Queue\Subscribe;
 
-use GpsLab\Component\Command\Command;
+use GpsLab\Component\Command\Queue\CommandQueue;
 
 /**
  * Publish and Subscribe command queue.
  */
-interface CommandQueue
+interface SubscribeCommandQueue extends CommandQueue
 {
-    /**
-     * Publish command to queue.
-     *
-     * @param Command $command
-     *
-     * @return bool
-     */
-    public function publish(Command $command);
-
     /**
      * Subscribe on command queue.
      *

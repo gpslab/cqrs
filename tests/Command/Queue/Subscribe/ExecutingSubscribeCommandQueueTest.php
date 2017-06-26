@@ -8,12 +8,12 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Tests\Command\Queue\PubSub;
+namespace GpsLab\Component\Tests\Command\Queue\Subscribe;
 
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Queue\PubSub\ExecutingCommandQueue;
+use GpsLab\Component\Command\Queue\Subscribe\ExecutingSubscribeCommandQueue;
 
-class ExecutingCommandQueueTest extends \PHPUnit_Framework_TestCase
+class ExecutingSubscribeCommandQueueTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Command
@@ -21,14 +21,14 @@ class ExecutingCommandQueueTest extends \PHPUnit_Framework_TestCase
     private $command;
 
     /**
-     * @var ExecutingCommandQueue
+     * @var ExecutingSubscribeCommandQueue
      */
     private $queue;
 
     protected function setUp()
     {
         $this->command = $this->getMock(Command::class);
-        $this->queue = new ExecutingCommandQueue();
+        $this->queue = new ExecutingSubscribeCommandQueue();
     }
 
     public function testPublish()

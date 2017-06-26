@@ -8,11 +8,11 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Command\Queue\PubSub;
+namespace GpsLab\Component\Command\Queue\Subscribe;
 
 use GpsLab\Component\Command\Command;
 
-class ExecutingCommandQueue implements CommandQueue
+class ExecutingSubscribeCommandQueue implements SubscribeCommandQueue
 {
     /**
      * @var callable|null

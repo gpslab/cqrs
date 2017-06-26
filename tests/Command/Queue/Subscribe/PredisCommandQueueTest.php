@@ -8,15 +8,15 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Tests\Command\Queue\PubSub;
+namespace GpsLab\Component\Tests\Command\Queue\Subscribe;
 
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Queue\PubSub\PredisCommandQueue;
+use GpsLab\Component\Command\Queue\Subscribe\PredisSubscribeCommandQueue;
 use Psr\Log\LoggerInterface;
 use Superbalist\PubSub\Redis\RedisPubSubAdapter;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
+class PredisSubscribeCommandQueueTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Command
@@ -62,11 +62,11 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $format
      *
-     * @return PredisCommandQueue
+     * @return PredisSubscribeCommandQueue
      */
     private function queue($format)
     {
-        return new PredisCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name, $format);
+        return new PredisSubscribeCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name, $format);
     }
 
     /**

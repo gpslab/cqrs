@@ -8,14 +8,14 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Command\Queue\PullPush;
+namespace GpsLab\Component\Command\Queue\Pull;
 
 use GpsLab\Component\Command\Command;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class PredisCommandQueue implements CommandQueue
+class PredisPullCommandQueue implements PullCommandQueue
 {
     const DEFAULT_FORMAT = 'predis';
 
@@ -66,13 +66,13 @@ class PredisCommandQueue implements CommandQueue
     }
 
     /**
-     * Push command to queue.
+     * Publish command to queue.
      *
      * @param Command $command
      *
      * @return bool
      */
-    public function push(Command $command)
+    public function publish(Command $command)
     {
         $value = $this->serializer->serialize($command, $this->format);
 

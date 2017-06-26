@@ -8,11 +8,11 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Command\Queue\PullPush;
+namespace GpsLab\Component\Command\Queue\Pull;
 
 use GpsLab\Component\Command\Command;
 
-class MemoryUniqueCommandQueue implements CommandQueue
+class MemoryPullCommandQueue implements PullCommandQueue
 {
     /**
      * @var Command[]
@@ -20,21 +20,14 @@ class MemoryUniqueCommandQueue implements CommandQueue
     private $commands = [];
 
     /**
-     * Push command to queue.
+     * Publish command to queue.
      *
      * @param Command $command
      *
      * @return bool
      */
-    public function push(Command $command)
+    public function publish(Command $command)
     {
-        $index = array_search($command, $this->commands);
-
-        // remove exists command and push it again
-        if ($index !== false) {
-            unset($this->commands[$index]);
-        }
-
         $this->commands[] = $command;
 
         return true;

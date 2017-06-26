@@ -8,17 +8,17 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Tests\Command\Queue\PullPush;
+namespace GpsLab\Component\Tests\Command\Queue\Pull;
 
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Queue\PullPush\PredisCommandQueue;
+use GpsLab\Component\Command\Queue\Pull\PredisPullCommandQueue;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
+class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Client
@@ -50,11 +50,11 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $format
      *
-     * @return PredisCommandQueue
+     * @return PredisPullCommandQueue
      */
     private function queue($format)
     {
-        return new PredisCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name, $format);
+        return new PredisPullCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name, $format);
     }
 
     /**
@@ -103,7 +103,7 @@ class PredisCommandQueueTest extends \PHPUnit_Framework_TestCase
         }
 
         foreach ($queue as $command) {
-            $this->assertTrue($this->queue($format)->push($command));
+            $this->assertTrue($this->queue($format)->publish($command));
         }
     }
 

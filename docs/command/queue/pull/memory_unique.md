@@ -1,7 +1,7 @@
-Predis unique queue
+Memory unique queue
 ===================
 
-It works just like the [Predis queue](predis.md), but it only allows storing unique commands. All duplicates will
+It works just like the [Memory queue](memory.md), but it only allows storing unique commands. All duplicates will
 be ignored.
 
 ### What is it for
@@ -20,39 +20,22 @@ there is no need to update the block.
 
 ### Usage
 
-Configure queue:
-
-```php
-use GpsLab\Component\Command\Queue\PullPush\PredisUniqueCommandQueue;
-use Symfony\Component\Serializer\Serializer;
-use Predis\Client;
-
-//$predis = new Client('tcp://10.0.0.1:6379'); // Predis client
-//$serializer = new Serializer(); // Symfony serializer
-//$logger = new Logger(); // PSR-3 logger
-$queue_name = 'article_queue';
-$format = 'json'; // default: predis
-$queue = new PredisUniqueCommandQueue($predis, $serializer, $logger, $queue_name, $format);
-```
-
-Make command and push it into queue:
-
-```php
-$command = new RenameArticleCommand();
-$command->new_name = $new_name;
-
-$queue->push($command);
-```
-
-In latter pull commands from queue:
-
 ```php
 use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
 use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
+use GpsLab\Component\Command\Queue\Pull\MemoryUniquePullCommandQueue;
 
 $locator = new DirectBindingCommandHandlerLocator();
 $bus = new HandlerLocatedCommandBus($locator);
+$queue = new MemoryUniquePullCommandQueue();
 
+$command = new RenameArticleCommand();
+$command->new_name = $new_name;
+
+$queue->publish($command);
+
+
+// in latter
 while ($command = $queue->pull()) {
     $bus->handle($command);
 }

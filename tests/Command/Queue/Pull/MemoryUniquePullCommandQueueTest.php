@@ -8,22 +8,22 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace GpsLab\Component\Tests\Command\Queue\PullPush;
+namespace GpsLab\Component\Tests\Command\Queue\Pull;
 
-use GpsLab\Component\Command\Queue\PullPush\MemoryCommandQueue;
+use GpsLab\Component\Command\Queue\Pull\MemoryUniquePullCommandQueue;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 
-class MemoryCommandQueueTest extends \PHPUnit_Framework_TestCase
+class MemoryUniquePullCommandQueueTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var MemoryCommandQueue
+     * @var MemoryUniquePullCommandQueue
      */
     private $queue;
 
     protected function setUp()
     {
-        $this->queue = new MemoryCommandQueue();
+        $this->queue = new MemoryUniquePullCommandQueue();
     }
 
     public function testQueue()
@@ -31,14 +31,20 @@ class MemoryCommandQueueTest extends \PHPUnit_Framework_TestCase
         $queue = [
             new CreateContact(),
             new RenameContactCommand(),
-            new CreateContact(), // duplicate
+            new CreateContact(),        // duplicate
+            new RenameContactCommand(), // duplicate
+            new RenameContactCommand(), // duplicate
+            new CreateContact(),        // duplicate
+        ];
+        $expected = [
+            new CreateContact(),
+            new RenameContactCommand(),
         ];
 
         foreach ($queue as $command) {
-            $this->assertTrue($this->queue->push($command));
+            $this->assertTrue($this->queue->publish($command));
         }
 
-        $expected = array_reverse($queue);
         $i = count($expected);
         while ($command = $this->queue->pull()) {
             $this->assertEquals($expected[--$i], $command);
