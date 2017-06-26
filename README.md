@@ -31,7 +31,7 @@ composer require gpslab/cqrs
     * [Direct binding locator](docs/command/locator/direct_binding.md)
     * [PSR-11 Container locator](docs/command/locator/psr-11_container.md) *([PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md))*
     * [Symfony container locator](docs/command/locator/symfony_container.md) *(Symfony 3.3 [implements](http://symfony.com/blog/new-in-symfony-3-3-psr-11-containers) a [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md))*
-* Queue
+* [Queue](docs/command/queue/queue.md)
   * [Pull](docs/command/queue/pull/pull.md)
     * [Memory queue](docs/command/queue/pull/memory.md)
     * [Memory unique queue](docs/command/queue/pull/memory_unique.md)
