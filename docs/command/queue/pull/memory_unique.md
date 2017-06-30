@@ -33,9 +33,11 @@ $command = new RenameArticleCommand();
 $command->new_name = $new_name;
 
 $queue->publish($command);
+```
 
+In latter
 
-// in latter
+```php
 while ($command = $queue->pull()) {
     $bus->handle($command);
 }

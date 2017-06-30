@@ -1,7 +1,7 @@
 Payload serializer
 ==================
 
-If you use the [Payload](https://github.com/gpslab/payload) package, you can simplify the serialization of your
+If you use the [Payload package](https://github.com/gpslab/payload), you can simplify the serialization of your
 specific commands.
 
 ```php

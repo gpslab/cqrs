@@ -18,14 +18,19 @@ use GpsLab\Component\Command\Queue\PubSub\ExecutingCommandQueue;
 $locator = new DirectBindingCommandHandlerLocator();
 $bus = new HandlerLocatedCommandBus($locator);
 $queue = new ExecutingCommandQueue();
+```
 
+Subscribe to the queue:
 
+```php
 $queue->subscribe(function(RenameArticleCommand $command) use ($bus) {
     $bus->handle($command);
 });
+```
 
+Make command and publish it into queue:
 
-// in latter
+```php
 $command = new RenameArticleCommand();
 $command->new_name = $new_name;
 

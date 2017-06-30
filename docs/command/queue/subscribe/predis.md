@@ -39,16 +39,7 @@ $format = 'json'; // default: predis
 $queue = new PredisCommandQueue($predis, $serializer, $logger, $queue_name, $format);
 ```
 
-Make command and publish it into queue:
-
-```php
-$command = new RenameArticleCommand();
-$command->new_name = $new_name;
-
-$queue->publish($command);
-```
-
-In latter pull commands from queue:
+Subscribe to the queue:
 
 ```php
 use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
@@ -60,4 +51,13 @@ $bus = new HandlerLocatedCommandBus($locator);
 $queue->subscribe(function(RenameArticleCommand $command) use ($bus) {
     $bus->handle($command);
 });
+```
+
+Make command and publish it into queue:
+
+```php
+$command = new RenameArticleCommand();
+$command->new_name = $new_name;
+
+$queue->publish($command);
 ```
