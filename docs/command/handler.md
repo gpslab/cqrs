@@ -98,3 +98,14 @@ $locator = new DirectBindingCommandHandlerLocator();
 $locator->registerHandler(RenameArticleCommand::class, [new ArticleHandler(), 'handleRenameArticle']);
 $locator->registerHandler(PublishArticleCommand::class, [new ArticleHandler(), 'handlePublishArticle']);
 ```
+
+## Command handler locator
+
+You can use exists locators of command handler:
+
+ * [Direct binding locator](locator/direct_binding.md)
+ * [PSR-11 container aware locator](locator/psr-11_container.md)
+ * [Symfony container aware locator](locator/symfony_container.md)
+
+Or you can create custom locator that implements `GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator`
+interface.

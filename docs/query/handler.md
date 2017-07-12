@@ -98,3 +98,14 @@ $locator = new DirectBindingQueryHandlerLocator();
 $locator->registerHandler(ContactByIdentityQuery::class, [new ArticleHandler(), 'handleContactByIdentity']);
 $locator->registerHandler(ContactByNameQuery::class, [new ArticleHandler(), 'handleContactByName']);
 ```
+
+## Query handler locator
+
+You can use exists locators of query handler:
+
+ * [Direct binding locator](locator/direct_binding.md)
+ * [PSR-11 container aware locator](locator/psr-11_container.md)
+ * [Symfony container aware locator](locator/symfony_container.md)
+
+Or you can create custom locator that implements `GpsLab\Component\Query\Handler\Locator\QueryHandlerLocator`
+interface.
