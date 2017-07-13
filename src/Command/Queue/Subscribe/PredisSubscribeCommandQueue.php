@@ -99,6 +99,26 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
     }
 
     /**
+     * Unsubscribe on command queue.
+     *
+     * @param callable $handler
+     *
+     * @return bool
+     */
+    public function unsubscribe(callable $handler)
+    {
+        $index = array_search($handler, $this->handlers);
+
+        if ($index === false) {
+            return false;
+        }
+
+        unset($this->handlers[$index]);
+
+        return true;
+    }
+
+    /**
      * @param mixed $message
      */
     private function handle($message)
@@ -108,10 +128,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
         } catch (\Exception $e) { // catch only deserialize exception
             // it's a critical error
             // it is necessary to react quickly to it
-            $this->logger->critical(
-                'Failed denormalize a command in the Redis queue',
-                [$message, $e->getMessage()]
-            );
+            $this->logger->critical('Failed denormalize a command in the Redis queue', [$message, $e->getMessage()]);
 
             // try denormalize in later
             $this->client->publish($this->queue_name, $message);

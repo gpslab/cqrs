@@ -208,9 +208,11 @@ class PredisSubscribeCommandQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testLazeSubscribe()
     {
-        $handler = function ($command) {
+        $handler1 = function ($command) {
             $this->assertInstanceOf(Command::class, $command);
             $this->assertEquals($this->command, $command);
+        };
+        $handler2 = function (Command $command) {
         };
 
         $this->client
@@ -218,8 +220,17 @@ class PredisSubscribeCommandQueueTest extends \PHPUnit_Framework_TestCase
             ->method('subscribe')
         ;
 
-        $this->queue->subscribe($handler);
-        $this->queue->subscribe(function ($command) {
-        });
+        $this->assertFalse($this->queue->unsubscribe($handler1));
+        $this->assertFalse($this->queue->unsubscribe($handler2));
+
+        $this->queue->subscribe($handler1);
+
+        $this->assertTrue($this->queue->unsubscribe($handler1));
+        $this->assertFalse($this->queue->unsubscribe($handler1));
+
+        $this->queue->subscribe($handler2);
+
+        $this->assertTrue($this->queue->unsubscribe($handler2));
+        $this->assertFalse($this->queue->unsubscribe($handler2));
     }
 }

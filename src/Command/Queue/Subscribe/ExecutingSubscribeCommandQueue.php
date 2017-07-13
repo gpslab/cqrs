@@ -15,9 +15,9 @@ use GpsLab\Component\Command\Command;
 class ExecutingSubscribeCommandQueue implements SubscribeCommandQueue
 {
     /**
-     * @var callable|null
+     * @var callable[]
      */
-    private $handler;
+    private $handlers = [];
 
     /**
      * Publish command to queue.
@@ -28,9 +28,9 @@ class ExecutingSubscribeCommandQueue implements SubscribeCommandQueue
      */
     public function publish(Command $command)
     {
-        // absence of a handler is not a error
-        if (is_callable($this->handler)) {
-            call_user_func($this->handler, $command);
+        // absence of a handlers is not a error
+        foreach ($this->handlers as $handler) {
+            call_user_func($handler, $command);
         }
 
         return true;
@@ -43,6 +43,26 @@ class ExecutingSubscribeCommandQueue implements SubscribeCommandQueue
      */
     public function subscribe(callable $handler)
     {
-        $this->handler = $handler;
+        $this->handlers[] = $handler;
+    }
+
+    /**
+     * Unsubscribe on command queue.
+     *
+     * @param callable $handler
+     *
+     * @return bool
+     */
+    public function unsubscribe(callable $handler)
+    {
+        $index = array_search($handler, $this->handlers);
+
+        if ($index === false) {
+            return false;
+        }
+
+        unset($this->handlers[$index]);
+
+        return true;
     }
 }

@@ -51,9 +51,17 @@ use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
 $locator = new DirectBindingCommandHandlerLocator();
 $bus = new HandlerLocatedCommandBus($locator);
 
-$queue->subscribe(function(RenameArticleCommand $command) use ($bus) {
+$handler = function(RenameArticleCommand $command) use ($bus) {
     $bus->handle($command);
-});
+};
+
+$queue->subscribe($handler);
+```
+
+You can unsubscribe of the queue:
+
+```php
+$queue->unsubscribe($handler);
 ```
 
 Make command and publish it into queue:

@@ -23,4 +23,13 @@ interface SubscribeCommandQueue extends CommandQueue
      * @param callable $handler
      */
     public function subscribe(callable $handler);
+
+    /**
+     * Unsubscribe on command queue.
+     *
+     * @param callable $handler
+     *
+     * @return bool
+     */
+    public function unsubscribe(callable $handler);
 }

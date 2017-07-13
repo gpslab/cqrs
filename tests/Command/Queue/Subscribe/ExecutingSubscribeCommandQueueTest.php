@@ -34,14 +34,19 @@ class ExecutingSubscribeCommandQueueTest extends \PHPUnit_Framework_TestCase
     public function testPublish()
     {
         $subscriber_called = false;
-
-        $this->queue->subscribe(function ($command) use (&$subscriber_called) {
+        $handler = function ($command) use (&$subscriber_called) {
             $this->assertInstanceOf(Command::class, $command);
             $this->assertEquals($this->command, $command);
             $subscriber_called = true;
-        });
+        };
+
+        $this->assertFalse($this->queue->unsubscribe($handler));
+
+        $this->queue->subscribe($handler);
 
         $this->assertTrue($this->queue->publish($this->command));
         $this->assertTrue($subscriber_called);
+        $this->assertTrue($this->queue->unsubscribe($handler));
+        $this->assertFalse($this->queue->unsubscribe($handler));
     }
 }
