@@ -3,24 +3,24 @@ UPGRADE FROM 1.0 to 1.1
 
  * Added a common interface of command queue and use it in Pull queues.
 
-  ```php
-  interface CommandQueue
-  {
-      public function publish(Command $command);
-  }
-  ```
+   ```php
+   interface CommandQueue
+   {
+       public function publish(Command $command);
+   }
+   ```
 
-  Before:
+   Before:
 
-  ```php
-  $queue->push($command);
-  ```
+   ```php
+   $queue->push($command);
+   ```
 
-  After:
+   After:
 
-  ```php
-  $queue->publish($command);
-  ```
+   ```php
+   $queue->publish($command);
+   ```
 
 Renamed namespaces
 ------------------
