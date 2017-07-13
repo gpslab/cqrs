@@ -1,7 +1,10 @@
 UPGRADE FROM 1.1 to 1.2
 =======================
 
- * Created a separate serializer service for change the implementation for serializer.
+Serialization commands
+----------------------
+
+ * Created a separate serializer service for add opportunity change the implementation of serializer.
 
    ```php
    interface Serializer
@@ -44,6 +47,9 @@ UPGRADE FROM 1.1 to 1.2
    $queue = new PredisUniquePullCommandQueue($predis, $serializer, $logger, $queue_name);
    $queue = new PredisCommandQueue($pubsub_predis, $serializer, $logger, $queue_name);
    ```
+
+Subscribe queue
+---------------
 
  * Added opportunity to use several handlers in subscribe queue.
 
