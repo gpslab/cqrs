@@ -1,8 +1,8 @@
 UPGRADE FROM 1.1 to 1.2
 =======================
 
-Serialization commands
-----------------------
+Command serialization
+---------------------
 
  * Created a separate serializer service for add opportunity change the implementation of serializer.
 
