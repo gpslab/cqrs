@@ -10,13 +10,12 @@
 
 namespace GpsLab\Component\Tests\Command\Queue\Pull;
 
-use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Queue\Pull\PredisPullCommandQueue;
+use GpsLab\Component\Command\Queue\Serializer\Serializer;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +25,7 @@ class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
     private $client;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|Serializer
      */
     private $serializer;
 
@@ -36,6 +35,11 @@ class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
+     * @var PredisPullCommandQueue
+     */
+    private $queue;
+
+    /**
      * @var string
      */
     private $queue_name = 'commands';
@@ -43,38 +47,12 @@ class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->client = $this->getMock(Client::class);
-        $this->serializer = $this->getMock(SerializerInterface::class);
+        $this->serializer = $this->getMock(Serializer::class);
         $this->logger = $this->getMock(LoggerInterface::class);
+        $this->queue = new PredisPullCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name);
     }
 
-    /**
-     * @param string $format
-     *
-     * @return PredisPullCommandQueue
-     */
-    private function queue($format)
-    {
-        return new PredisPullCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name, $format);
-    }
-
-    /**
-     * @return array
-     */
-    public function formats()
-    {
-        return [
-            [null, 'predis'],
-            ['json', 'json'],
-        ];
-    }
-
-    /**
-     * @dataProvider formats
-     *
-     * @param string $format
-     * @param string $expected_format
-     */
-    public function testPushQueue($format, $expected_format)
+    public function testPushQueue()
     {
         $queue = [
             new RenameContactCommand(),
@@ -89,7 +67,7 @@ class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
             $this->serializer
                 ->expects($this->at($i))
                 ->method('serialize')
-                ->with($command, $expected_format)
+                ->with($command)
                 ->will($this->returnValue($value))
             ;
 
@@ -103,17 +81,11 @@ class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
         }
 
         foreach ($queue as $command) {
-            $this->assertTrue($this->queue($format)->publish($command));
+            $this->assertTrue($this->queue->publish($command));
         }
     }
 
-    /**
-     * @dataProvider formats
-     *
-     * @param string $format
-     * @param string $expected_format
-     */
-    public function testPopQueue($format, $expected_format)
+    public function testPopQueue()
     {
         $queue = [
             new RenameContactCommand(),
@@ -128,7 +100,7 @@ class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
             $this->serializer
                 ->expects($this->at($i))
                 ->method('deserialize')
-                ->with($value, Command::class, $expected_format)
+                ->with($value)
                 ->will($this->returnValue($command))
             ;
 
@@ -149,7 +121,7 @@ class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
 
         $expected = array_reverse($queue);
         $i = count($expected);
-        while ($command = $this->queue($format)->pull()) {
+        while ($command = $this->queue->pull()) {
             $this->assertEquals($expected[--$i], $command);
         }
 
@@ -157,13 +129,7 @@ class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($command, 'No commands in queue');
     }
 
-    /**
-     * @dataProvider formats
-     *
-     * @param string $format
-     * @param string $expected_format
-     */
-    public function testFailedDeserialize($format, $expected_format)
+    public function testFailedDeserialize()
     {
         $exception = new \Exception('foo');
         $command = new RenameContactCommand();
@@ -185,7 +151,7 @@ class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
         $this->serializer
             ->expects($this->once())
             ->method('deserialize')
-            ->with($value, Command::class, $expected_format)
+            ->with($value)
             ->will($this->throwException($exception))
         ;
 
@@ -196,6 +162,6 @@ class PredisPullCommandQueueTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1))
         ;
 
-        $this->assertNull($this->queue($format)->pull());
+        $this->assertNull($this->queue->pull());
     }
 }

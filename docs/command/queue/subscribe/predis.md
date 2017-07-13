@@ -26,17 +26,20 @@ subscriber.
 Configure queue:
 
 ```php
-use GpsLab\Component\Command\Queue\PubSub\PredisCommandQueue;
+use GpsLab\Component\Command\Queue\Subscribe\PredisCommandQueue;
+use GpsLab\Component\Command\Queue\Serializer\SymfonySerializer;
 use Symfony\Component\Serializer\Serializer;
 use Superbalist\PubSub\Redis\RedisPubSubAdapter;
 use Predis\Client;
 
 //$predis = new RedisPubSubAdapter(new Client('tcp://10.0.0.1:6379')); // Predis client
-//$serializer = new Serializer(); // Symfony serializer
+//$symfony_serializer = new Serializer(); // Symfony serializer
 //$logger = new Logger(); // PSR-3 logger
 $queue_name = 'article_queue';
 $format = 'json'; // default: predis
-$queue = new PredisCommandQueue($predis, $serializer, $logger, $queue_name, $format);
+// you can create another implementation of serializer
+$serializer = new SymfonySerializer($symfony_serializer, $format);
+$queue = new PredisCommandQueue($predis, $serializer, $logger, $queue_name);
 ```
 
 Subscribe to the queue:

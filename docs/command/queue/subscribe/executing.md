@@ -13,11 +13,11 @@ subscriber.
 ```php
 use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
 use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
-use GpsLab\Component\Command\Queue\PubSub\ExecutingCommandQueue;
+use GpsLab\Component\Command\Queue\Subscribe\ExecutingSubscribeCommandQueue;
 
 $locator = new DirectBindingCommandHandlerLocator();
 $bus = new HandlerLocatedCommandBus($locator);
-$queue = new ExecutingCommandQueue();
+$queue = new ExecutingSubscribeCommandQueue();
 ```
 
 Subscribe to the queue:
