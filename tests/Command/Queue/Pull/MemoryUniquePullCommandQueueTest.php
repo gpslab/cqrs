@@ -13,8 +13,9 @@ namespace GpsLab\Component\Tests\Command\Queue\Pull;
 use GpsLab\Component\Command\Queue\Pull\MemoryUniquePullCommandQueue;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
+use PHPUnit\Framework\TestCase;
 
-class MemoryUniquePullCommandQueueTest extends \PHPUnit_Framework_TestCase
+class MemoryUniquePullCommandQueueTest extends TestCase
 {
     /**
      * @var MemoryUniquePullCommandQueue

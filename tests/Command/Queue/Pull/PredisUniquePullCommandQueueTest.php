@@ -16,8 +16,9 @@ use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\TestCase;
 
-class PredisUniquePullCommandQueueTest extends \PHPUnit_Framework_TestCase
+class PredisUniquePullCommandQueueTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Client

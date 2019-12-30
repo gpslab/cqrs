@@ -13,8 +13,9 @@ namespace GpsLab\Component\Tests\Query\Bus;
 use GpsLab\Component\Query\Bus\HandlerLocatedQueryBus;
 use GpsLab\Component\Query\Query;
 use GpsLab\Component\Query\Handler\Locator\QueryHandlerLocator;
+use PHPUnit\Framework\TestCase;
 
-class HandlerLocatedQueryBusTest extends \PHPUnit_Framework_TestCase
+class HandlerLocatedQueryBusTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|QueryHandlerLocator

@@ -15,8 +15,9 @@ use GpsLab\Component\Command\Queue\Serializer\Serializer;
 use GpsLab\Component\Command\Queue\Subscribe\PredisSubscribeCommandQueue;
 use Psr\Log\LoggerInterface;
 use Superbalist\PubSub\Redis\RedisPubSubAdapter;
+use PHPUnit\Framework\TestCase;
 
-class PredisSubscribeCommandQueueTest extends \PHPUnit_Framework_TestCase
+class PredisSubscribeCommandQueueTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Command
@@ -181,6 +182,7 @@ class PredisSubscribeCommandQueueTest extends \PHPUnit_Framework_TestCase
         $handler = function ($command) use ($exception) {
             $this->assertInstanceOf(Command::class, $command);
             $this->assertEquals($this->command, $command);
+
             throw $exception;
         };
 

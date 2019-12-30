@@ -15,8 +15,9 @@ use GpsLab\Component\Command\Command;
 use GpsLab\Component\Tests\Fixture\Command\Handler\RenameContactHandler;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 
-class SymfonyContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
+class SymfonyContainerCommandHandlerLocatorTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|ContainerInterface

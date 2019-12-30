@@ -15,8 +15,9 @@ use GpsLab\Component\Command\Command;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\Handler\CreateContactHandler;
 use Psr\Container\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 
-class ContainerCommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
+class ContainerCommandHandlerLocatorTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|ContainerInterface

@@ -15,8 +15,9 @@ use GpsLab\Component\Query\Query;
 use GpsLab\Component\Tests\Fixture\Query\ContactByIdentity;
 use GpsLab\Component\Tests\Fixture\Query\Handler\ContactByIdentityHandler;
 use Psr\Container\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 
-class ContainerQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
+class ContainerQueryHandlerLocatorTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|ContainerInterface

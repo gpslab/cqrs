@@ -12,8 +12,9 @@ namespace GpsLab\Component\Tests\Query\Handler\Locator;
 
 use GpsLab\Component\Query\Handler\Locator\DirectBindingQueryHandlerLocator;
 use GpsLab\Component\Query\Query;
+use PHPUnit\Framework\TestCase;
 
-class DirectBindingQueryHandlerLocatorTest extends \PHPUnit_Framework_TestCase
+class DirectBindingQueryHandlerLocatorTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Query

@@ -12,8 +12,9 @@ namespace GpsLab\Component\Tests\Command\Queue\Subscribe;
 
 use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Queue\Subscribe\ExecutingSubscribeCommandQueue;
+use PHPUnit\Framework\TestCase;
 
-class ExecutingSubscribeCommandQueueTest extends \PHPUnit_Framework_TestCase
+class ExecutingSubscribeCommandQueueTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Command
