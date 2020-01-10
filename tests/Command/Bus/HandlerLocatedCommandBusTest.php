@@ -13,8 +13,9 @@ namespace GpsLab\Component\Tests\Command\Bus;
 use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
 use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator;
+use PHPUnit\Framework\TestCase;
 
-class HandlerLocatedCommandBusTest extends \PHPUnit_Framework_TestCase
+class HandlerLocatedCommandBusTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|CommandHandlerLocator

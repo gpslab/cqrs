@@ -13,8 +13,9 @@ namespace  GpsLab\Component\Tests\Command\Queue\Serializer;
 use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Queue\Serializer\SymfonySerializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use PHPUnit\Framework\TestCase;
 
-class SymfonySerializerTest extends \PHPUnit_Framework_TestCase
+class SymfonySerializerTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface
