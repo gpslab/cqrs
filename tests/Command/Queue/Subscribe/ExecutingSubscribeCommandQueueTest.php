@@ -12,12 +12,13 @@ namespace GpsLab\Component\Tests\Command\Queue\Subscribe;
 
 use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Queue\Subscribe\ExecutingSubscribeCommandQueue;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ExecutingSubscribeCommandQueueTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Command
+     * @var MockObject|Command
      */
     private $command;
 
@@ -26,9 +27,9 @@ class ExecutingSubscribeCommandQueueTest extends TestCase
      */
     private $queue;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->command = $this->getMock(Command::class);
+        $this->command = $this->createMock(Command::class);
         $this->queue = new ExecutingSubscribeCommandQueue();
     }
 

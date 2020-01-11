@@ -12,12 +12,13 @@ namespace GpsLab\Component\Tests\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
 use GpsLab\Component\Command\Command;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DirectBindingCommandHandlerLocatorTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Command
+     * @var MockObject|Command
      */
     private $command;
 
@@ -31,13 +32,12 @@ class DirectBindingCommandHandlerLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->command = $this->getMock(Command::class);
+        $this->command = $this->createMock(Command::class);
         $this->handler = function (Command $command) {
             $this->assertEquals($command, $this->command);
         };
-
         $this->locator = new DirectBindingCommandHandlerLocator();
     }
 

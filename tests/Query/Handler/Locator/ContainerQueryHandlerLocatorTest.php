@@ -15,17 +15,18 @@ use GpsLab\Component\Query\Query;
 use GpsLab\Component\Tests\Fixture\Query\ContactByIdentity;
 use GpsLab\Component\Tests\Fixture\Query\Handler\ContactByIdentityHandler;
 use Psr\Container\ContainerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ContainerQueryHandlerLocatorTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ContainerInterface
+     * @var MockObject|ContainerInterface
      */
     private $container;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Query
+     * @var MockObject|Query
      */
     private $query;
 
@@ -39,14 +40,13 @@ class ContainerQueryHandlerLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->query = $this->getMock(Query::class);
+        $this->query = $this->createMock(Query::class);
         $this->handler = function (Query $query) {
             $this->assertEquals($query, $this->query);
         };
-        $this->container = $this->getMock(ContainerInterface::class);
-
+        $this->container = $this->createMock(ContainerInterface::class);
         $this->locator = new ContainerQueryHandlerLocator($this->container);
     }
 

@@ -13,18 +13,19 @@ namespace  GpsLab\Component\Tests\Command\Queue\Serializer;
 use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Queue\Serializer\SymfonySerializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SymfonySerializerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface
+     * @var MockObject|SerializerInterface
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->serializer = $this->getMock(SerializerInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
     }
 
     /**

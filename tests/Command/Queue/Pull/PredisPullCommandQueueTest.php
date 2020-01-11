@@ -16,22 +16,23 @@ use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PredisPullCommandQueueTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Client
+     * @var MockObject|Client
      */
     private $client;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Serializer
+     * @var MockObject|Serializer
      */
     private $serializer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @var MockObject|LoggerInterface
      */
     private $logger;
 
@@ -45,11 +46,11 @@ class PredisPullCommandQueueTest extends TestCase
      */
     private $queue_name = 'commands';
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->client = $this->getMock(Client::class);
-        $this->serializer = $this->getMock(Serializer::class);
-        $this->logger = $this->getMock(LoggerInterface::class);
+        $this->client = $this->createMock(Client::class);
+        $this->serializer = $this->createMock(Serializer::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->queue = new PredisPullCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name);
     }
 

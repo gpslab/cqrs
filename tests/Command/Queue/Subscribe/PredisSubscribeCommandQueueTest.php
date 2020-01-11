@@ -10,32 +10,34 @@
 
 namespace GpsLab\Component\Tests\Command\Queue\Subscribe;
 
+use Exception;
 use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Queue\Serializer\Serializer;
 use GpsLab\Component\Command\Queue\Subscribe\PredisSubscribeCommandQueue;
 use Psr\Log\LoggerInterface;
 use Superbalist\PubSub\Redis\RedisPubSubAdapter;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PredisSubscribeCommandQueueTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Command
+     * @var MockObject|Command
      */
     private $command;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RedisPubSubAdapter
+     * @var MockObject|RedisPubSubAdapter
      */
     private $client;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Serializer
+     * @var MockObject|Serializer
      */
     private $serializer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @var MockObject|LoggerInterface
      */
     private $logger;
 
@@ -49,15 +51,15 @@ class PredisSubscribeCommandQueueTest extends TestCase
      */
     private $queue_name = 'commands';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists(RedisPubSubAdapter::class)) {
             $this->markTestSkipped('php-pubsub-redis is not installed.');
         }
 
-        $this->command = $this->getMock(Command::class);
-        $this->serializer = $this->getMock(Serializer::class);
-        $this->logger = $this->getMock(LoggerInterface::class);
+        $this->command = $this->createMock(Command::class);
+        $this->serializer = $this->createMock(Serializer::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->client = $this
             ->getMockBuilder(RedisPubSubAdapter::class)
             ->disableOriginalConstructor()
@@ -173,11 +175,10 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->assertFalse($subscriber_called);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testSubscribeHandlerFailure()
     {
+        $this->expectException(Exception::class);
+
         $exception = new \Exception('bar');
         $handler = function ($command) use ($exception) {
             $this->assertInstanceOf(Command::class, $command);

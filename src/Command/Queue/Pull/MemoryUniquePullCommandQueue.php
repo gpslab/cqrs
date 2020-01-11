@@ -31,7 +31,7 @@ class MemoryUniquePullCommandQueue implements PullCommandQueue
         $index = array_search($command, $this->commands);
 
         // remove exists command and publish it again
-        if ($index !== false) {
+        if (false !== $index) {
             unset($this->commands[$index]);
         }
 
