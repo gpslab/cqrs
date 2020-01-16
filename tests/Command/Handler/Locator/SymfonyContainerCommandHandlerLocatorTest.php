@@ -15,17 +15,18 @@ use GpsLab\Component\Command\Command;
 use GpsLab\Component\Tests\Fixture\Command\Handler\RenameContactHandler;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SymfonyContainerCommandHandlerLocatorTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ContainerInterface
+     * @var MockObject|ContainerInterface
      */
     private $container;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Command
+     * @var MockObject|Command
      */
     private $command;
 
@@ -39,14 +40,13 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->command = $this->getMock(Command::class);
+        $this->command = $this->createMock(Command::class);
         $this->handler = function (Command $command) {
             $this->assertEquals($command, $this->command);
         };
-        $this->container = $this->getMock(ContainerInterface::class);
-
+        $this->container = $this->createMock(ContainerInterface::class);
         $this->locator = new SymfonyContainerCommandHandlerLocator();
     }
 

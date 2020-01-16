@@ -13,17 +13,19 @@ namespace GpsLab\Component\Tests\Query\Bus;
 use GpsLab\Component\Query\Bus\HandlerLocatedQueryBus;
 use GpsLab\Component\Query\Query;
 use GpsLab\Component\Query\Handler\Locator\QueryHandlerLocator;
+use GpsLab\Component\Query\Exception\HandlerNotFoundException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class HandlerLocatedQueryBusTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|QueryHandlerLocator
+     * @var MockObject|QueryHandlerLocator
      */
     private $locator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Query
+     * @var MockObject|Query
      */
     private $query;
 
@@ -37,13 +39,13 @@ class HandlerLocatedQueryBusTest extends TestCase
      */
     private $bus;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->query = $this->getMock(Query::class);
+        $this->query = $this->createMock(Query::class);
         $this->handler = function (Query $query) {
             $this->assertEquals($this->query, $query);
         };
-        $this->locator = $this->getMock(QueryHandlerLocator::class);
+        $this->locator = $this->createMock(QueryHandlerLocator::class);
         $this->bus = new HandlerLocatedQueryBus($this->locator);
     }
 
@@ -67,11 +69,10 @@ class HandlerLocatedQueryBusTest extends TestCase
         $this->assertEquals($this->query, $handled_query);
     }
 
-    /**
-     * @expectedException \GpsLab\Component\Query\Exception\HandlerNotFoundException
-     */
     public function testNoHandler()
     {
+        $this->expectException(HandlerNotFoundException::class);
+
         $this->locator
             ->expects($this->once())
             ->method('findHandler')
