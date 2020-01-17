@@ -107,7 +107,7 @@ class SymfonyContainerQueryHandlerLocatorTest extends TestCase
         $service = 'foo';
 
         $this->container
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('get')
             ->with($service)
             ->will($this->returnValue(null))
@@ -125,7 +125,7 @@ class SymfonyContainerQueryHandlerLocatorTest extends TestCase
         $service = 'foo';
 
         $this->container
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('get')
             ->with($service)
             ->will($this->returnValue(new \stdClass()))
