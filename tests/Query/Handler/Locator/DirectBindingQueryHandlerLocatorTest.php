@@ -36,7 +36,7 @@ class DirectBindingQueryHandlerLocatorTest extends TestCase
     {
         $this->query = $this->createMock(Query::class);
         $this->handler = function (Query $query): void {
-            $this->assertEquals($query, $this->query);
+            $this->assertSame($query, $this->query);
         };
         $this->locator = new DirectBindingQueryHandlerLocator();
     }
@@ -46,7 +46,7 @@ class DirectBindingQueryHandlerLocatorTest extends TestCase
         $this->locator->registerHandler(get_class($this->query), $this->handler);
 
         $handler = $this->locator->findHandler($this->query);
-        $this->assertEquals($this->handler, $handler);
+        $this->assertSame($this->handler, $handler);
     }
 
     public function testNoQueryHandler(): void

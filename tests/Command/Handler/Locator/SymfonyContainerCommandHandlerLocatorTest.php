@@ -44,7 +44,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
     {
         $this->command = $this->createMock(Command::class);
         $this->handler = function (Command $command): void {
-            $this->assertEquals($command, $this->command);
+            $this->assertSame($command, $this->command);
         };
         $this->container = $this->createMock(ContainerInterface::class);
         $this->locator = new SymfonyContainerCommandHandlerLocator();
@@ -59,17 +59,17 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
             ->expects($this->exactly(2))
             ->method('get')
             ->with($service)
-            ->will($this->returnValue($this->handler))
+            ->willReturn($this->handler)
         ;
 
         $this->locator->registerService(get_class($this->command), $service);
 
         $handler = $this->locator->findHandler($this->command);
-        $this->assertEquals($this->handler, $handler);
+        $this->assertSame($this->handler, $handler);
 
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($this->command);
-        $this->assertEquals($this->handler, $handler);
+        $this->assertSame($this->handler, $handler);
     }
 
     public function testFindHandlerServiceInvoke(): void
@@ -84,21 +84,21 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
             ->expects($this->exactly(2))
             ->method('get')
             ->with($service)
-            ->will($this->returnValue($handler_obj))
+            ->willReturn($handler_obj)
         ;
 
         $this->locator->registerService(RenameContactCommand::class, $service, $method);
 
         $handler = $this->locator->findHandler($command);
-        $this->assertEquals([$handler_obj, $method], $handler);
+        $this->assertSame([$handler_obj, $method], $handler);
 
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($command);
-        $this->assertEquals([$handler_obj, $method], $handler);
+        $this->assertSame([$handler_obj, $method], $handler);
 
         // test exec handler
         call_user_func($handler, $command);
-        $this->assertEquals($command, $handler_obj->command());
+        $this->assertSame($command, $handler_obj->command());
     }
 
     public function testNoCommandHandler(): void
@@ -107,10 +107,10 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
         $service = 'foo';
 
         $this->container
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('get')
             ->with($service)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $this->locator->registerService(get_class($this->command), $service);
@@ -125,10 +125,10 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
         $service = 'foo';
 
         $this->container
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('get')
             ->with($service)
-            ->will($this->returnValue(new \stdClass()))
+            ->willReturn(new \stdClass())
         ;
 
         $this->locator->registerService(get_class($this->command), $service);

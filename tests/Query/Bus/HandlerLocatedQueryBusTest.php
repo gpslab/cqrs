@@ -43,7 +43,7 @@ class HandlerLocatedQueryBusTest extends TestCase
     {
         $this->query = $this->createMock(Query::class);
         $this->handler = function (Query $query): void {
-            $this->assertEquals($this->query, $query);
+            $this->assertSame($this->query, $query);
         };
         $this->locator = $this->createMock(QueryHandlerLocator::class);
         $this->bus = new HandlerLocatedQueryBus($this->locator);
@@ -62,11 +62,11 @@ class HandlerLocatedQueryBusTest extends TestCase
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->query)
-            ->will($this->returnValue($handler))
+            ->willReturn($handler)
         ;
 
-        $this->assertEquals($data, $this->bus->handle($this->query));
-        $this->assertEquals($this->query, $handled_query);
+        $this->assertSame($data, $this->bus->handle($this->query));
+        $this->assertSame($this->query, $handled_query);
     }
 
     public function testNoHandler(): void
@@ -77,7 +77,7 @@ class HandlerLocatedQueryBusTest extends TestCase
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->query)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $this->bus->handle($this->query);

@@ -52,11 +52,11 @@ class HandlerLocatedCommandBusTest extends TestCase
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->command)
-            ->will($this->returnValue($handler))
+            ->willReturn($handler)
         ;
 
         $this->bus->handle($this->command);
-        $this->assertEquals($this->command, $handled_command);
+        $this->assertSame($this->command, $handled_command);
     }
 
     public function testNoHandler(): void
@@ -67,7 +67,7 @@ class HandlerLocatedCommandBusTest extends TestCase
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->command)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $this->bus->handle($this->command);

@@ -36,7 +36,7 @@ class DirectBindingCommandHandlerLocatorTest extends TestCase
     {
         $this->command = $this->createMock(Command::class);
         $this->handler = function (Command $command): void {
-            $this->assertEquals($command, $this->command);
+            $this->assertSame($command, $this->command);
         };
         $this->locator = new DirectBindingCommandHandlerLocator();
     }
@@ -46,7 +46,7 @@ class DirectBindingCommandHandlerLocatorTest extends TestCase
         $this->locator->registerHandler(get_class($this->command), $this->handler);
 
         $handler = $this->locator->findHandler($this->command);
-        $this->assertEquals($this->handler, $handler);
+        $this->assertSame($this->handler, $handler);
     }
 
     public function testNoCommandHandler(): void

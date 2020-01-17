@@ -42,10 +42,10 @@ class MemoryPullCommandQueueTest extends TestCase
         $expected = array_reverse($queue);
         $i = count($expected);
         while ($command = $this->queue->pull()) {
-            $this->assertEquals($expected[--$i], $command);
+            $this->assertSame($expected[--$i], $command);
         }
 
-        $this->assertEquals(0, $i, 'Queue cleared');
+        $this->assertSame(0, $i, 'Queue cleared');
         $this->assertNull($command, 'No commands in queue');
     }
 }

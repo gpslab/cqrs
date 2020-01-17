@@ -70,14 +70,14 @@ class PredisPullCommandQueueTest extends TestCase
                 ->expects($this->at($i))
                 ->method('serialize')
                 ->with($command)
-                ->will($this->returnValue($value))
+                ->willReturn($value)
             ;
 
             $this->client
                 ->expects($this->at($i))
                 ->method('__call')
                 ->with('rpush', [$this->queue_name, [$value]])
-                ->will($this->returnValue(1))
+                ->willReturn(1)
             ;
             ++$i;
         }
@@ -103,14 +103,14 @@ class PredisPullCommandQueueTest extends TestCase
                 ->expects($this->at($i))
                 ->method('deserialize')
                 ->with($value)
-                ->will($this->returnValue($command))
+                ->willReturn($command)
             ;
 
             $this->client
                 ->expects($this->at($i))
                 ->method('__call')
                 ->with('lpop', [$this->queue_name])
-                ->will($this->returnValue($value))
+                ->willReturn($value)
             ;
             ++$i;
         }
@@ -118,16 +118,16 @@ class PredisPullCommandQueueTest extends TestCase
             ->expects($this->at($i))
             ->method('__call')
             ->with('lpop', [$this->queue_name])
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $expected = array_reverse($queue);
         $i = count($expected);
         while ($command = $this->queue->pull()) {
-            $this->assertEquals($expected[--$i], $command);
+            $this->assertSame($expected[--$i], $command);
         }
 
-        $this->assertEquals(0, $i, 'Queue cleared');
+        $this->assertSame(0, $i, 'Queue cleared');
         $this->assertNull($command, 'No commands in queue');
     }
 
@@ -141,27 +141,27 @@ class PredisPullCommandQueueTest extends TestCase
             ->expects($this->at(0))
             ->method('__call')
             ->with('lpop', [$this->queue_name])
-            ->will($this->returnValue($value))
+            ->willReturn($value)
         ;
         $this->client
             ->expects($this->at(1))
             ->method('__call')
             ->with('rpush', [$this->queue_name, [$value]])
-            ->will($this->returnValue(1))
+            ->willReturn(1)
         ;
 
         $this->serializer
             ->expects($this->once())
             ->method('deserialize')
             ->with($value)
-            ->will($this->throwException($exception))
+            ->willThrowException($exception)
         ;
 
         $this->logger
             ->expects($this->once())
             ->method('critical')
             ->with('Failed denormalize a command in the Redis queue', [$value, $exception->getMessage()])
-            ->will($this->returnValue(1))
+            ->willReturn(1)
         ;
 
         $this->assertNull($this->queue->pull());

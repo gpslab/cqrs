@@ -54,7 +54,7 @@ class SymfonySerializerTest extends TestCase
             ->expects($this->once())
             ->method('serialize')
             ->with($data, $expected_format)
-            ->will($this->returnValue($result))
+            ->willReturn($result)
         ;
 
         if ($format) {
@@ -63,7 +63,7 @@ class SymfonySerializerTest extends TestCase
             $serializer = new SymfonySerializer($this->serializer);
         }
 
-        $this->assertEquals($result, $serializer->serialize($data));
+        $this->assertSame($result, $serializer->serialize($data));
     }
 
     /**
@@ -81,7 +81,7 @@ class SymfonySerializerTest extends TestCase
             ->expects($this->once())
             ->method('deserialize')
             ->with($data, Command::class, $expected_format)
-            ->will($this->returnValue($result))
+            ->willReturn($result)
         ;
 
         if ($format) {
@@ -90,6 +90,6 @@ class SymfonySerializerTest extends TestCase
             $serializer = new SymfonySerializer($this->serializer);
         }
 
-        $this->assertEquals($result, $serializer->deserialize($data));
+        $this->assertSame($result, $serializer->deserialize($data));
     }
 }
