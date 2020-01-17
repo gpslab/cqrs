@@ -126,7 +126,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->assertTrue($subscriber_called);
     }
 
-    public function testSubscribeFailure(): void
+    public function testErrorOnDeserialize(): void
     {
         $subscriber_called = false;
         $handler = function ($command) use (&$subscriber_called): void {
@@ -157,6 +157,60 @@ class PredisSubscribeCommandQueueTest extends TestCase
                     ->with(
                         'Failed denormalize a command in the Redis queue',
                         [$message, $exception->getMessage()]
+                    )
+                ;
+
+                $this->client
+                    ->expects($this->once())
+                    ->method('publish')
+                    ->with($this->queue_name, $message)
+                ;
+
+                $handler_wrapper($message);
+            })
+        ;
+
+        $this->queue->subscribe($handler);
+
+        $this->assertFalse($subscriber_called);
+    }
+
+    public function testDeserializeBadResult(): void
+    {
+        $subscriber_called = false;
+        $handler = function ($command) use (&$subscriber_called): void {
+            $this->assertInstanceOf(Command::class, $command);
+            $this->assertEquals($this->command, $command);
+            $subscriber_called = true;
+        };
+
+        $this->client
+            ->expects($this->once())
+            ->method('subscribe')
+            ->willReturnCallback(function ($queue_name, $handler_wrapper): void {
+                $this->assertEquals($this->queue_name, $queue_name);
+                $this->assertIsCallable($handler_wrapper);
+
+                $result = new \stdClass();
+                $message = 'foo';
+                $exception_message = sprintf(
+                    'The denormalization command is expected "%s", got "%s" inside.',
+                    Command::class,
+                    \stdClass::class
+                );
+                $this->serializer
+                    ->expects($this->once())
+                    ->method('deserialize')
+                    ->with($message)
+                    ->willReturn($result)
+                ;
+
+                $this->logger
+                    ->expects($this->once())
+                    ->method('critical')
+                    ->with(
+                        'Failed denormalize a command in the Redis queue',
+                        [$message, $exception_message]
                     )
                 ;
 
