@@ -104,7 +104,7 @@ class ContainerQueryHandlerLocatorTest extends TestCase
         $service = 'foo';
 
         $this->container
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('get')
             ->with($service)
             ->will($this->returnValue(null))
@@ -127,7 +127,7 @@ class ContainerQueryHandlerLocatorTest extends TestCase
         $service = 'foo';
 
         $this->container
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('get')
             ->with($service)
             ->will($this->returnValue(new \stdClass()))
