@@ -98,7 +98,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $subscriber_called = false;
         $handler = function ($command) use (&$subscriber_called) {
             $this->assertInstanceOf(Command::class, $command);
-            $this->assertEquals($this->command, $command);
+            $this->assertSame($this->command, $command);
             $subscriber_called = true;
         };
 
@@ -106,8 +106,8 @@ class PredisSubscribeCommandQueueTest extends TestCase
             ->expects($this->once())
             ->method('subscribe')
             ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
-                $this->assertEquals($this->queue_name, $queue_name);
-                $this->assertTrue(is_callable($handler_wrapper));
+                $this->assertSame($this->queue_name, $queue_name);
+                $this->assertIsCallable($handler_wrapper);
 
                 $message = 'foo';
                 $this->serializer
@@ -131,7 +131,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $subscriber_called = false;
         $handler = function ($command) use (&$subscriber_called) {
             $this->assertInstanceOf(Command::class, $command);
-            $this->assertEquals($this->command, $command);
+            $this->assertSame($this->command, $command);
             $subscriber_called = true;
         };
 
@@ -139,8 +139,8 @@ class PredisSubscribeCommandQueueTest extends TestCase
             ->expects($this->once())
             ->method('subscribe')
             ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
-                $this->assertEquals($this->queue_name, $queue_name);
-                $this->assertTrue(is_callable($handler_wrapper));
+                $this->assertSame($this->queue_name, $queue_name);
+                $this->assertIsCallable($handler_wrapper);
 
                 $exception = new \Exception('bar');
                 $message = 'foo';
@@ -182,7 +182,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $exception = new \Exception('bar');
         $handler = function ($command) use ($exception) {
             $this->assertInstanceOf(Command::class, $command);
-            $this->assertEquals($this->command, $command);
+            $this->assertSame($this->command, $command);
 
             throw $exception;
         };
@@ -191,8 +191,8 @@ class PredisSubscribeCommandQueueTest extends TestCase
             ->expects($this->once())
             ->method('subscribe')
             ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
-                $this->assertEquals($this->queue_name, $queue_name);
-                $this->assertTrue(is_callable($handler_wrapper));
+                $this->assertSame($this->queue_name, $queue_name);
+                $this->assertIsCallable($handler_wrapper);
 
                 $message = 'foo';
                 $this->serializer
@@ -213,7 +213,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
     {
         $handler1 = function ($command) {
             $this->assertInstanceOf(Command::class, $command);
-            $this->assertEquals($this->command, $command);
+            $this->assertSame($this->command, $command);
         };
         $handler2 = function (Command $command) {
         };

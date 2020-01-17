@@ -51,7 +51,7 @@ class MemoryUniquePullCommandQueueTest extends TestCase
             $this->assertEquals($expected[--$i], $command);
         }
 
-        $this->assertEquals(0, $i, 'Queue cleared');
+        $this->assertSame(0, $i, 'Queue cleared');
         $this->assertNull($command, 'No commands in queue');
     }
 }
