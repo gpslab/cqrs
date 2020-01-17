@@ -44,7 +44,7 @@ class ContainerQueryHandlerLocatorTest extends TestCase
     {
         $this->query = $this->createMock(Query::class);
         $this->handler = function (Query $query) {
-            $this->assertEquals($query, $this->query);
+            $this->assertSame($query, $this->query);
         };
         $this->container = $this->createMock(ContainerInterface::class);
         $this->locator = new ContainerQueryHandlerLocator($this->container);
@@ -64,11 +64,11 @@ class ContainerQueryHandlerLocatorTest extends TestCase
         $this->locator->registerService(get_class($this->query), $service);
 
         $handler = $this->locator->findHandler($this->query);
-        $this->assertEquals($this->handler, $handler);
+        $this->assertSame($this->handler, $handler);
 
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($this->query);
-        $this->assertEquals($this->handler, $handler);
+        $this->assertSame($this->handler, $handler);
     }
 
     public function testFindHandlerServiceInvoke()
@@ -88,15 +88,15 @@ class ContainerQueryHandlerLocatorTest extends TestCase
         $this->locator->registerService(ContactByIdentity::class, $service, $method);
 
         $handler = $this->locator->findHandler($query);
-        $this->assertEquals([$handler_obj, $method], $handler);
+        $this->assertSame([$handler_obj, $method], $handler);
 
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($query);
-        $this->assertEquals([$handler_obj, $method], $handler);
+        $this->assertSame([$handler_obj, $method], $handler);
 
         // test exec handler
         call_user_func($handler, $query);
-        $this->assertEquals($query, $handler_obj->query());
+        $this->assertSame($query, $handler_obj->query());
     }
 
     public function testNoQueryHandler()

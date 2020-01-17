@@ -38,7 +38,7 @@ class ExecutingSubscribeCommandQueueTest extends TestCase
         $subscriber_called = false;
         $handler = function ($command) use (&$subscriber_called) {
             $this->assertInstanceOf(Command::class, $command);
-            $this->assertEquals($this->command, $command);
+            $this->assertSame($this->command, $command);
             $subscriber_called = true;
         };
 

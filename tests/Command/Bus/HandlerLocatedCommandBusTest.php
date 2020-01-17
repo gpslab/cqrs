@@ -56,7 +56,7 @@ class HandlerLocatedCommandBusTest extends TestCase
         ;
 
         $this->bus->handle($this->command);
-        $this->assertEquals($this->command, $handled_command);
+        $this->assertSame($this->command, $handled_command);
     }
 
     public function testNoHandler()

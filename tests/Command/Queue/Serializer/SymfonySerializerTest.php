@@ -59,7 +59,7 @@ class SymfonySerializerTest extends TestCase
 
         $serializer = new SymfonySerializer($this->serializer, $format);
 
-        $this->assertEquals($result, $serializer->serialize($data));
+        $this->assertSame($result, $serializer->serialize($data));
     }
 
     /**
@@ -82,6 +82,6 @@ class SymfonySerializerTest extends TestCase
 
         $serializer = new SymfonySerializer($this->serializer, $format);
 
-        $this->assertEquals($result, $serializer->deserialize($data));
+        $this->assertSame($result, $serializer->deserialize($data));
     }
 }
