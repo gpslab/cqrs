@@ -54,7 +54,7 @@ class PredisPullCommandQueueTest extends TestCase
         $this->queue = new PredisPullCommandQueue($this->client, $this->serializer, $this->logger, $this->queue_name);
     }
 
-    public function testPushQueue()
+    public function testPushQueue(): void
     {
         $queue = [
             new RenameContactCommand(),
@@ -87,7 +87,7 @@ class PredisPullCommandQueueTest extends TestCase
         }
     }
 
-    public function testPopQueue()
+    public function testPopQueue(): void
     {
         $queue = [
             new RenameContactCommand(),
@@ -131,7 +131,7 @@ class PredisPullCommandQueueTest extends TestCase
         $this->assertNull($command, 'No commands in queue');
     }
 
-    public function testFailedDeserialize()
+    public function testFailedDeserialize(): void
     {
         $exception = new \Exception('foo');
         $command = new RenameContactCommand();

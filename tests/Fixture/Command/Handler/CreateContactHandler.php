@@ -22,7 +22,7 @@ class CreateContactHandler
     /**
      * @param CreateContact $command
      */
-    public function handleCreateContact(CreateContact $command)
+    public function handleCreateContact(CreateContact $command): void
     {
         $this->command = $command;
     }
@@ -30,7 +30,7 @@ class CreateContactHandler
     /**
      * @return CreateContact|null
      */
-    public function command()
+    public function command(): ?CreateContact
     {
         return $this->command;
     }

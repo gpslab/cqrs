@@ -42,18 +42,18 @@ class HandlerLocatedQueryBusTest extends TestCase
     protected function setUp(): void
     {
         $this->query = $this->createMock(Query::class);
-        $this->handler = function (Query $query) {
+        $this->handler = function (Query $query): void {
             $this->assertEquals($this->query, $query);
         };
         $this->locator = $this->createMock(QueryHandlerLocator::class);
         $this->bus = new HandlerLocatedQueryBus($this->locator);
     }
 
-    public function testDispatch()
+    public function testDispatch(): void
     {
         $data = 'foo';
         $handled_query = null;
-        $handler = function (Query $query) use (&$handled_query, $data) {
+        $handler = static function (Query $query) use (&$handled_query, $data): string {
             $handled_query = $query;
 
             return $data;
@@ -69,7 +69,7 @@ class HandlerLocatedQueryBusTest extends TestCase
         $this->assertEquals($this->query, $handled_query);
     }
 
-    public function testNoHandler()
+    public function testNoHandler(): void
     {
         $this->expectException(HandlerNotFoundException::class);
 

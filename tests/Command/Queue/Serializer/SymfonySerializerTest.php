@@ -31,7 +31,7 @@ class SymfonySerializerTest extends TestCase
     /**
      * @return array
      */
-    public function formats()
+    public function formats(): array
     {
         return [
             [null, 'predis'],
@@ -42,10 +42,10 @@ class SymfonySerializerTest extends TestCase
     /**
      * @dataProvider formats
      *
-     * @param string $format
-     * @param string $expected_format
+     * @param string|null $format
+     * @param string      $expected_format
      */
-    public function testSerialize($format, $expected_format)
+    public function testSerialize(?string $format, string $expected_format): void
     {
         $data = new \stdClass();
         $result = 'foo';
@@ -65,10 +65,10 @@ class SymfonySerializerTest extends TestCase
     /**
      * @dataProvider formats
      *
-     * @param string $format
-     * @param string $expected_format
+     * @param string|null $format
+     * @param string      $expected_format
      */
-    public function testDeserialize($format, $expected_format)
+    public function testDeserialize(?string $format, string $expected_format): void
     {
         $data = 'foo';
         $result = new \stdClass();

@@ -59,7 +59,7 @@ class PredisUniquePullCommandQueueTest extends TestCase
         );
     }
 
-    public function testPushQueue()
+    public function testPushQueue(): void
     {
         $queue = [
             new RenameContactCommand(),
@@ -101,7 +101,7 @@ class PredisUniquePullCommandQueueTest extends TestCase
         }
     }
 
-    public function testPopQueue()
+    public function testPopQueue(): void
     {
         $queue = [
             new RenameContactCommand(),
@@ -145,7 +145,7 @@ class PredisUniquePullCommandQueueTest extends TestCase
         $this->assertNull($command, 'No commands in queue');
     }
 
-    public function testFailedDeserialize()
+    public function testFailedDeserialize(): void
     {
         $exception = new \Exception('foo');
         $command = new RenameContactCommand();

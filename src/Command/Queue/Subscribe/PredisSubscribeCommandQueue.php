@@ -91,7 +91,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
 
         // laze subscribe
         if (!$this->subscribed) {
-            $this->client->subscribe($this->queue_name, function ($message) {
+            $this->client->subscribe($this->queue_name, function ($message): void {
                 $this->handle($message);
             });
             $this->subscribed = true;

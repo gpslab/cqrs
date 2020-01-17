@@ -35,13 +35,13 @@ class DirectBindingQueryHandlerLocatorTest extends TestCase
     protected function setUp(): void
     {
         $this->query = $this->createMock(Query::class);
-        $this->handler = function (Query $query) {
+        $this->handler = function (Query $query): void {
             $this->assertEquals($query, $this->query);
         };
         $this->locator = new DirectBindingQueryHandlerLocator();
     }
 
-    public function testFindHandler()
+    public function testFindHandler(): void
     {
         $this->locator->registerHandler(get_class($this->query), $this->handler);
 
@@ -49,7 +49,7 @@ class DirectBindingQueryHandlerLocatorTest extends TestCase
         $this->assertEquals($this->handler, $handler);
     }
 
-    public function testNoQueryHandler()
+    public function testNoQueryHandler(): void
     {
         $this->locator->registerHandler('foo', $this->handler);
 
