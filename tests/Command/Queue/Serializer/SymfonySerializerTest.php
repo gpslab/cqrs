@@ -54,7 +54,7 @@ class SymfonySerializerTest extends TestCase
             ->expects($this->once())
             ->method('serialize')
             ->with($data, $expected_format)
-            ->will($this->returnValue($result))
+            ->willReturn($result)
         ;
 
         $serializer = new SymfonySerializer($this->serializer, $format);
@@ -77,7 +77,7 @@ class SymfonySerializerTest extends TestCase
             ->expects($this->once())
             ->method('deserialize')
             ->with($data, Command::class, $expected_format)
-            ->will($this->returnValue($result))
+            ->willReturn($result)
         ;
 
         $serializer = new SymfonySerializer($this->serializer, $format);

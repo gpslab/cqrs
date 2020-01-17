@@ -62,7 +62,7 @@ class HandlerLocatedQueryBusTest extends TestCase
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->query)
-            ->will($this->returnValue($handler))
+            ->willReturn($handler)
         ;
 
         $this->assertEquals($data, $this->bus->handle($this->query));
@@ -77,7 +77,7 @@ class HandlerLocatedQueryBusTest extends TestCase
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->query)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $this->bus->handle($this->query);

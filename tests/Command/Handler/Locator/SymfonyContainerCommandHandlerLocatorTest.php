@@ -59,7 +59,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
             ->expects($this->exactly(2))
             ->method('get')
             ->with($service)
-            ->will($this->returnValue($this->handler))
+            ->willReturn($this->handler)
         ;
 
         $this->locator->registerService(get_class($this->command), $service);
@@ -84,7 +84,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
             ->expects($this->exactly(2))
             ->method('get')
             ->with($service)
-            ->will($this->returnValue($handler_obj))
+            ->willReturn($handler_obj)
         ;
 
         $this->locator->registerService(RenameContactCommand::class, $service, $method);
@@ -110,7 +110,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with($service)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $this->locator->registerService(get_class($this->command), $service);
@@ -128,7 +128,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with($service)
-            ->will($this->returnValue(new \stdClass()))
+            ->willReturn(new \stdClass())
         ;
 
         $this->locator->registerService(get_class($this->command), $service);
