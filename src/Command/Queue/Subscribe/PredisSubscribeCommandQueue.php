@@ -40,7 +40,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
     /**
      * @var string
      */
-    private $queue_name = '';
+    private $queue_name;
 
     /**
      * @var bool
@@ -57,7 +57,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
         RedisPubSubAdapter $client,
         Serializer $serializer,
         LoggerInterface $logger,
-        $queue_name
+        string $queue_name
     ) {
         $this->client = $client;
         $this->serializer = $serializer;
@@ -72,7 +72,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
      *
      * @return bool
      */
-    public function publish(Command $command)
+    public function publish(Command $command): bool
     {
         $massage = $this->serializer->serialize($command);
         $this->client->publish($this->queue_name, $massage);
@@ -85,7 +85,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
      *
      * @param callable $handler
      */
-    public function subscribe(callable $handler)
+    public function subscribe(callable $handler): void
     {
         $this->handlers[] = $handler;
 
@@ -105,7 +105,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
      *
      * @return bool
      */
-    public function unsubscribe(callable $handler)
+    public function unsubscribe(callable $handler): bool
     {
         $index = array_search($handler, $this->handlers);
 
@@ -121,7 +121,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
     /**
      * @param mixed $message
      */
-    private function handle($message)
+    private function handle($message): void
     {
         try {
             $command = $this->serializer->deserialize($message);
@@ -137,7 +137,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
         }
 
         foreach ($this->handlers as $handler) {
-            call_user_func($handler, $command);
+            $handler($command);
         }
     }
 }

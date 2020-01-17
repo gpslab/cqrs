@@ -26,7 +26,7 @@ class MemoryPullCommandQueue implements PullCommandQueue
      *
      * @return bool
      */
-    public function publish(Command $command)
+    public function publish(Command $command): bool
     {
         $this->commands[] = $command;
 
@@ -38,7 +38,7 @@ class MemoryPullCommandQueue implements PullCommandQueue
      *
      * @return Command|null
      */
-    public function pull()
+    public function pull(): ?Command
     {
         return array_shift($this->commands);
     }

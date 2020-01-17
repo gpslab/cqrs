@@ -26,11 +26,11 @@ class ExecutingSubscribeCommandQueue implements SubscribeCommandQueue
      *
      * @return bool
      */
-    public function publish(Command $command)
+    public function publish(Command $command): bool
     {
         // absence of a handlers is not a error
         foreach ($this->handlers as $handler) {
-            call_user_func($handler, $command);
+            $handler($command);
         }
 
         return true;
@@ -41,7 +41,7 @@ class ExecutingSubscribeCommandQueue implements SubscribeCommandQueue
      *
      * @param callable $handler
      */
-    public function subscribe(callable $handler)
+    public function subscribe(callable $handler): void
     {
         $this->handlers[] = $handler;
     }
@@ -53,7 +53,7 @@ class ExecutingSubscribeCommandQueue implements SubscribeCommandQueue
      *
      * @return bool
      */
-    public function unsubscribe(callable $handler)
+    public function unsubscribe(callable $handler): bool
     {
         $index = array_search($handler, $this->handlers);
 

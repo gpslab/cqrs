@@ -32,7 +32,7 @@ class HandlerLocatedCommandBus implements CommandBus
     /**
      * @param Command $command
      */
-    public function handle(Command $command)
+    public function handle(Command $command): void
     {
         $handler = $this->locator->findHandler($command);
 
@@ -40,6 +40,6 @@ class HandlerLocatedCommandBus implements CommandBus
             throw HandlerNotFoundException::notFound($command);
         }
 
-        call_user_func($handler, $command);
+        $handler($command);
     }
 }

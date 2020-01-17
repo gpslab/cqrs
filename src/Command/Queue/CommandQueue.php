@@ -21,5 +21,5 @@ interface CommandQueue
      *
      * @return bool
      */
-    public function publish(Command $command);
+    public function publish(Command $command): bool;
 }

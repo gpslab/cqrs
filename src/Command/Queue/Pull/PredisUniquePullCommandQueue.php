@@ -35,7 +35,7 @@ class PredisUniquePullCommandQueue implements PullCommandQueue
     /**
      * @var string
      */
-    private $queue_name = '';
+    private $queue_name;
 
     /**
      * @param Client          $client
@@ -43,7 +43,7 @@ class PredisUniquePullCommandQueue implements PullCommandQueue
      * @param LoggerInterface $logger
      * @param string          $queue_name
      */
-    public function __construct(Client $client, Serializer $serializer, LoggerInterface $logger, $queue_name)
+    public function __construct(Client $client, Serializer $serializer, LoggerInterface $logger, string $queue_name)
     {
         $this->client = $client;
         $this->serializer = $serializer;
@@ -58,7 +58,7 @@ class PredisUniquePullCommandQueue implements PullCommandQueue
      *
      * @return bool
      */
-    public function publish(Command $command)
+    public function publish(Command $command): bool
     {
         $value = $this->serializer->serialize($command);
 
@@ -73,7 +73,7 @@ class PredisUniquePullCommandQueue implements PullCommandQueue
      *
      * @return Command|null
      */
-    public function pull()
+    public function pull(): ?Command
     {
         $value = $this->client->lpop($this->queue_name);
 
@@ -82,7 +82,13 @@ class PredisUniquePullCommandQueue implements PullCommandQueue
         }
 
         try {
-            return $this->serializer->deserialize($value);
+            $command = $this->serializer->deserialize($value);
+
+            if ($command instanceof Command) {
+                return $command;
+            }
+
+            throw new \RuntimeException(sprintf('The denormalization command is expected "%s", got "%s" inside.', Command::class, get_class($command)));
         } catch (\Exception $e) {
             // it's a critical error
             // it is necessary to react quickly to it
