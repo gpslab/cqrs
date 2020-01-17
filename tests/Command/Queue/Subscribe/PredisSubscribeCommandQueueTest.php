@@ -81,7 +81,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
             ->expects($this->once())
             ->method('serialize')
             ->with($this->command)
-            ->will($this->returnValue($massage))
+            ->willReturn($massage)
         ;
 
         $this->client
@@ -105,7 +105,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->will($this->returnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
+            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
                 $this->assertEquals($this->queue_name, $queue_name);
                 $this->assertTrue(is_callable($handler_wrapper));
 
@@ -114,11 +114,11 @@ class PredisSubscribeCommandQueueTest extends TestCase
                     ->expects($this->once())
                     ->method('deserialize')
                     ->with($message)
-                    ->will($this->returnValue($this->command))
+                    ->willReturn($this->command)
                 ;
 
                 call_user_func($handler_wrapper, $message);
-            }))
+            })
         ;
 
         $this->queue->subscribe($handler);
@@ -138,7 +138,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->will($this->returnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
+            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
                 $this->assertEquals($this->queue_name, $queue_name);
                 $this->assertTrue(is_callable($handler_wrapper));
 
@@ -148,7 +148,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
                     ->expects($this->once())
                     ->method('deserialize')
                     ->with($message)
-                    ->will($this->throwException($exception))
+                    ->willThrowException($exception)
                 ;
 
                 $this->logger
@@ -167,7 +167,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
                 ;
 
                 call_user_func($handler_wrapper, $message);
-            }))
+            })
         ;
 
         $this->queue->subscribe($handler);
@@ -190,7 +190,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->will($this->returnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
+            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
                 $this->assertEquals($this->queue_name, $queue_name);
                 $this->assertTrue(is_callable($handler_wrapper));
 
@@ -199,11 +199,11 @@ class PredisSubscribeCommandQueueTest extends TestCase
                     ->expects($this->once())
                     ->method('deserialize')
                     ->with($message)
-                    ->will($this->returnValue($this->command))
+                    ->willReturn($this->command)
                 ;
 
                 call_user_func($handler_wrapper, $message);
-            }))
+            })
         ;
 
         $this->queue->subscribe($handler);

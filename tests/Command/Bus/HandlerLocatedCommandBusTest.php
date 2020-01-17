@@ -52,7 +52,7 @@ class HandlerLocatedCommandBusTest extends TestCase
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->command)
-            ->will($this->returnValue($handler))
+            ->willReturn($handler)
         ;
 
         $this->bus->handle($this->command);
@@ -67,7 +67,7 @@ class HandlerLocatedCommandBusTest extends TestCase
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->command)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $this->bus->handle($this->command);
