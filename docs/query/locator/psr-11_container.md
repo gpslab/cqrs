@@ -11,7 +11,7 @@ It's a implementation of locator `QueryHandlerLocator` for
 Example register the [anonymous function](http://php.net/manual/en/functions.anonymous.php) as a query handler:
 
 ```php
-$handler = function (ContactByNameQuery $query) {
+$handler = static function (ContactByNameQuery $query) {
     // do something
 };
 

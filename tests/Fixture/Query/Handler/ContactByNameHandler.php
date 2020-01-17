@@ -22,7 +22,7 @@ class ContactByNameHandler
     /**
      * @param ContactByNameQuery $query
      */
-    public function handleContactByName(ContactByNameQuery $query)
+    public function handleContactByName(ContactByNameQuery $query): void
     {
         $this->query = $query;
     }
@@ -30,7 +30,7 @@ class ContactByNameHandler
     /**
      * @return ContactByNameQuery|null
      */
-    public function query()
+    public function query(): ?ContactByNameQuery
     {
         return $this->query;
     }

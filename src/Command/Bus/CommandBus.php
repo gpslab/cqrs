@@ -17,5 +17,5 @@ interface CommandBus
     /**
      * @param Command $command
      */
-    public function handle(Command $command);
+    public function handle(Command $command): void;
 }

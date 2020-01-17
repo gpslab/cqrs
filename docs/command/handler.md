@@ -7,7 +7,7 @@ handler.
 The command handler can be a [anonymous function](http://php.net/manual/en/functions.anonymous.php):
 
 ```php
-$handler = function (RenameArticleCommand $command) {
+$handler = static function (RenameArticleCommand $command): void {
     // do something
 };
 
@@ -19,7 +19,7 @@ $locator->registerHandler(RenameArticleCommand::class, $handler);
 It can be a some function:
 
 ```php
-function RenameArticleHandler(RenameArticleCommand $command)
+function RenameArticleHandler(RenameArticleCommand $command): void
 {
     // do something
 }
@@ -34,7 +34,7 @@ It can be a [called object](http://php.net/manual/en/language.oop5.magic.php#obj
 ```php
 class RenameArticleHandler
 {
-    public function __invoke(RenameArticleCommand $command)
+    public function __invoke(RenameArticleCommand $command): void
     {
         // do something
     }
@@ -50,7 +50,7 @@ It can be a static method of class:
 ```php
 class RenameArticleHandler
 {
-    public static function handleRenameArticle(RenameArticleCommand $command)
+    public static function handleRenameArticle(RenameArticleCommand $command): void
     {
         // do something
     }
@@ -66,7 +66,7 @@ It can be a public method of class:
 ```php
 class RenameArticleHandler
 {
-    public function handleRenameArticle(RenameArticleCommand $command)
+    public function handleRenameArticle(RenameArticleCommand $command): void
     {
         // do something
     }
@@ -82,12 +82,12 @@ You can handle many commands in one handler.
 ```php
 class ArticleHandler
 {
-    public function handleRenameArticle(RenameArticleCommand $command)
+    public function handleRenameArticle(RenameArticleCommand $command): void
     {
         // do something
     }
 
-    public function handlePublishArticle(PublishArticleCommand $command)
+    public function handlePublishArticle(PublishArticleCommand $command): void
     {
         // do something
     }

@@ -12,14 +12,14 @@ namespace GpsLab\Component\Query\Exception;
 
 use GpsLab\Component\Query\Query;
 
-class HandlerNotFoundException extends \RuntimeException
+final class HandlerNotFoundException extends \RuntimeException
 {
     /**
      * @param Query $query
      *
      * @return self
      */
-    public static function notFound(Query $query)
+    public static function notFound(Query $query): self
     {
         $parts = explode('\\', get_class($query));
 

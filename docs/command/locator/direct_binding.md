@@ -8,7 +8,7 @@ Direct binding locator is the simplest locator. You bind a specific handler to a
 Example of binding:
 
 ```php
-$handler = function (RenameArticleCommand $command) {
+$handler = static function (RenameArticleCommand $command): void {
     // do something
 };
 

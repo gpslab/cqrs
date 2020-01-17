@@ -42,6 +42,6 @@ class HandlerLocatedQueryBus implements QueryBus
             throw HandlerNotFoundException::notFound($query);
         }
 
-        return call_user_func($handler, $query);
+        return $handler($query);
     }
 }

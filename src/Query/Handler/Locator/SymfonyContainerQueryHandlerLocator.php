@@ -29,7 +29,7 @@ class SymfonyContainerQueryHandlerLocator implements QueryHandlerLocator, Contai
      *
      * @return callable|null
      */
-    public function findHandler(Query $query)
+    public function findHandler(Query $query): ?callable
     {
         return $this->lazyLoad(get_class($query));
     }
@@ -39,20 +39,20 @@ class SymfonyContainerQueryHandlerLocator implements QueryHandlerLocator, Contai
      * @param string $service
      * @param string $method
      */
-    public function registerService($query_name, $service, $method = '__invoke')
+    public function registerService(string $query_name, string $service, string $method = '__invoke'): void
     {
         $this->query_handler_ids[$query_name] = [$service, $method];
     }
 
     /**
-     * @param $query_name
+     * @param string $query_name
      *
-     * @return callable
+     * @return callable|null
      */
-    private function lazyLoad($query_name)
+    private function lazyLoad(string $query_name): ?callable
     {
         if ($this->container instanceof ContainerInterface && isset($this->query_handler_ids[$query_name])) {
-            list($service, $method) = $this->query_handler_ids[$query_name];
+            [$service, $method] = $this->query_handler_ids[$query_name];
 
             return $this->resolve($this->container->get($service), $method);
         }
@@ -66,7 +66,7 @@ class SymfonyContainerQueryHandlerLocator implements QueryHandlerLocator, Contai
      *
      * @return callable|null
      */
-    private function resolve($service, $method)
+    private function resolve($service, string $method): ?callable
     {
         if (is_callable($service)) {
             return $service;

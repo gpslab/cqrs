@@ -43,14 +43,14 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
     protected function setUp(): void
     {
         $this->command = $this->createMock(Command::class);
-        $this->handler = function (Command $command) {
+        $this->handler = function (Command $command): void {
             $this->assertSame($command, $this->command);
         };
         $this->container = $this->createMock(ContainerInterface::class);
         $this->locator = new SymfonyContainerCommandHandlerLocator();
     }
 
-    public function testFindHandler()
+    public function testFindHandler(): void
     {
         $this->locator->setContainer($this->container);
         $service = 'foo';
@@ -72,7 +72,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
         $this->assertSame($this->handler, $handler);
     }
 
-    public function testFindHandlerServiceInvoke()
+    public function testFindHandlerServiceInvoke(): void
     {
         $this->locator->setContainer($this->container);
         $service = 'foo';
@@ -101,7 +101,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
         $this->assertSame($command, $handler_obj->command());
     }
 
-    public function testNoCommandHandler()
+    public function testNoCommandHandler(): void
     {
         $this->locator->setContainer($this->container);
         $service = 'foo';
@@ -119,7 +119,7 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
         $this->assertNull($handler);
     }
 
-    public function testHandlerIsNotACommandHandler()
+    public function testHandlerIsNotACommandHandler(): void
     {
         $this->locator->setContainer($this->container);
         $service = 'foo';
@@ -137,14 +137,14 @@ class SymfonyContainerCommandHandlerLocatorTest extends TestCase
         $this->assertNull($handler);
     }
 
-    public function testNoAnyCommandHandler()
+    public function testNoAnyCommandHandler(): void
     {
         $this->locator->setContainer($this->container);
         $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
     }
 
-    public function testNoContainer()
+    public function testNoContainer(): void
     {
         $service = 'foo';
 

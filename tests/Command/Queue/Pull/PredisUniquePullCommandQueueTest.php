@@ -10,6 +10,7 @@
 
 namespace GpsLab\Component\Tests\Command\Queue\Pull;
 
+use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Queue\Pull\PredisUniquePullCommandQueue;
 use GpsLab\Component\Command\Queue\Serializer\Serializer;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
@@ -59,7 +60,7 @@ class PredisUniquePullCommandQueueTest extends TestCase
         );
     }
 
-    public function testPushQueue()
+    public function testPushQueue(): void
     {
         $queue = [
             new RenameContactCommand(),
@@ -101,7 +102,7 @@ class PredisUniquePullCommandQueueTest extends TestCase
         }
     }
 
-    public function testPopQueue()
+    public function testPopQueue(): void
     {
         $queue = [
             new RenameContactCommand(),
@@ -145,7 +146,7 @@ class PredisUniquePullCommandQueueTest extends TestCase
         $this->assertNull($command, 'No commands in queue');
     }
 
-    public function testFailedDeserialize()
+    public function testErrorOnDeserialize(): void
     {
         $exception = new \Exception('foo');
         $command = new RenameContactCommand();
@@ -175,6 +176,47 @@ class PredisUniquePullCommandQueueTest extends TestCase
             ->expects($this->once())
             ->method('critical')
             ->with('Failed denormalize a command in the Redis queue', [$value, $exception->getMessage()])
+            ->willReturn(1)
+        ;
+
+        $this->assertNull($this->queue->pull());
+    }
+
+    public function testDeserializeBadResult(): void
+    {
+        $result = new \stdClass();
+        $command = new RenameContactCommand();
+        $value = spl_object_hash($command);
+        $message = sprintf(
+            'The denormalization command is expected "%s", got "%s" inside.',
+            Command::class,
+            \stdClass::class
+        );
+
+        $this->client
+            ->expects($this->at(0))
+            ->method('__call')
+            ->with('lpop', [$this->queue_name])
+            ->willReturn($value)
+        ;
+        $this->client
+            ->expects($this->at(1))
+            ->method('__call')
+            ->with('rpush', [$this->queue_name, [$value]])
+            ->willReturn(1)
+        ;
+
+        $this->serializer
+            ->expects($this->once())
+            ->method('deserialize')
+            ->with($value)
+            ->willReturn($result)
+        ;
+
+        $this->logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('Failed denormalize a command in the Redis queue', [$value, $message])
             ->willReturn(1)
         ;
 

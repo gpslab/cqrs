@@ -7,7 +7,7 @@ handler.
 The query handler can be a [anonymous function](http://php.net/manual/en/functions.anonymous.php):
 
 ```php
-$handler = function (ContactByIdentityQuery $query) {
+$handler = static function (ContactByIdentityQuery $query) {
     // do something
 };
 

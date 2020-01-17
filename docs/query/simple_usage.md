@@ -29,12 +29,12 @@ class ArticleByIdentityQuery implements Query
 {
     private $article_id;
 
-    public function __construct(integer $article_id)
+    public function __construct(int $article_id)
     {
         $this->article_id = $article_id;
     }
 
-    public function articleId()
+    public function articleId(): int
     {
         return $this->article_id;
     }

@@ -41,10 +41,10 @@ class HandlerLocatedCommandBusTest extends TestCase
         $this->bus = new HandlerLocatedCommandBus($this->locator);
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
         $handled_command = null;
-        $handler = function (Command $command) use (&$handled_command) {
+        $handler = static function (Command $command) use (&$handled_command): void {
             $handled_command = $command;
         };
 
@@ -59,7 +59,7 @@ class HandlerLocatedCommandBusTest extends TestCase
         $this->assertSame($this->command, $handled_command);
     }
 
-    public function testNoHandler()
+    public function testNoHandler(): void
     {
         $this->expectException(HandlerNotFoundException::class);
 

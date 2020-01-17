@@ -43,14 +43,14 @@ class ContainerCommandHandlerLocatorTest extends TestCase
     protected function setUp(): void
     {
         $this->command = $this->createMock(Command::class);
-        $this->handler = function (Command $command) {
+        $this->handler = function (Command $command): void {
             $this->assertSame($command, $this->command);
         };
         $this->container = $this->createMock(ContainerInterface::class);
         $this->locator = new ContainerCommandHandlerLocator($this->container);
     }
 
-    public function testFindHandler()
+    public function testFindHandler(): void
     {
         $service = 'foo';
 
@@ -71,7 +71,7 @@ class ContainerCommandHandlerLocatorTest extends TestCase
         $this->assertSame($this->handler, $handler);
     }
 
-    public function testFindHandlerServiceInvoke()
+    public function testFindHandlerServiceInvoke(): void
     {
         $service = 'foo';
         $command = new CreateContact();
@@ -99,7 +99,7 @@ class ContainerCommandHandlerLocatorTest extends TestCase
         $this->assertSame($command, $handler_obj->command());
     }
 
-    public function testNoCommandHandler()
+    public function testNoCommandHandler(): void
     {
         $service = 'foo';
 
@@ -116,13 +116,13 @@ class ContainerCommandHandlerLocatorTest extends TestCase
         $this->assertNull($handler);
     }
 
-    public function testNoAnyCommandHandler()
+    public function testNoAnyCommandHandler(): void
     {
         $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
     }
 
-    public function testHandlerIsNotACommandHandler()
+    public function testHandlerIsNotACommandHandler(): void
     {
         $service = 'foo';
 

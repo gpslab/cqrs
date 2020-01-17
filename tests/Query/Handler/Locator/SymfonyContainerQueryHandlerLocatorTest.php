@@ -43,14 +43,14 @@ class SymfonyContainerQueryHandlerLocatorTest extends TestCase
     protected function setUp(): void
     {
         $this->query = $this->createMock(Query::class);
-        $this->handler = function (Query $query) {
+        $this->handler = function (Query $query): void {
             $this->assertSame($query, $this->query);
         };
         $this->container = $this->createMock(ContainerInterface::class);
         $this->locator = new SymfonyContainerQueryHandlerLocator();
     }
 
-    public function testFindHandler()
+    public function testFindHandler(): void
     {
         $this->locator->setContainer($this->container);
         $service = 'foo';
@@ -72,7 +72,7 @@ class SymfonyContainerQueryHandlerLocatorTest extends TestCase
         $this->assertSame($this->handler, $handler);
     }
 
-    public function testFindHandlerServiceInvoke()
+    public function testFindHandlerServiceInvoke(): void
     {
         $this->locator->setContainer($this->container);
         $service = 'foo';
@@ -97,11 +97,11 @@ class SymfonyContainerQueryHandlerLocatorTest extends TestCase
         $this->assertSame([$handler_obj, $method], $handler);
 
         // test exec handler
-        call_user_func($handler, $query);
+        $handler($query);
         $this->assertSame($query, $handler_obj->query());
     }
 
-    public function testNoQueryHandler()
+    public function testNoQueryHandler(): void
     {
         $this->locator->setContainer($this->container);
         $service = 'foo';
@@ -119,7 +119,7 @@ class SymfonyContainerQueryHandlerLocatorTest extends TestCase
         $this->assertNull($handler);
     }
 
-    public function testHandlerIsNotAQueryHandler()
+    public function testHandlerIsNotAQueryHandler(): void
     {
         $this->locator->setContainer($this->container);
         $service = 'foo';
@@ -137,14 +137,14 @@ class SymfonyContainerQueryHandlerLocatorTest extends TestCase
         $this->assertNull($handler);
     }
 
-    public function testNoAnyCommandHandler()
+    public function testNoAnyCommandHandler(): void
     {
         $this->locator->setContainer($this->container);
         $handler = $this->locator->findHandler($this->query);
         $this->assertNull($handler);
     }
 
-    public function testNoContainer()
+    public function testNoContainer(): void
     {
         $service = 'foo';
 

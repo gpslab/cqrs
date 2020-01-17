@@ -73,7 +73,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         );
     }
 
-    public function testPublish()
+    public function testPublish(): void
     {
         $massage = 'foo';
 
@@ -93,10 +93,10 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->assertTrue($this->queue->publish($this->command));
     }
 
-    public function testSubscribe()
+    public function testSubscribe(): void
     {
         $subscriber_called = false;
-        $handler = function ($command) use (&$subscriber_called) {
+        $handler = function ($command) use (&$subscriber_called): void {
             $this->assertInstanceOf(Command::class, $command);
             $this->assertSame($this->command, $command);
             $subscriber_called = true;
@@ -105,7 +105,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
+            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler): void {
                 $this->assertSame($this->queue_name, $queue_name);
                 $this->assertIsCallable($handler_wrapper);
 
@@ -117,7 +117,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
                     ->willReturn($this->command)
                 ;
 
-                call_user_func($handler_wrapper, $message);
+                $handler_wrapper($message);
             })
         ;
 
@@ -126,10 +126,10 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->assertTrue($subscriber_called);
     }
 
-    public function testSubscribeFailure()
+    public function testErrorOnDeserialize(): void
     {
         $subscriber_called = false;
-        $handler = function ($command) use (&$subscriber_called) {
+        $handler = function ($command) use (&$subscriber_called): void {
             $this->assertInstanceOf(Command::class, $command);
             $this->assertSame($this->command, $command);
             $subscriber_called = true;
@@ -138,7 +138,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
+            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler): void {
                 $this->assertSame($this->queue_name, $queue_name);
                 $this->assertIsCallable($handler_wrapper);
 
@@ -166,7 +166,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
                     ->with($this->queue_name, $message)
                 ;
 
-                call_user_func($handler_wrapper, $message);
+                $handler_wrapper($message);
             })
         ;
 
@@ -175,12 +175,66 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->assertFalse($subscriber_called);
     }
 
-    public function testSubscribeHandlerFailure()
+    public function testDeserializeBadResult(): void
+    {
+        $subscriber_called = false;
+        $handler = function ($command) use (&$subscriber_called): void {
+            $this->assertInstanceOf(Command::class, $command);
+            $this->assertEquals($this->command, $command);
+            $subscriber_called = true;
+        };
+
+        $this->client
+            ->expects($this->once())
+            ->method('subscribe')
+            ->willReturnCallback(function ($queue_name, $handler_wrapper): void {
+                $this->assertEquals($this->queue_name, $queue_name);
+                $this->assertIsCallable($handler_wrapper);
+
+                $result = new \stdClass();
+                $message = 'foo';
+                $exception_message = sprintf(
+                    'The denormalization command is expected "%s", got "%s" inside.',
+                    Command::class,
+                    \stdClass::class
+                );
+                $this->serializer
+                    ->expects($this->once())
+                    ->method('deserialize')
+                    ->with($message)
+                    ->willReturn($result)
+                ;
+
+                $this->logger
+                    ->expects($this->once())
+                    ->method('critical')
+                    ->with(
+                        'Failed denormalize a command in the Redis queue',
+                        [$message, $exception_message]
+                    )
+                ;
+
+                $this->client
+                    ->expects($this->once())
+                    ->method('publish')
+                    ->with($this->queue_name, $message)
+                ;
+
+                $handler_wrapper($message);
+            })
+        ;
+
+        $this->queue->subscribe($handler);
+
+        $this->assertFalse($subscriber_called);
+    }
+
+    public function testSubscribeHandlerFailure(): void
     {
         $this->expectException(Exception::class);
 
         $exception = new \Exception('bar');
-        $handler = function ($command) use ($exception) {
+        $handler = function ($command) use ($exception): void {
             $this->assertInstanceOf(Command::class, $command);
             $this->assertSame($this->command, $command);
 
@@ -190,7 +244,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler) {
+            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler): void {
                 $this->assertSame($this->queue_name, $queue_name);
                 $this->assertIsCallable($handler_wrapper);
 
@@ -202,20 +256,20 @@ class PredisSubscribeCommandQueueTest extends TestCase
                     ->willReturn($this->command)
                 ;
 
-                call_user_func($handler_wrapper, $message);
+                $handler_wrapper($message);
             })
         ;
 
         $this->queue->subscribe($handler);
     }
 
-    public function testLazeSubscribe()
+    public function testLazeSubscribe(): void
     {
-        $handler1 = function ($command) {
+        $handler1 = function ($command): void {
             $this->assertInstanceOf(Command::class, $command);
             $this->assertSame($this->command, $command);
         };
-        $handler2 = function (Command $command) {
+        $handler2 = static function (Command $command): void {
         };
 
         $this->client

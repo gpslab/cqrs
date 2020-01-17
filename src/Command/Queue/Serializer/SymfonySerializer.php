@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class SymfonySerializer implements Serializer
 {
-    const DEFAULT_FORMAT = 'predis';
+    public const DEFAULT_FORMAT = 'predis';
 
     /**
      * @var SerializerInterface
@@ -25,16 +25,16 @@ class SymfonySerializer implements Serializer
     /**
      * @var string
      */
-    private $format = self::DEFAULT_FORMAT;
+    private $format;
 
     /**
      * @param SerializerInterface $serializer
-     * @param string|null         $format
+     * @param string              $format
      */
-    public function __construct(SerializerInterface $serializer, $format = null)
+    public function __construct(SerializerInterface $serializer, string $format = self::DEFAULT_FORMAT)
     {
         $this->serializer = $serializer;
-        $this->format = $format ?: self::DEFAULT_FORMAT;
+        $this->format = $format;
     }
 
     /**
@@ -42,7 +42,7 @@ class SymfonySerializer implements Serializer
      *
      * @return string
      */
-    public function serialize($data)
+    public function serialize($data): string
     {
         return $this->serializer->serialize($data, $this->format);
     }
@@ -52,7 +52,7 @@ class SymfonySerializer implements Serializer
      *
      * @return object
      */
-    public function deserialize($data)
+    public function deserialize(string $data)
     {
         return $this->serializer->deserialize($data, Command::class, $this->format);
     }

@@ -33,10 +33,10 @@ class ExecutingSubscribeCommandQueueTest extends TestCase
         $this->queue = new ExecutingSubscribeCommandQueue();
     }
 
-    public function testPublish()
+    public function testPublish(): void
     {
         $subscriber_called = false;
-        $handler = function ($command) use (&$subscriber_called) {
+        $handler = function ($command) use (&$subscriber_called): void {
             $this->assertInstanceOf(Command::class, $command);
             $this->assertSame($this->command, $command);
             $subscriber_called = true;

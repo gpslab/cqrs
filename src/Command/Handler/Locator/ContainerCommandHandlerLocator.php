@@ -38,7 +38,7 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
      *
      * @return callable|null
      */
-    public function findHandler(Command $command)
+    public function findHandler(Command $command): ?callable
     {
         return $this->lazyLoad(get_class($command));
     }
@@ -48,7 +48,7 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
      * @param string $service
      * @param string $method
      */
-    public function registerService($command_name, $service, $method = '__invoke')
+    public function registerService(string $command_name, string $service, string $method = '__invoke'): void
     {
         $this->command_handler_ids[$command_name] = [$service, $method];
     }
@@ -58,10 +58,10 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
      *
      * @return callable|null
      */
-    private function lazyLoad($command_name)
+    private function lazyLoad(string $command_name): ?callable
     {
         if (isset($this->command_handler_ids[$command_name])) {
-            list($service, $method) = $this->command_handler_ids[$command_name];
+            [$service, $method] = $this->command_handler_ids[$command_name];
 
             return $this->resolve($this->container->get($service), $method);
         }
@@ -75,7 +75,7 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
      *
      * @return callable|null
      */
-    private function resolve($service, $method)
+    private function resolve($service, string $method): ?callable
     {
         if (is_callable($service)) {
             return $service;

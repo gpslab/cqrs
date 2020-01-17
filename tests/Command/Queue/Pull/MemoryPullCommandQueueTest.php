@@ -27,7 +27,7 @@ class MemoryPullCommandQueueTest extends TestCase
         $this->queue = new MemoryPullCommandQueue();
     }
 
-    public function testQueue()
+    public function testQueue(): void
     {
         $queue = [
             new CreateContact(),

@@ -43,14 +43,14 @@ class ContainerQueryHandlerLocatorTest extends TestCase
     protected function setUp(): void
     {
         $this->query = $this->createMock(Query::class);
-        $this->handler = function (Query $query) {
+        $this->handler = function (Query $query): void {
             $this->assertSame($query, $this->query);
         };
         $this->container = $this->createMock(ContainerInterface::class);
         $this->locator = new ContainerQueryHandlerLocator($this->container);
     }
 
-    public function testFindHandler()
+    public function testFindHandler(): void
     {
         $service = 'foo';
 
@@ -71,7 +71,7 @@ class ContainerQueryHandlerLocatorTest extends TestCase
         $this->assertSame($this->handler, $handler);
     }
 
-    public function testFindHandlerServiceInvoke()
+    public function testFindHandlerServiceInvoke(): void
     {
         $service = 'foo';
         $query = new ContactByIdentity();
@@ -99,7 +99,7 @@ class ContainerQueryHandlerLocatorTest extends TestCase
         $this->assertSame($query, $handler_obj->query());
     }
 
-    public function testNoQueryHandler()
+    public function testNoQueryHandler(): void
     {
         $service = 'foo';
 
@@ -116,13 +116,13 @@ class ContainerQueryHandlerLocatorTest extends TestCase
         $this->assertNull($handler);
     }
 
-    public function testNoAnyCommandHandler()
+    public function testNoAnyCommandHandler(): void
     {
         $handler = $this->locator->findHandler($this->query);
         $this->assertNull($handler);
     }
 
-    public function testHandlerIsNotAQueryHandler()
+    public function testHandlerIsNotAQueryHandler(): void
     {
         $service = 'foo';
 
