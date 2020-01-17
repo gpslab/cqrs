@@ -129,7 +129,6 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
             if (!($command instanceof Command)) {
                 throw new \RuntimeException(sprintf('The denormalization command is expected "%s", got "%s" inside.', Command::class, get_class($command)));
             }
-
         } catch (\Exception $e) { // catch only deserialize exception
             // it's a critical error
             // it is necessary to react quickly to it
