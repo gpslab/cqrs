@@ -23,7 +23,7 @@ $queue = new ExecutingSubscribeCommandQueue();
 Subscribe to the queue:
 
 ```php
-$handler = function(RenameArticleCommand $command) use ($bus) {
+$handler = static function(RenameArticleCommand $command) use ($bus): void {
     $bus->handle($command);
 };
 

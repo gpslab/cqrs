@@ -13,12 +13,12 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class RenameArticleCommandSerializer implements NormalizerInterface, DenormalizerInterface
 {
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null): bool
     {
         return $data instanceof RenameArticleCommand;
     }
 
-    public function normalize($object, $format = null, array $context = [])
+    public function normalize($object, $format = null, array $context = []): array
     {
         return [
             'type' => 'RenameArticle',
@@ -26,7 +26,7 @@ class RenameArticleCommandSerializer implements NormalizerInterface, Denormalize
         ];
     }
 
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize($data, $class, $format = null, array $context = []): RenameArticleCommand
     {
         if ($data['type'] !== 'RenameArticle' || $class !== RenameArticleCommand::class) {
             throw new UnsupportedException();
@@ -35,7 +35,7 @@ class RenameArticleCommandSerializer implements NormalizerInterface, Denormalize
         return new RenameArticleCommand($data['payload']);
     }
 
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null): bool
     {
         return $type === Command::class && isset($data['type'], $data['payload']) && $data['type'] === 'RenameArticle';
     }

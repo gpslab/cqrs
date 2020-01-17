@@ -51,7 +51,7 @@ use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
 $locator = new DirectBindingCommandHandlerLocator();
 $bus = new HandlerLocatedCommandBus($locator);
 
-$handler = function(RenameArticleCommand $command) use ($bus) {
+$handler = static function(RenameArticleCommand $command) use ($bus): void {
     $bus->handle($command);
 };
 

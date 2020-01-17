@@ -12,20 +12,20 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class RenameArticleCommandSerializer implements NormalizerInterface, DenormalizerInterface
 {
-    const PATTERN = 'RenameArticle;%d;%d;%s';
-    const REGEXP = '/^
+    private const PATTERN = 'RenameArticle;%d;%d;%s';
+    private const REGEXP = '/^
             RenameArticle;      # command type
             (?<article_id>\d+); # article id
             (?<editor_id>\d+);  # editor of the change
             (?<new_name>.+      # new article name
         $/x';
 
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null): bool
     {
-        return $data instanceof RenameArticleCommand && $format == PredisPullCommandQueue::FORMAT;
+        return $data instanceof RenameArticleCommand && $format === PredisPullCommandQueue::FORMAT;
     }
 
-    public function normalize($object, $format = null, array $context = [])
+    public function normalize($object, $format = null, array $context = []): string
     {
         return sprintf(
             self::PATTERN,
@@ -35,7 +35,7 @@ class RenameArticleCommandSerializer implements NormalizerInterface, Denormalize
         );
     }
 
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize($data, $class, $format = null, array $context = []): RenameArticleCommand
     {
         if (!preg_match(self::REGEXP, $data, $match)) {
             throw new UnsupportedException();
@@ -48,7 +48,7 @@ class RenameArticleCommandSerializer implements NormalizerInterface, Denormalize
         );
     }
 
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null): bool
     {
         return
             $format === PredisCommandQueue::FORMAT &&

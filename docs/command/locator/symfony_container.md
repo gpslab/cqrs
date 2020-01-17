@@ -19,7 +19,7 @@ Example register the [called object](http://php.net/manual/en/language.oop5.magi
 ```php
 class RenameArticleHandler
 {
-    public function __invoke(RenameArticleCommand $command)
+    public function __invoke(RenameArticleCommand $command): void
     {
         // do something
     }
@@ -30,14 +30,12 @@ YAML configuration for this:
 
 ```yml
 services:
-    acme.demo.command.handler.article.rename:
-        class: RenameArticleHandler
+    RenameArticleHandler: ~
 
-    acme.demo.command.locator:
-        class: GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator
+    GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator:
         calls:
             - [ setContainer, [ '@service_container' ] ]
-            - [ registerService, [ 'RenameArticleCommand', 'acme.demo.command.handler.article.rename' ] ]
+            - [ registerService, [ 'RenameArticleCommand', 'RenameArticleHandler' ] ]
 ```
 
 ## Method of class
@@ -47,7 +45,7 @@ Example register the public method of class as a command handler:
 ```php
 class RenameArticleHandler
 {
-    public function handleRenameArticle(RenameArticleCommand $command)
+    public function handleRenameArticle(RenameArticleCommand $command): void
     {
         // do something
     }
@@ -58,14 +56,12 @@ YAML configuration for this:
 
 ```yml
 services:
-    acme.demo.command.handler.article.rename:
-        class: RenameArticleHandler
+    RenameArticleHandler: ~
 
-    acme.demo.command.locator:
-        class: GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator
+    GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator:
         calls:
             - [ setContainer, [ '@service_container' ] ]
-            - [ registerService, [ 'RenameArticleCommand', 'acme.demo.command.handler.article.rename', 'handleRenameArticle' ] ]
+            - [ registerService, [ 'RenameArticleCommand', 'RenameArticleHandler', 'handleRenameArticle' ] ]
 ```
 
 > **Note**

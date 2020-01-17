@@ -34,20 +34,20 @@ class RenameArticleCommand implements Command
 {
     private $article_id;
 
-    private $new_name = '';
+    private $new_name;
 
-    public function __construct(integer $article_id, string $new_name)
+    public function __construct(int $article_id, string $new_name)
     {
         $this->article_id = $article_id;
         $this->new_name = $new_name;
     }
 
-    public function articleId()
+    public function articleId(): int
     {
         return $this->article_id;
     }
 
-    public function newName()
+    public function newName(): string
     {
         return $this->new_name;
     }
@@ -74,7 +74,7 @@ class RenameArticleHandler
         $this->em = $em;
     }
 
-    public function handleRenameArticle(RenameArticleCommand $command)
+    public function handleRenameArticle(RenameArticleCommand $command): void
     {
         // get article by id
         $article = $this->em->getRepository(Article::class)->find($command->article_id);

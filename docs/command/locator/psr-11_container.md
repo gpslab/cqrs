@@ -11,7 +11,7 @@ It's a implementation of locator `CommandHandlerLocator` for
 Example register the [anonymous function](http://php.net/manual/en/functions.anonymous.php) as a command handler:
 
 ```php
-$handler = function (RenameArticleCommand $command) {
+$handler = static function (RenameArticleCommand $command): void {
     // do something
 };
 
@@ -32,7 +32,7 @@ Example register the [called object](http://php.net/manual/en/language.oop5.magi
 ```php
 class RenameArticleHandler
 {
-    public function __invoke(RenameArticleCommand $command)
+    public function __invoke(RenameArticleCommand $command): void
     {
         // do something
     }
@@ -55,7 +55,7 @@ Example register the public method of class as a command handler:
 ```php
 class RenameArticleHandler
 {
-    public function handleRenameArticle(RenameArticleCommand $command)
+    public function handleRenameArticle(RenameArticleCommand $command): void
     {
         // do something
     }
