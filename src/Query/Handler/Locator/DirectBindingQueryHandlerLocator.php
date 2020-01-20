@@ -37,10 +37,8 @@ class DirectBindingQueryHandlerLocator implements QueryHandlerLocator
      */
     public function registerSubscriber(QuerySubscriber $subscriber): void
     {
-        foreach ($subscriber::getSubscribedQueries() as $query_name => $methods) {
-            foreach ($methods as $method) {
-                $this->registerHandler($query_name, [$subscriber, $method]);
-            }
+        foreach ($subscriber::getSubscribedQueries() as $query_name => $method) {
+            $this->registerHandler($query_name, [$subscriber, $method]);
         }
     }
 

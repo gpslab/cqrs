@@ -17,7 +17,7 @@ interface QuerySubscriber
      *
      * <code>
      * [
-     *  [<query_name>, [<method,. ..>]],
+     *  [<query_name>, <method_name>],
      * ]
      * </code>
      *
