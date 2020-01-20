@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace GpsLab\Component\Tests\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Command;
+use GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\Handler\ContestCommandSubscriber;
-use GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator;
 use GpsLab\Component\Tests\Fixture\Command\Handler\RenameContactHandler;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 use PHPUnit\Framework\MockObject\MockObject;
