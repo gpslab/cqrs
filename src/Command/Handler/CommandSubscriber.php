@@ -17,7 +17,7 @@ interface CommandSubscriber
      *
      * <code>
      * [
-     *  [<command_name>, [<method,. ..>]],
+     *  [<command_name>, <method_name>],
      * ]
      * </code>
      *

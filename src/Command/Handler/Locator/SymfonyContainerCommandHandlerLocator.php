@@ -53,10 +53,8 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
     public function registerSubscriberService(string $service_name, string $class_name): void
     {
         if ($class_name instanceof CommandSubscriber) {
-            foreach ($class_name::getSubscribedCommands() as $command_name => $methods) {
-                foreach ($methods as $method) {
-                    $this->registerService($command_name, $service_name, $method);
-                }
+            foreach ($class_name::getSubscribedCommands() as $command_name => $method) {
+                $this->registerService($command_name, $service_name, $method);
             }
         }
     }
