@@ -14,7 +14,9 @@ namespace GpsLab\Component\Tests\Command\Handler\Locator;
 use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Handler\Locator\ContainerCommandHandlerLocator;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
+use GpsLab\Component\Tests\Fixture\Command\Handler\ContestCommandSubscriber;
 use GpsLab\Component\Tests\Fixture\Command\Handler\CreateContactHandler;
+use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -69,6 +71,7 @@ class ContainerCommandHandlerLocatorTest extends TestCase
 
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($this->command);
+        $this->assertIsCallable($handler);
         $this->assertSame($this->handler, $handler);
     }
 
@@ -93,6 +96,7 @@ class ContainerCommandHandlerLocatorTest extends TestCase
 
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($command);
+        $this->assertIsCallable($handler);
         $this->assertSame([$handler_obj, $method], $handler);
 
         // test exec handler
@@ -138,5 +142,33 @@ class ContainerCommandHandlerLocatorTest extends TestCase
 
         $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
+    }
+
+    public function testRegisterSubscriber(): void
+    {
+        $service = 'foo';
+        $subscriber = new ContestCommandSubscriber();
+
+        $this->container
+            ->expects($this->exactly(3))
+            ->method('get')
+            ->with($service)
+            ->willReturn($subscriber)
+        ;
+
+        $this->locator->registerSubscriberService($service, get_class($subscriber));
+
+        $handler = $this->locator->findHandler(new CreateContact());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'onCreate'], $handler);
+
+        // double call ContainerInterface::get()
+        $handler = $this->locator->findHandler(new CreateContact());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'onCreate'], $handler);
+
+        $handler = $this->locator->findHandler(new RenameContactCommand());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'onRename'], $handler);
     }
 }

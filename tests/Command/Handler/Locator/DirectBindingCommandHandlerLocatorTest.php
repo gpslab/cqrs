@@ -12,6 +12,9 @@ declare(strict_types=1);
 namespace GpsLab\Component\Tests\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Command;
+use GpsLab\Component\Tests\Fixture\Command\CreateContact;
+use GpsLab\Component\Tests\Fixture\Command\Handler\ContestCommandSubscriber;
+use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -56,5 +59,26 @@ class DirectBindingCommandHandlerLocatorTest extends TestCase
 
         $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
+    }
+
+    public function testRegisterSubscriber(): void
+    {
+        $service = 'foo';
+        $subscriber = new ContestCommandSubscriber();
+
+        $this->locator->registerSubscriber($subscriber);
+
+        $handler = $this->locator->findHandler(new CreateContact());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'onCreate'], $handler);
+
+        // double call ContainerInterface::get()
+        $handler = $this->locator->findHandler(new CreateContact());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'onCreate'], $handler);
+
+        $handler = $this->locator->findHandler(new RenameContactCommand());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'onRename'], $handler);
     }
 }
