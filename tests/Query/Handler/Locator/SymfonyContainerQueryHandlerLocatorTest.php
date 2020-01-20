@@ -13,8 +13,10 @@ namespace GpsLab\Component\Tests\Query\Handler\Locator;
 
 use GpsLab\Component\Query\Handler\Locator\SymfonyContainerQueryHandlerLocator;
 use GpsLab\Component\Query\Query;
+use GpsLab\Component\Tests\Fixture\Query\ContactByIdentity;
 use GpsLab\Component\Tests\Fixture\Query\ContactByNameQuery;
 use GpsLab\Component\Tests\Fixture\Query\Handler\ContactByNameHandler;
+use GpsLab\Component\Tests\Fixture\Query\Handler\ContestQuerySubscriber;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -153,5 +155,34 @@ class SymfonyContainerQueryHandlerLocatorTest extends TestCase
 
         $handler = $this->locator->findHandler($this->query);
         $this->assertNull($handler);
+    }
+
+    public function testRegisterSubscriber(): void
+    {
+        $this->locator->setContainer($this->container);
+        $service = 'foo';
+        $subscriber = new ContestQuerySubscriber();
+
+        $this->container
+            ->expects($this->exactly(3))
+            ->method('get')
+            ->with($service)
+            ->willReturn($subscriber)
+        ;
+
+        $this->locator->registerSubscriberService($service, get_class($subscriber));
+
+        $handler = $this->locator->findHandler(new ContactByIdentity());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'getByIdentity'], $handler);
+
+        // double call ContainerInterface::get()
+        $handler = $this->locator->findHandler(new ContactByIdentity());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'getByIdentity'], $handler);
+
+        $handler = $this->locator->findHandler(new ContactByNameQuery());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'getByNameQuery'], $handler);
     }
 }

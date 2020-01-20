@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace GpsLab\Component\Query\Handler\Locator;
 
+use GpsLab\Component\Query\Handler\QuerySubscriber;
 use GpsLab\Component\Query\Query;
 
 class DirectBindingQueryHandlerLocator implements QueryHandlerLocator
@@ -29,6 +30,16 @@ class DirectBindingQueryHandlerLocator implements QueryHandlerLocator
     public function registerHandler(string $query_name, callable $handler): void
     {
         $this->handlers[$query_name] = $handler;
+    }
+
+    /**
+     * @param QuerySubscriber $subscriber
+     */
+    public function registerSubscriber(QuerySubscriber $subscriber): void
+    {
+        foreach ($subscriber::getSubscribedQueries() as $query_name => $method) {
+            $this->registerHandler($query_name, [$subscriber, $method]);
+        }
     }
 
     /**

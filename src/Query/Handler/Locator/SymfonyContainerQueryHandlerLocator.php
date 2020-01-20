@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace GpsLab\Component\Query\Handler\Locator;
 
+use GpsLab\Component\Query\Handler\QuerySubscriber;
 use GpsLab\Component\Query\Query;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -43,6 +44,19 @@ class SymfonyContainerQueryHandlerLocator implements QueryHandlerLocator, Contai
     public function registerService(string $query_name, string $service, string $method = '__invoke'): void
     {
         $this->query_handler_ids[$query_name] = [$service, $method];
+    }
+
+    /**
+     * @param string $service_name
+     * @param string $class_name
+     */
+    public function registerSubscriberService(string $service_name, string $class_name): void
+    {
+        if (is_a($class_name, QuerySubscriber::class, true)) {
+            foreach (forward_static_call([$class_name, 'getSubscribedQueries']) as $query_name => $method) {
+                $this->registerService($query_name, $service_name, $method);
+            }
+        }
     }
 
     /**

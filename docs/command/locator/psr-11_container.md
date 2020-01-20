@@ -15,8 +15,8 @@ $handler = static function (RenameArticleCommand $command): void {
     // do something
 };
 
-// example of registr handler in PSR-11 container
-// container on request $container->get('acme.demo.command.handler.article.rename') must return $handler
+// example of register handler in PSR-11 container
+// container on request $container->get('acme.demo.command.handler.article.rename') must return handler
 //$container = new Container();
 //$container->set('acme.demo.command.handler.article.rename', $handler);
 
@@ -38,8 +38,8 @@ class RenameArticleHandler
     }
 }
 
-// example of registr handler in PSR-11 container
-// container on request $container->get('acme.demo.command.handler.article.rename') must return $handler
+// example of register handler in PSR-11 container
+// container on request $container->get('acme.demo.command.handler.article.rename') must return handler
 //$container = new Container();
 //$container->set('acme.demo.command.handler.article.rename', new RenameArticleHandler());
 
@@ -61,12 +61,42 @@ class RenameArticleHandler
     }
 }
 
-// example of registr handler in PSR-11 container
-// container on request $container->get('acme.demo.command.handler.article.rename') must return $handler
+// example of register handler in PSR-11 container
+// container on request $container->get('acme.demo.command.handler.article.rename') must return handler
 //$container = new Container();
 //$container->set('acme.demo.command.handler.article.rename', new RenameArticleHandler());
 
 // register command handler service in handler locator
 $locator = new ContainerCommandHandlerLocator($container);
 $locator->registerService(RenameArticleCommand::class, 'acme.demo.command.handler.article.rename', 'handleRenameArticle');
+```
+
+## Subscriber
+
+Example register a subscriber as a command handler:
+
+```php
+class ArticleCommandSubscriber implements CommandSubscriber
+{
+    public static function getSubscribedCommands(): array
+    {
+        return [
+            RenameArticleCommand::class => 'handleRename',
+        ];
+    }
+
+    public function handleRename(RenameArticleCommand $command): void
+    {
+        // do something
+    }
+}
+
+// example of register subscriber in PSR-11 container
+// container on request $container->get('acme.demo.command.handler.article.rename') must return subscriber
+//$container = new Container();
+//$container->set('acme.demo.command.subscriber.article', new ArticleCommandSubscriber());
+
+// register command handler service in handler locator
+$locator = new ContainerCommandHandlerLocator($container);
+$locator->registerSubscriberService('acme.demo.command.subscriber.article', ArticleCommandSubscriber::class);
 ```
