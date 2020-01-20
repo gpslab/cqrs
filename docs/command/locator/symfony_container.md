@@ -74,7 +74,7 @@ class ArticleCommandSubscriber implements CommandSubscriber
     public static function getSubscribedCommands(): array
     {
         return [
-            RenameArticleCommand::class => 'handleRename'
+            RenameArticleCommand::class => 'handleRename',
         ];
     }
 

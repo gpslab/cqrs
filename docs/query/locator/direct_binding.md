@@ -19,6 +19,34 @@ $locator->registerHandler(ContactByNameQuery::class, $handler);
 
 More examples of binding in the section [Create handler](../handler.md).
 
+## Subscriber
+
+Example register a subscriber as a command handler:
+
+```php
+class ContactQuerySubscriber implements QuerySubscriber
+{
+    public static function getSubscribedQueries(): array
+    {
+        return [
+            ContactByNameQuery::class => 'getByNameQuery',
+        ];
+    }
+
+    public function getByNameQuery(ContactByNameQuery $query)
+    {
+        // return some data
+    }
+}
+
+// register command subscriber in handler locator
+$subscriber = new ContactQuerySubscriber();
+$locator = new DirectBindingQueryHandlerLocator();
+$locator->registerSubscriber($subscriber);
+```
+
+## Problem
+
 The main problem with this locator is that you do not have the ability to implement a lazy load of the dependencies for
 this handler. The second problem is the need to explicitly register all handlers, even if you need to handle only one
 query at a run time.
