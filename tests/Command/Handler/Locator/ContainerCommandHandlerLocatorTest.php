@@ -95,7 +95,7 @@ class ContainerCommandHandlerLocatorTest extends TestCase
         $this->assertSame([$handler_obj, $method], $handler);
 
         // test exec handler
-        call_user_func($handler, $command);
+        $handler($command);
         $this->assertSame($command, $handler_obj->command());
     }
 
