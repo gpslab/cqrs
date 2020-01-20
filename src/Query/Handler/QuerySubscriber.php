@@ -16,9 +16,9 @@ interface QuerySubscriber
      * Get called methods for subscribed queries.
      *
      * <code>
-     * [
-     *  [<query_name>, <method_name>],
-     * ]
+     * {
+     *  <query_name>: <method_name>,
+     * }
      * </code>
      *
      * @return array

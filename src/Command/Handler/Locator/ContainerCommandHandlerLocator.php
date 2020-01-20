@@ -61,8 +61,8 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
      */
     public function registerSubscriberService(string $service_name, string $class_name): void
     {
-        if ($class_name instanceof CommandSubscriber) {
-            foreach ($class_name::getSubscribedCommands() as $command_name => $method) {
+        if (is_a($class_name, CommandSubscriber::class, true)) {
+            foreach (forward_static_call([$class_name, 'getSubscribedCommands']) as $command_name => $method) {
                 $this->registerService($command_name, $service_name, $method);
             }
         }

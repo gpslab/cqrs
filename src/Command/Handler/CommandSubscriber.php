@@ -16,9 +16,9 @@ interface CommandSubscriber
      * Get called methods for subscribed commands.
      *
      * <code>
-     * [
-     *  [<command_name>, <method_name>],
-     * ]
+     * {
+     *  <command_name>: <method_name>,
+     * }
      * </code>
      *
      * @return array
