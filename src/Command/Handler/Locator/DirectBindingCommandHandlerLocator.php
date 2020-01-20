@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace GpsLab\Component\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Command;
+use GpsLab\Component\Command\Handler\CommandSubscriber;
 
 class DirectBindingCommandHandlerLocator implements CommandHandlerLocator
 {
@@ -29,6 +30,18 @@ class DirectBindingCommandHandlerLocator implements CommandHandlerLocator
     public function registerHandler(string $command_name, callable $handler): void
     {
         $this->handlers[$command_name] = $handler;
+    }
+
+    /**
+     * @param CommandSubscriber $subscriber
+     */
+    public function registerSubscriberService(CommandSubscriber $subscriber): void
+    {
+        foreach ($subscriber::getSubscribedCommands() as $command_name => $methods) {
+            foreach ($methods as $method) {
+                $this->registerHandler($command_name, [$subscriber, $method]);
+            }
+        }
     }
 
     /**

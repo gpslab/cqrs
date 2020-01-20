@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace GpsLab\Component\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Command;
+use GpsLab\Component\Command\Handler\CommandSubscriber;
 use Psr\Container\ContainerInterface;
 
 class ContainerCommandHandlerLocator implements CommandHandlerLocator
@@ -52,6 +53,21 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
     public function registerService(string $command_name, string $service, string $method = '__invoke'): void
     {
         $this->command_handler_ids[$command_name] = [$service, $method];
+    }
+
+    /**
+     * @param string $service_name
+     * @param string $class_name
+     */
+    public function registerSubscriberService(string $service_name, string $class_name): void
+    {
+        if ($class_name instanceof CommandSubscriber) {
+            foreach ($class_name::getSubscribedCommands() as $command_name => $methods) {
+                foreach ($methods as $method) {
+                    $this->registerService($command_name, $service_name, $method);
+                }
+            }
+        }
     }
 
     /**
