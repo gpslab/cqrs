@@ -14,10 +14,10 @@ use Exception;
 use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Queue\Serializer\Serializer;
 use GpsLab\Component\Command\Queue\Subscribe\PredisSubscribeCommandQueue;
-use Psr\Log\LoggerInterface;
-use Superbalist\PubSub\Redis\RedisPubSubAdapter;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Superbalist\PubSub\Redis\RedisPubSubAdapter;
 
 class PredisSubscribeCommandQueueTest extends TestCase
 {

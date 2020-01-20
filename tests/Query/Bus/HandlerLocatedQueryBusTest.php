@@ -11,9 +11,9 @@
 namespace GpsLab\Component\Tests\Query\Bus;
 
 use GpsLab\Component\Query\Bus\HandlerLocatedQueryBus;
-use GpsLab\Component\Query\Query;
-use GpsLab\Component\Query\Handler\Locator\QueryHandlerLocator;
 use GpsLab\Component\Query\Exception\HandlerNotFoundException;
+use GpsLab\Component\Query\Handler\Locator\QueryHandlerLocator;
+use GpsLab\Component\Query\Query;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

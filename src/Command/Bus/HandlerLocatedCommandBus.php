@@ -11,8 +11,8 @@
 namespace GpsLab\Component\Command\Bus;
 
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator;
 use GpsLab\Component\Command\Exception\HandlerNotFoundException;
+use GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator;
 
 class HandlerLocatedCommandBus implements CommandBus
 {

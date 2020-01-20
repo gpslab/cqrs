@@ -15,10 +15,10 @@ use GpsLab\Component\Command\Queue\Pull\PredisPullCommandQueue;
 use GpsLab\Component\Command\Queue\Serializer\Serializer;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
-use Predis\Client;
-use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Predis\Client;
+use Psr\Log\LoggerInterface;
 
 class PredisPullCommandQueueTest extends TestCase
 {

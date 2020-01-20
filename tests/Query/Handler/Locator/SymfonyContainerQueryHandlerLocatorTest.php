@@ -14,9 +14,9 @@ use GpsLab\Component\Query\Handler\Locator\SymfonyContainerQueryHandlerLocator;
 use GpsLab\Component\Query\Query;
 use GpsLab\Component\Tests\Fixture\Query\ContactByNameQuery;
 use GpsLab\Component\Tests\Fixture\Query\Handler\ContactByNameHandler;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SymfonyContainerQueryHandlerLocatorTest extends TestCase
 {
