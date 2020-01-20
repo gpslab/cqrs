@@ -13,6 +13,9 @@ namespace GpsLab\Component\Tests\Query\Handler\Locator;
 
 use GpsLab\Component\Query\Handler\Locator\DirectBindingQueryHandlerLocator;
 use GpsLab\Component\Query\Query;
+use GpsLab\Component\Tests\Fixture\Query\ContactByIdentity;
+use GpsLab\Component\Tests\Fixture\Query\ContactByNameQuery;
+use GpsLab\Component\Tests\Fixture\Query\Handler\ContestQuerySubscriber;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,5 +59,25 @@ class DirectBindingQueryHandlerLocatorTest extends TestCase
 
         $handler = $this->locator->findHandler($this->query);
         $this->assertNull($handler);
+    }
+
+    public function testRegisterSubscriber(): void
+    {
+        $subscriber = new ContestQuerySubscriber();
+
+        $this->locator->registerSubscriber($subscriber);
+
+        $handler = $this->locator->findHandler(new ContactByIdentity());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'getByIdentity'], $handler);
+
+        // double call ContainerInterface::get()
+        $handler = $this->locator->findHandler(new ContactByIdentity());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'getByIdentity'], $handler);
+
+        $handler = $this->locator->findHandler(new ContactByNameQuery());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'getByNameQuery'], $handler);
     }
 }

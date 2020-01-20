@@ -63,7 +63,6 @@ class DirectBindingCommandHandlerLocatorTest extends TestCase
 
     public function testRegisterSubscriber(): void
     {
-        $service = 'foo';
         $subscriber = new ContestCommandSubscriber();
 
         $this->locator->registerSubscriber($subscriber);
