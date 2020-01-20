@@ -109,7 +109,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
     {
         $index = array_search($handler, $this->handlers);
 
-        if ($index === false) {
+        if (false === $index) {
             return false;
         }
 
