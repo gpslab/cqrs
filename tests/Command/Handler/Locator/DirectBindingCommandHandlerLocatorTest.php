@@ -10,8 +10,8 @@
 
 namespace GpsLab\Component\Tests\Command\Handler\Locator;
 
-use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
 use GpsLab\Component\Command\Command;
+use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

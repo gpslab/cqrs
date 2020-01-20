@@ -10,13 +10,13 @@
 
 namespace GpsLab\Component\Tests\Command\Handler\Locator;
 
-use GpsLab\Component\Command\Handler\Locator\ContainerCommandHandlerLocator;
 use GpsLab\Component\Command\Command;
+use GpsLab\Component\Command\Handler\Locator\ContainerCommandHandlerLocator;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
 use GpsLab\Component\Tests\Fixture\Command\Handler\CreateContactHandler;
-use Psr\Container\ContainerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 class ContainerCommandHandlerLocatorTest extends TestCase
 {

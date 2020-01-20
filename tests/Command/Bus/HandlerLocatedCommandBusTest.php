@@ -12,8 +12,8 @@ namespace GpsLab\Component\Tests\Command\Bus;
 
 use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator;
 use GpsLab\Component\Command\Exception\HandlerNotFoundException;
+use GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
