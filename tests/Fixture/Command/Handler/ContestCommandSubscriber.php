@@ -18,55 +18,29 @@ use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 class ContestCommandSubscriber implements CommandSubscriber
 {
     /**
-     * @var CreateContact|null
-     */
-    private $create_contact_command;
-
-    /**
-     * @var RenameContactCommand|null
-     */
-    private $rename_contact_command;
-
-    /**
      * @return array
      */
     public static function getSubscribedCommands(): array
     {
         return [
-            CreateContact::class => 'onCreate',
-            RenameContactCommand::class => 'onRename',
+            CreateContact::class => 'handleCreate',
+            RenameContactCommand::class => 'handleRename',
         ];
     }
 
     /**
      * @param CreateContact $command
      */
-    public function onCreate(CreateContact $command): void
+    public function handleCreate(CreateContact $command): void
     {
-        $this->create_contact_command = $command;
+        // do something
     }
 
     /**
      * @param RenameContactCommand $command
      */
-    public function onRename(RenameContactCommand $command): void
+    public function handleRename(RenameContactCommand $command): void
     {
-        $this->rename_contact_command = $command;
-    }
-
-    /**
-     * @return CreateContact|null
-     */
-    public function getCreateContactCommand(): ?CreateContact
-    {
-        return $this->create_contact_command;
-    }
-
-    /**
-     * @return RenameContactCommand|null
-     */
-    public function getRenameContactCommand(): ?RenameContactCommand
-    {
-        return $this->rename_contact_command;
+        // do something
     }
 }

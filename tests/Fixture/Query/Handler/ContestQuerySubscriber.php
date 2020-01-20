@@ -36,6 +36,7 @@ class ContestQuerySubscriber implements QuerySubscriber
      */
     public function getByIdentity(ContactByIdentity $query): string
     {
+        // return some data
         return get_class($query);
     }
 
@@ -46,6 +47,7 @@ class ContestQuerySubscriber implements QuerySubscriber
      */
     public function getByNameQuery(ContactByNameQuery $query): string
     {
+        // return some data
         return get_class($query);
     }
 }

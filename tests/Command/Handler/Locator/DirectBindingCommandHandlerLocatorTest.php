@@ -69,15 +69,15 @@ class DirectBindingCommandHandlerLocatorTest extends TestCase
 
         $handler = $this->locator->findHandler(new CreateContact());
         $this->assertIsCallable($handler);
-        $this->assertSame([$subscriber, 'onCreate'], $handler);
+        $this->assertSame([$subscriber, 'handleCreate'], $handler);
 
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler(new CreateContact());
         $this->assertIsCallable($handler);
-        $this->assertSame([$subscriber, 'onCreate'], $handler);
+        $this->assertSame([$subscriber, 'handleCreate'], $handler);
 
         $handler = $this->locator->findHandler(new RenameContactCommand());
         $this->assertIsCallable($handler);
-        $this->assertSame([$subscriber, 'onRename'], $handler);
+        $this->assertSame([$subscriber, 'handleRename'], $handler);
     }
 }
