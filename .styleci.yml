@@ -8,4 +8,3 @@ disabled:
   - phpdoc_align
   - blank_line_after_opening_tag
   - phpdoc_no_empty_return
-  - no_superfluous_phpdoc_tags
