@@ -32,7 +32,7 @@ matrix:
           dist: trusty
           env: PREDIS_VERSION=1.1.*
         - php: 7.2
-          env: PUBSUB_PREDIS_VERSION=2.0.*
+          env: PUBSUB_PREDIS_VERSION=2.0.* COVERALLS=1
 
 before_install:
     - if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then echo 'xdebug.enable = on' >> /etc/hhvm/php.ini; fi
@@ -45,8 +45,9 @@ install:
     - composer install --prefer-dist --no-interaction --no-scripts --no-progress
 
 script:
-    - vendor/bin/phpunit --verbose --coverage-clover build/coverage-clover.xml
+    - if [ "$COVERALLS" != "1" ]; then vendor/bin/phpunit --verbose; fi;
+    - if [ "$COVERALLS" = "1" ]; then vendor/bin/phpunit --verbose --coverage-clover build/coverage-clover.xml; fi;
 
 after_script:
-    - vendor/bin/ocular code-coverage:upload --format=php-clover build/coverage-clover.xml
-    - vendor/bin/coveralls -v -c .coveralls.yml
+    - if [ "$COVERALLS" = "1" ]; then vendor/bin/ocular code-coverage:upload --format=php-clover build/coverage-clover.xml; fi;
+    - if [ "$COVERALLS" = "1" ]; then vendor/bin/coveralls -v -c .coveralls.yml; fi;
