@@ -93,4 +93,33 @@ class SymfonySerializerTest extends TestCase
 
         $this->assertSame($result, $serializer->deserialize($data));
     }
+
+    /**
+     * @dataProvider formats
+     *
+     * @param string|null $format
+     * @param string      $expected_format
+     */
+    public function testFailedDeserialize(?string $format, string $expected_format): void
+    {
+        $this->expectException(\RuntimeException::class);
+
+        $data = 'foo';
+        $result = 'bar';
+
+        $this->serializer
+            ->expects($this->once())
+            ->method('deserialize')
+            ->with($data, Command::class, $expected_format)
+            ->willReturn($result)
+        ;
+
+        if ($format) {
+            $serializer = new SymfonySerializer($this->serializer, $format);
+        } else {
+            $serializer = new SymfonySerializer($this->serializer);
+        }
+
+        $serializer->deserialize($data);
+    }
 }
