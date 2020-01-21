@@ -7,3 +7,6 @@ parameters:
     paths:
         - src
         - tests
+    ignoreErrors:
+        # Predis client in version 1.0 is not iterable
+        - '#Predis\\Client<Predis\\Client>#'
