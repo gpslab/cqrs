@@ -42,6 +42,8 @@ install:
     - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --dev --no-update; fi;
     - if [ "$PREDIS_VERSION" != "" ]; then composer require "predis/predis:${PREDIS_VERSION}" --dev --no-update; fi;
     - composer install --prefer-dist --no-interaction --no-scripts --no-progress
+    # Predis client in version 1.0 is not iterable
+    - if [ "$PREDIS_VERSION" = "1.0.*" ]; then cp .travis/predis_10_phpstan.neon phpstan.neon; fi;
 
 script:
     - vendor/bin/phpunit --verbose --coverage-clover build/coverage-clover.xml
