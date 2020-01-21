@@ -31,8 +31,6 @@ matrix:
         - php: 7.1
           dist: trusty
           env: PREDIS_VERSION=1.1.*
-        - php: 7.2
-          env: PUBSUB_PREDIS_VERSION=2.0.*
 
 before_install:
     - if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then echo 'xdebug.enable = on' >> /etc/hhvm/php.ini; fi
@@ -43,7 +41,6 @@ before_install:
 install:
     - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --dev --no-update; fi;
     - if [ "$PREDIS_VERSION" != "" ]; then composer require "predis/predis:${PREDIS_VERSION}" --dev --no-update; fi;
-    - if [ "$PUBSUB_PREDIS_VERSION" != "" ]; then composer require "superbalist/php-pubsub-redis:${PUBSUB_PREDIS_VERSION}" --dev --no-update; fi;
     - composer install --prefer-dist --no-interaction --no-scripts --no-progress
 
 script:
