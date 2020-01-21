@@ -106,7 +106,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler): void {
+            ->willReturnCallback(function ($queue_name, $handler_wrapper): void {
                 $this->assertSame($this->queue_name, $queue_name);
                 $this->assertIsCallable($handler_wrapper);
 
@@ -139,7 +139,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler): void {
+            ->willReturnCallback(function ($queue_name, $handler_wrapper): void {
                 $this->assertSame($this->queue_name, $queue_name);
                 $this->assertIsCallable($handler_wrapper);
 
@@ -245,7 +245,7 @@ class PredisSubscribeCommandQueueTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('subscribe')
-            ->willReturnCallback(function ($queue_name, $handler_wrapper) use ($handler): void {
+            ->willReturnCallback(function ($queue_name, $handler_wrapper): void {
                 $this->assertSame($this->queue_name, $queue_name);
                 $this->assertIsCallable($handler_wrapper);
 
