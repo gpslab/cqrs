@@ -87,8 +87,10 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
             return $service;
         }
 
-        if (is_callable([$service, $method])) {
-            return [$service, $method];
+        $handler = [$service, $method];
+
+        if (is_callable($handler)) {
+            return $handler;
         }
 
         return null;
