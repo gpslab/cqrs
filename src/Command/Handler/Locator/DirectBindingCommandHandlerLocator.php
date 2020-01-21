@@ -38,7 +38,10 @@ class DirectBindingCommandHandlerLocator implements CommandHandlerLocator
     public function registerSubscriber(CommandSubscriber $subscriber): void
     {
         foreach ($subscriber::getSubscribedCommands() as $command_name => $method) {
-            $this->registerHandler($command_name, [$subscriber, $method]);
+            $handler = [$subscriber, $method];
+            if (is_callable($handler)) {
+                $this->registerHandler($command_name, $handler);
+            }
         }
     }
 

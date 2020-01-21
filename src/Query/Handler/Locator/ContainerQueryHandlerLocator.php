@@ -61,8 +61,9 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
      */
     public function registerSubscriberService(string $service_name, string $class_name): void
     {
-        if (is_a($class_name, QuerySubscriber::class, true)) {
-            foreach (forward_static_call([$class_name, 'getSubscribedQueries']) as $query_name => $method) {
+        $get_subscribed_queries = [$class_name, 'getSubscribedQueries'];
+        if (is_callable($get_subscribed_queries) && is_a($class_name, QuerySubscriber::class, true)) {
+            foreach ($get_subscribed_queries() as $query_name => $method) {
                 $this->registerService($query_name, $service_name, $method);
             }
         }
