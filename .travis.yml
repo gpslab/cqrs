@@ -47,9 +47,8 @@ install:
     - composer install --prefer-dist --no-interaction --no-scripts --no-progress
 
 script:
-    - if [ "$COVERALLS" != "1" ]; then vendor/bin/phpunit --verbose; fi;
-    - if [ "$COVERALLS" = "1" ]; then vendor/bin/phpunit --verbose --coverage-clover build/coverage-clover.xml; fi;
-    - if [ "$PUBSUB_PREDIS_VERSION" != "" ]; then vendor/bin/phpstan analyse; fi;
+    - vendor/bin/phpunit --verbose --coverage-clover build/coverage-clover.xml
+    - vendor/bin/phpstan analyse
 
 after_script:
     - php ocular.phar code-coverage:upload --format=php-clover build/coverage-clover.xml
