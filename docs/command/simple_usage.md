@@ -13,14 +13,8 @@ use GpsLab\Component\Command\Command;
 
 class RenameArticleCommand implements Command
 {
-    /**
-     * @var int
-     */
     public $article_id;
 
-    /**
-     * @var string
-     */
     public $new_name = '';
 }
 ```
@@ -56,7 +50,7 @@ class RenameArticleCommand implements Command
 
 > **Note**
 >
-> To simplify the filling of the team, you can use [payload](https://github.com/gpslab/payload).
+> To simplify the filling of the command, you can use [payload](https://github.com/gpslab/payload).
 
 You can use any implementations of [callable type](http://php.net/manual/en/language.types.callable.php) as a command
 handler. We recommend using public methods of classes as handlers. For example we use [Doctrine ORM](https://github.com/doctrine/doctrine2).
@@ -90,8 +84,9 @@ use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
 use GpsLab\Component\Command\Handler\Locator\DirectBindingCommandHandlerLocator;
 
 // register command handler in handler locator
+$handler = new RenameArticleHandler($em);
 $locator = new DirectBindingCommandHandlerLocator();
-$locator->registerHandler(RenameArticleCommand::class, [new RenameArticleHandler($em), 'handleRenameArticle']);
+$locator->registerHandler(RenameArticleCommand::class, [$handler, 'handleRenameArticle']);
 
 // create bus with command handler locator
 $bus = new HandlerLocatedCommandBus($locator);

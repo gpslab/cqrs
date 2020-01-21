@@ -13,9 +13,6 @@ use GpsLab\Component\Query\Query;
 
 class ArticleByIdentityQuery implements Query
 {
-    /**
-     * @var int
-     */
     public $article_id;
 }
 ```
@@ -43,7 +40,7 @@ class ArticleByIdentityQuery implements Query
 
 > **Note**
 >
-> To simplify the filling of the team, you can use [payload](https://github.com/gpslab/payload).
+> To simplify the filling of the query, you can use [payload](https://github.com/gpslab/payload).
 
 You can use any implementations of [callable type](http://php.net/manual/en/language.types.callable.php) as a query
 handler. We recommend using public methods of classes as handlers. For example we use [Doctrine ORM](https://github.com/doctrine/doctrine2).
@@ -76,8 +73,9 @@ use GpsLab\Component\Query\Bus\HandlerLocatedQueryBus;
 use GpsLab\Component\Query\Handler\Locator\DirectBindingQueryHandlerLocator;
 
 // register query handler in handler locator
+$handler = new ArticleByIdentityHandler($em);
 $locator = new DirectBindingQueryHandlerLocator();
-$locator->registerHandler(ArticleByIdentityQuery::class, [new ArticleByIdentityHandler($em), 'handleArticleByIdentity']);
+$locator->registerHandler(ArticleByIdentityQuery::class, [$handler, 'handleArticleByIdentity']);
 
 // create bus with query handler locator
 $bus = new HandlerLocatedQueryBus($locator);
