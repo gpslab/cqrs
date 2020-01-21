@@ -1,0 +1,6 @@
+includes:
+    - phpstan.neon.dist
+
+parameters:
+    ignoreErrors:
+        - '#Predis\\Client<Predis\\Client>#'

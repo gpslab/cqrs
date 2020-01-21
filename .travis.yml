@@ -31,24 +31,24 @@ matrix:
         - php: 7.1
           dist: trusty
           env: PREDIS_VERSION=1.1.*
-        - php: 7.2
-          env: PUBSUB_PREDIS_VERSION=2.0.* COVERALLS=1
 
 before_install:
     - if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then echo 'xdebug.enable = on' >> /etc/hhvm/php.ini; fi
     - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.2.0/php-coveralls.phar
 
 install:
     - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --dev --no-update; fi;
     - if [ "$PREDIS_VERSION" != "" ]; then composer require "predis/predis:${PREDIS_VERSION}" --dev --no-update; fi;
-    - if [ "$PUBSUB_PREDIS_VERSION" != "" ]; then composer require "superbalist/php-pubsub-redis:${PUBSUB_PREDIS_VERSION}" --dev --no-update; fi;
     - composer install --prefer-dist --no-interaction --no-scripts --no-progress
+    # Predis client in version 1.0 is not iterable
+    - if [ "$PREDIS_VERSION" = "1.0.*" ]; then cp .travis/predis_10_phpstan.neon phpstan.neon; fi;
 
 script:
-    - if [ "$COVERALLS" != "1" ]; then vendor/bin/phpunit --verbose; fi;
-    - if [ "$COVERALLS" = "1" ]; then vendor/bin/phpunit --verbose --coverage-clover build/coverage-clover.xml; fi;
-    - if [ "$PUBSUB_PREDIS_VERSION" != "" ]; then vendor/bin/phpstan analyse; fi;
+    - vendor/bin/phpunit --verbose --coverage-clover build/coverage-clover.xml
+    - vendor/bin/phpstan analyse
 
 after_script:
-    - if [ "$COVERALLS" = "1" ]; then vendor/bin/ocular code-coverage:upload --format=php-clover build/coverage-clover.xml; fi;
-    - if [ "$COVERALLS" = "1" ]; then vendor/bin/coveralls -v -c .coveralls.yml; fi;
+    - php ocular.phar code-coverage:upload --format=php-clover build/coverage-clover.xml
+    - php php-coveralls.phar -v -c .coveralls.yml

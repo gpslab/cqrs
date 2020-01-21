@@ -34,8 +34,6 @@
         "phpunit/phpunit": "^7.0|^8.2",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
-        "scrutinizer/ocular": "~1.3",
-        "php-coveralls/php-coveralls": "^1.0",
         "superbalist/php-pubsub-redis": "2.0.*"
     }
 }
