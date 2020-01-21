@@ -52,8 +52,9 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
      */
     public function registerSubscriberService(string $service_name, string $class_name): void
     {
-        if (is_a($class_name, CommandSubscriber::class, true)) {
-            foreach (forward_static_call([$class_name, 'getSubscribedCommands']) as $command_name => $method) {
+        $get_subscribed_commands = [$class_name, 'getSubscribedCommands'];
+        if (is_callable($get_subscribed_commands) && is_a($class_name, CommandSubscriber::class, true)) {
+            foreach ($get_subscribed_commands() as $command_name => $method) {
                 $this->registerService($command_name, $service_name, $method);
             }
         }
@@ -87,8 +88,10 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
             return $service;
         }
 
-        if (is_callable([$service, $method])) {
-            return [$service, $method];
+        $handler = [$service, $method];
+
+        if (is_callable($handler)) {
+            return $handler;
         }
 
         return null;

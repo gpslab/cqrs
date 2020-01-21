@@ -55,6 +55,12 @@ class SymfonySerializer implements Serializer
      */
     public function deserialize(string $data)
     {
-        return $this->serializer->deserialize($data, Command::class, $this->format);
+        $result = $this->serializer->deserialize($data, Command::class, $this->format);
+
+        if (!is_object($result)) {
+            throw new \RuntimeException(sprintf('Failed deserialize data "%s"', $data));
+        }
+
+        return $result;
     }
 }
