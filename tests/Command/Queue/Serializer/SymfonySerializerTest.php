@@ -30,7 +30,7 @@ class SymfonySerializerTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array[]
      */
     public function formats(): array
     {

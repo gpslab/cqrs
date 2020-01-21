@@ -23,7 +23,7 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
     private $container;
 
     /**
-     * @var array
+     * @var array[]
      */
     private $command_handler_ids = [];
 

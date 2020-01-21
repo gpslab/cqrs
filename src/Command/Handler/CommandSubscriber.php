@@ -21,7 +21,7 @@ interface CommandSubscriber
      * }
      * </code>
      *
-     * @return array
+     * @return array<class-string, string>
      */
     public static function getSubscribedCommands(): array;
 }

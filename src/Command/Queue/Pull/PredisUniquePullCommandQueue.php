@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 class PredisUniquePullCommandQueue implements PullCommandQueue
 {
     /**
-     * @var Client
+     * @var Client<Client>
      */
     private $client;
 
@@ -39,7 +39,7 @@ class PredisUniquePullCommandQueue implements PullCommandQueue
     private $queue_name;
 
     /**
-     * @param Client          $client
+     * @param Client<Client>  $client
      * @param Serializer      $serializer
      * @param LoggerInterface $logger
      * @param string          $queue_name

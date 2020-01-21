@@ -23,7 +23,7 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
     private $container;
 
     /**
-     * @var array
+     * @var array[]
      */
     private $query_handler_ids = [];
 

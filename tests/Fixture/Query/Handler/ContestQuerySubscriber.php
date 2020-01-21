@@ -19,7 +19,7 @@ use GpsLab\Component\Tests\Fixture\Query\ContactByNameQuery;
 class ContestQuerySubscriber implements QuerySubscriber
 {
     /**
-     * @return array
+     * @return array<class-string, string>
      */
     public static function getSubscribedQueries(): array
     {
