@@ -1,5 +1,9 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+
 parameters:
-    level: 0
+    level: 6
     paths:
         - src
         - tests

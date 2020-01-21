@@ -18,7 +18,7 @@ use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
 class ContestCommandSubscriber implements CommandSubscriber
 {
     /**
-     * @return array
+     * @return array<class-string, string>
      */
     public static function getSubscribedCommands(): array
     {

@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
 class PredisPullCommandQueueTest extends TestCase
 {
     /**
-     * @var MockObject|Client
+     * @var MockObject|Client<Client>
      */
     private $client;
 

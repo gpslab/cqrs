@@ -22,7 +22,7 @@ class SymfonyContainerCommandHandlerLocator implements CommandHandlerLocator, Co
     use ContainerAwareTrait;
 
     /**
-     * @var array
+     * @var array[]
      */
     private $command_handler_ids = [];
 

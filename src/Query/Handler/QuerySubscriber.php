@@ -21,7 +21,7 @@ interface QuerySubscriber
      * }
      * </code>
      *
-     * @return array
+     * @return array<class-string, string>
      */
     public static function getSubscribedQueries(): array;
 }

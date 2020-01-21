@@ -22,7 +22,7 @@ class SymfonyContainerQueryHandlerLocator implements QueryHandlerLocator, Contai
     use ContainerAwareTrait;
 
     /**
-     * @var array
+     * @var array[]
      */
     private $query_handler_ids = [];
 
