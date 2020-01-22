@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -19,5 +20,5 @@ interface QueryHandlerLocator
      *
      * @return callable|null
      */
-    public function findHandler(Query $query);
+    public function findHandler(Query $query): ?callable;
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -17,12 +18,12 @@ interface Serializer
      *
      * @return string
      */
-    public function serialize($data);
+    public function serialize($data): string;
 
     /**
      * @param string $data
      *
      * @return object
      */
-    public function deserialize($data);
+    public function deserialize(string $data);
 }

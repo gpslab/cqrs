@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -20,5 +21,5 @@ interface PullCommandQueue extends CommandQueue
      *
      * @return Command|null
      */
-    public function pull();
+    public function pull(): ?Command;
 }

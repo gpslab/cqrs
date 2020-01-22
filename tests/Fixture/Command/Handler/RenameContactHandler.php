@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -22,7 +23,7 @@ class RenameContactHandler
     /**
      * @param RenameContactCommand $command
      */
-    public function handleRenameContact(RenameContactCommand $command)
+    public function handleRenameContact(RenameContactCommand $command): void
     {
         $this->command = $command;
     }
@@ -30,7 +31,7 @@ class RenameContactHandler
     /**
      * @return RenameContactCommand|null
      */
-    public function command()
+    public function command(): ?RenameContactCommand
     {
         return $this->command;
     }

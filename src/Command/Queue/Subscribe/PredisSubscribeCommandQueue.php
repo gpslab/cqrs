@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -40,7 +41,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
     /**
      * @var string
      */
-    private $queue_name = '';
+    private $queue_name;
 
     /**
      * @var bool
@@ -57,7 +58,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
         RedisPubSubAdapter $client,
         Serializer $serializer,
         LoggerInterface $logger,
-        $queue_name
+        string $queue_name
     ) {
         $this->client = $client;
         $this->serializer = $serializer;
@@ -72,7 +73,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
      *
      * @return bool
      */
-    public function publish(Command $command)
+    public function publish(Command $command): bool
     {
         $massage = $this->serializer->serialize($command);
         $this->client->publish($this->queue_name, $massage);
@@ -85,13 +86,13 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
      *
      * @param callable $handler
      */
-    public function subscribe(callable $handler)
+    public function subscribe(callable $handler): void
     {
         $this->handlers[] = $handler;
 
         // laze subscribe
         if (!$this->subscribed) {
-            $this->client->subscribe($this->queue_name, function ($message) {
+            $this->client->subscribe($this->queue_name, function ($message): void {
                 $this->handle($message);
             });
             $this->subscribed = true;
@@ -105,7 +106,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
      *
      * @return bool
      */
-    public function unsubscribe(callable $handler)
+    public function unsubscribe(callable $handler): bool
     {
         $index = array_search($handler, $this->handlers);
 
@@ -121,10 +122,14 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
     /**
      * @param mixed $message
      */
-    private function handle($message)
+    private function handle($message): void
     {
         try {
             $command = $this->serializer->deserialize($message);
+
+            if (!($command instanceof Command)) {
+                throw new \RuntimeException(sprintf('The denormalization command is expected "%s", got "%s" inside.', Command::class, get_class($command)));
+            }
         } catch (\Exception $e) { // catch only deserialize exception
             // it's a critical error
             // it is necessary to react quickly to it
@@ -137,7 +142,7 @@ class PredisSubscribeCommandQueue implements SubscribeCommandQueue
         }
 
         foreach ($this->handlers as $handler) {
-            call_user_func($handler, $command);
+            $handler($command);
         }
     }
 }

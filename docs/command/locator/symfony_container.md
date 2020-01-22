@@ -19,7 +19,7 @@ Example register the [called object](http://php.net/manual/en/language.oop5.magi
 ```php
 class RenameArticleHandler
 {
-    public function __invoke(RenameArticleCommand $command)
+    public function __invoke(RenameArticleCommand $command): void
     {
         // do something
     }
@@ -30,14 +30,12 @@ YAML configuration for this:
 
 ```yml
 services:
-    acme.demo.command.handler.article.rename:
-        class: RenameArticleHandler
+    RenameArticleHandler: ~
 
-    acme.demo.command.locator:
-        class: GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator
+    GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator:
         calls:
             - [ setContainer, [ '@service_container' ] ]
-            - [ registerService, [ 'RenameArticleCommand', 'acme.demo.command.handler.article.rename' ] ]
+            - [ registerService, [ 'RenameArticleCommand', 'RenameArticleHandler' ] ]
 ```
 
 ## Method of class
@@ -47,7 +45,7 @@ Example register the public method of class as a command handler:
 ```php
 class RenameArticleHandler
 {
-    public function handleRenameArticle(RenameArticleCommand $command)
+    public function handleRenameArticle(RenameArticleCommand $command): void
     {
         // do something
     }
@@ -58,17 +56,72 @@ YAML configuration for this:
 
 ```yml
 services:
-    acme.demo.command.handler.article.rename:
-        class: RenameArticleHandler
+    RenameArticleHandler: ~
 
-    acme.demo.command.locator:
-        class: GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator
+    GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator:
         calls:
             - [ setContainer, [ '@service_container' ] ]
-            - [ registerService, [ 'RenameArticleCommand', 'acme.demo.command.handler.article.rename', 'handleRenameArticle' ] ]
+            - [ registerService, [ 'RenameArticleCommand', 'RenameArticleHandler', 'handleRenameArticle' ] ]
 ```
 
-> **Note**
->
-> You can [tagged](https://symfony.com/doc/current/service_container/tags.html) command handler services for optimize
-> register the services in command locator.
+## Subscriber
+
+Example register a subscriber as a command handler:
+
+```php
+class ArticleCommandSubscriber implements CommandSubscriber
+{
+    public static function getSubscribedCommands(): array
+    {
+        return [
+            RenameArticleCommand::class => 'handleRename',
+        ];
+    }
+
+    public function handleRename(RenameArticleCommand $command): void
+    {
+        // do something
+    }
+}
+```
+
+YAML configuration for this:
+
+```yml
+services:
+    ArticleCommandSubscriber: ~
+
+    GpsLab\Component\Command\Handler\Locator\SymfonyContainerCommandHandlerLocator:
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
+            - [ registerSubscriberService, [ 'ArticleCommandSubscriber', 'ArticleCommandSubscriber' ] ]
+```
+
+## Tagging
+
+You can [tagged](https://symfony.com/doc/current/service_container/tags.html) command handler services for optimize
+register the services in command locator. You can autoconfigure your subscribers and automatically register it in
+locator like that:
+
+```php
+// src/Kernel.php
+class Kernel extends BaseKernel
+{
+    protected function build(ContainerBuilder $container): void
+    {
+        $container
+            ->registerForAutoconfiguration(CommandSubscriber::class)
+            ->addTag('gpslab.command.subscriber')
+        ;
+
+        $locator = $container->findDefinition(SymfonyContainerCommandHandlerLocator::class);
+
+        $tagged_subscribers = $container->findTaggedServiceIds('gpslab.command.subscriber');
+
+        foreach ($tagged_subscribers as $id => $attributes) {
+            $subscriber = $container->findDefinition($id);
+            $locator->addMethodCall('registerSubscriberService', [$id, $subscriber->getClass()]);
+        }
+    }
+}
+```

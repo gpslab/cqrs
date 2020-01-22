@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -12,18 +13,20 @@ namespace GpsLab\Component\Tests\Command\Bus;
 
 use GpsLab\Component\Command\Bus\HandlerLocatedCommandBus;
 use GpsLab\Component\Command\Command;
+use GpsLab\Component\Command\Exception\HandlerNotFoundException;
 use GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class HandlerLocatedCommandBusTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CommandHandlerLocator
+     * @var MockObject|CommandHandlerLocator
      */
     private $locator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Command
+     * @var MockObject|Command
      */
     private $command;
 
@@ -32,17 +35,17 @@ class HandlerLocatedCommandBusTest extends TestCase
      */
     private $bus;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->command = $this->getMock(Command::class);
-        $this->locator = $this->getMock(CommandHandlerLocator::class);
+        $this->command = $this->createMock(Command::class);
+        $this->locator = $this->createMock(CommandHandlerLocator::class);
         $this->bus = new HandlerLocatedCommandBus($this->locator);
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
         $handled_command = null;
-        $handler = function (Command $command) use (&$handled_command) {
+        $handler = static function (Command $command) use (&$handled_command): void {
             $handled_command = $command;
         };
 
@@ -50,23 +53,22 @@ class HandlerLocatedCommandBusTest extends TestCase
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->command)
-            ->will($this->returnValue($handler))
+            ->willReturn($handler)
         ;
 
         $this->bus->handle($this->command);
-        $this->assertEquals($this->command, $handled_command);
+        $this->assertSame($this->command, $handled_command);
     }
 
-    /**
-     * @expectedException \GpsLab\Component\Command\Exception\HandlerNotFoundException
-     */
-    public function testNoHandler()
+    public function testNoHandler(): void
     {
+        $this->expectException(HandlerNotFoundException::class);
+
         $this->locator
             ->expects($this->once())
             ->method('findHandler')
             ->with($this->command)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $this->bus->handle($this->command);

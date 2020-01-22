@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -11,8 +12,8 @@
 namespace GpsLab\Component\Command\Bus;
 
 use GpsLab\Component\Command\Command;
-use GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator;
 use GpsLab\Component\Command\Exception\HandlerNotFoundException;
+use GpsLab\Component\Command\Handler\Locator\CommandHandlerLocator;
 
 class HandlerLocatedCommandBus implements CommandBus
 {
@@ -32,7 +33,7 @@ class HandlerLocatedCommandBus implements CommandBus
     /**
      * @param Command $command
      */
-    public function handle(Command $command)
+    public function handle(Command $command): void
     {
         $handler = $this->locator->findHandler($command);
 
@@ -40,6 +41,6 @@ class HandlerLocatedCommandBus implements CommandBus
             throw HandlerNotFoundException::notFound($command);
         }
 
-        call_user_func($handler, $command);
+        $handler($command);
     }
 }

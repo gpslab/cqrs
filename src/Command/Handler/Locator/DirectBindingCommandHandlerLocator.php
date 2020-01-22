@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -11,6 +12,7 @@
 namespace GpsLab\Component\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Command;
+use GpsLab\Component\Command\Handler\CommandSubscriber;
 
 class DirectBindingCommandHandlerLocator implements CommandHandlerLocator
 {
@@ -25,9 +27,22 @@ class DirectBindingCommandHandlerLocator implements CommandHandlerLocator
      * @param string   $command_name
      * @param callable $handler
      */
-    public function registerHandler($command_name, callable $handler)
+    public function registerHandler(string $command_name, callable $handler): void
     {
         $this->handlers[$command_name] = $handler;
+    }
+
+    /**
+     * @param CommandSubscriber $subscriber
+     */
+    public function registerSubscriber(CommandSubscriber $subscriber): void
+    {
+        foreach ($subscriber::getSubscribedCommands() as $command_name => $method) {
+            $handler = [$subscriber, $method];
+            if (is_callable($handler)) {
+                $this->registerHandler($command_name, $handler);
+            }
+        }
     }
 
     /**
@@ -35,10 +50,8 @@ class DirectBindingCommandHandlerLocator implements CommandHandlerLocator
      *
      * @return callable|null
      */
-    public function findHandler(Command $command)
+    public function findHandler(Command $command): ?callable
     {
-        $command_name = get_class($command);
-
-        return isset($this->handlers[$command_name]) ? $this->handlers[$command_name] : null;
+        return $this->handlers[get_class($command)] ?? null;
     }
 }

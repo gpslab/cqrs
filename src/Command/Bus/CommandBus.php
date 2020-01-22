@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -17,5 +18,5 @@ interface CommandBus
     /**
      * @param Command $command
      */
-    public function handle(Command $command);
+    public function handle(Command $command): void;
 }

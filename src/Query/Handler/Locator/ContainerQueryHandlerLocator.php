@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -10,6 +11,7 @@
 
 namespace GpsLab\Component\Query\Handler\Locator;
 
+use GpsLab\Component\Query\Handler\QuerySubscriber;
 use GpsLab\Component\Query\Query;
 use Psr\Container\ContainerInterface;
 
@@ -21,7 +23,7 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
     private $container;
 
     /**
-     * @var array
+     * @var array[]
      */
     private $query_handler_ids = [];
 
@@ -38,7 +40,7 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
      *
      * @return callable|null
      */
-    public function findHandler(Query $query)
+    public function findHandler(Query $query): ?callable
     {
         return $this->lazyLoad(get_class($query));
     }
@@ -48,20 +50,34 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
      * @param string $service
      * @param string $method
      */
-    public function registerService($query_name, $service, $method = '__invoke')
+    public function registerService(string $query_name, string $service, string $method = '__invoke'): void
     {
         $this->query_handler_ids[$query_name] = [$service, $method];
     }
 
     /**
-     * @param $query_name
-     *
-     * @return callable
+     * @param string $service_name
+     * @param string $class_name
      */
-    private function lazyLoad($query_name)
+    public function registerSubscriberService(string $service_name, string $class_name): void
+    {
+        $get_subscribed_queries = [$class_name, 'getSubscribedQueries'];
+        if (is_callable($get_subscribed_queries) && is_a($class_name, QuerySubscriber::class, true)) {
+            foreach ($get_subscribed_queries() as $query_name => $method) {
+                $this->registerService($query_name, $service_name, $method);
+            }
+        }
+    }
+
+    /**
+     * @param string $query_name
+     *
+     * @return callable|null
+     */
+    private function lazyLoad(string $query_name): ?callable
     {
         if (isset($this->query_handler_ids[$query_name])) {
-            list($service, $method) = $this->query_handler_ids[$query_name];
+            [$service, $method] = $this->query_handler_ids[$query_name];
 
             return $this->resolve($this->container->get($service), $method);
         }
@@ -75,14 +91,16 @@ class ContainerQueryHandlerLocator implements QueryHandlerLocator
      *
      * @return callable|null
      */
-    private function resolve($service, $method)
+    private function resolve($service, string $method): ?callable
     {
         if (is_callable($service)) {
             return $service;
         }
 
-        if (is_callable([$service, $method])) {
-            return [$service, $method];
+        $handler = [$service, $method];
+
+        if (is_callable($handler)) {
+            return $handler;
         }
 
         return null;

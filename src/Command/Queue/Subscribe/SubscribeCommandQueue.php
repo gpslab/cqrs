@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -22,7 +23,7 @@ interface SubscribeCommandQueue extends CommandQueue
      *
      * @param callable $handler
      */
-    public function subscribe(callable $handler);
+    public function subscribe(callable $handler): void;
 
     /**
      * Unsubscribe on command queue.
@@ -31,5 +32,5 @@ interface SubscribeCommandQueue extends CommandQueue
      *
      * @return bool
      */
-    public function unsubscribe(callable $handler);
+    public function unsubscribe(callable $handler): bool;
 }

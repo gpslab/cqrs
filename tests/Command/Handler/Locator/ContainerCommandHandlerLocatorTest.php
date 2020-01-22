@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -10,22 +11,25 @@
 
 namespace GpsLab\Component\Tests\Command\Handler\Locator;
 
-use GpsLab\Component\Command\Handler\Locator\ContainerCommandHandlerLocator;
 use GpsLab\Component\Command\Command;
+use GpsLab\Component\Command\Handler\Locator\ContainerCommandHandlerLocator;
 use GpsLab\Component\Tests\Fixture\Command\CreateContact;
+use GpsLab\Component\Tests\Fixture\Command\Handler\ContestCommandSubscriber;
 use GpsLab\Component\Tests\Fixture\Command\Handler\CreateContactHandler;
-use Psr\Container\ContainerInterface;
+use GpsLab\Component\Tests\Fixture\Command\RenameContactCommand;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 class ContainerCommandHandlerLocatorTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ContainerInterface
+     * @var MockObject|ContainerInterface
      */
     private $container;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Command
+     * @var MockObject|Command
      */
     private $command;
 
@@ -39,18 +43,17 @@ class ContainerCommandHandlerLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->command = $this->getMock(Command::class);
-        $this->handler = function (Command $command) {
-            $this->assertEquals($command, $this->command);
+        $this->command = $this->createMock(Command::class);
+        $this->handler = function (Command $command): void {
+            $this->assertSame($command, $this->command);
         };
-        $this->container = $this->getMock(ContainerInterface::class);
-
+        $this->container = $this->createMock(ContainerInterface::class);
         $this->locator = new ContainerCommandHandlerLocator($this->container);
     }
 
-    public function testFindHandler()
+    public function testFindHandler(): void
     {
         $service = 'foo';
 
@@ -58,20 +61,21 @@ class ContainerCommandHandlerLocatorTest extends TestCase
             ->expects($this->exactly(2))
             ->method('get')
             ->with($service)
-            ->will($this->returnValue($this->handler))
+            ->willReturn($this->handler)
         ;
 
         $this->locator->registerService(get_class($this->command), $service);
 
         $handler = $this->locator->findHandler($this->command);
-        $this->assertEquals($this->handler, $handler);
+        $this->assertSame($this->handler, $handler);
 
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($this->command);
-        $this->assertEquals($this->handler, $handler);
+        $this->assertIsCallable($handler);
+        $this->assertSame($this->handler, $handler);
     }
 
-    public function testFindHandlerServiceInvoke()
+    public function testFindHandlerServiceInvoke(): void
     {
         $service = 'foo';
         $command = new CreateContact();
@@ -82,32 +86,33 @@ class ContainerCommandHandlerLocatorTest extends TestCase
             ->expects($this->exactly(2))
             ->method('get')
             ->with($service)
-            ->will($this->returnValue($handler_obj))
+            ->willReturn($handler_obj)
         ;
 
         $this->locator->registerService(CreateContact::class, $service, $method);
 
         $handler = $this->locator->findHandler($command);
-        $this->assertEquals([$handler_obj, $method], $handler);
+        $this->assertSame([$handler_obj, $method], $handler);
 
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($command);
-        $this->assertEquals([$handler_obj, $method], $handler);
+        $this->assertIsCallable($handler);
+        $this->assertSame([$handler_obj, $method], $handler);
 
         // test exec handler
-        call_user_func($handler, $command);
-        $this->assertEquals($command, $handler_obj->command());
+        $handler($command);
+        $this->assertSame($command, $handler_obj->command());
     }
 
-    public function testNoCommandHandler()
+    public function testNoCommandHandler(): void
     {
         $service = 'foo';
 
         $this->container
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('get')
             ->with($service)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $this->locator->registerService(get_class($this->command), $service);
@@ -116,26 +121,54 @@ class ContainerCommandHandlerLocatorTest extends TestCase
         $this->assertNull($handler);
     }
 
-    public function testNoAnyCommandHandler()
+    public function testNoAnyCommandHandler(): void
     {
         $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
     }
 
-    public function testHandlerIsNotACommandHandler()
+    public function testHandlerIsNotACommandHandler(): void
     {
         $service = 'foo';
 
         $this->container
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('get')
             ->with($service)
-            ->will($this->returnValue(new \stdClass()))
+            ->willReturn(new \stdClass())
         ;
 
         $this->locator->registerService(get_class($this->command), $service);
 
         $handler = $this->locator->findHandler($this->command);
         $this->assertNull($handler);
+    }
+
+    public function testRegisterSubscriber(): void
+    {
+        $service = 'foo';
+        $subscriber = new ContestCommandSubscriber();
+
+        $this->container
+            ->expects($this->exactly(3))
+            ->method('get')
+            ->with($service)
+            ->willReturn($subscriber)
+        ;
+
+        $this->locator->registerSubscriberService($service, get_class($subscriber));
+
+        $handler = $this->locator->findHandler(new CreateContact());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'handleCreate'], $handler);
+
+        // double call ContainerInterface::get()
+        $handler = $this->locator->findHandler(new CreateContact());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'handleCreate'], $handler);
+
+        $handler = $this->locator->findHandler(new RenameContactCommand());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'handleRename'], $handler);
     }
 }

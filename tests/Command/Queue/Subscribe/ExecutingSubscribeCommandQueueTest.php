@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -12,12 +13,13 @@ namespace GpsLab\Component\Tests\Command\Queue\Subscribe;
 
 use GpsLab\Component\Command\Command;
 use GpsLab\Component\Command\Queue\Subscribe\ExecutingSubscribeCommandQueue;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ExecutingSubscribeCommandQueueTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Command
+     * @var MockObject|Command
      */
     private $command;
 
@@ -26,18 +28,18 @@ class ExecutingSubscribeCommandQueueTest extends TestCase
      */
     private $queue;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->command = $this->getMock(Command::class);
+        $this->command = $this->createMock(Command::class);
         $this->queue = new ExecutingSubscribeCommandQueue();
     }
 
-    public function testPublish()
+    public function testPublish(): void
     {
         $subscriber_called = false;
-        $handler = function ($command) use (&$subscriber_called) {
+        $handler = function ($command) use (&$subscriber_called): void {
             $this->assertInstanceOf(Command::class, $command);
-            $this->assertEquals($this->command, $command);
+            $this->assertSame($this->command, $command);
             $subscriber_called = true;
         };
 

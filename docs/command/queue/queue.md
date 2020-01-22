@@ -7,7 +7,7 @@ this you can use the interface of the queue.
 ```php
 interface CommandQueue
 {
-    public function publish(Command $command);
+    public function publish(Command $command): void;
 }
 ```
 

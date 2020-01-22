@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -13,19 +14,22 @@ namespace GpsLab\Component\Tests\Query\Handler\Locator;
 use GpsLab\Component\Query\Handler\Locator\ContainerQueryHandlerLocator;
 use GpsLab\Component\Query\Query;
 use GpsLab\Component\Tests\Fixture\Query\ContactByIdentity;
+use GpsLab\Component\Tests\Fixture\Query\ContactByNameQuery;
 use GpsLab\Component\Tests\Fixture\Query\Handler\ContactByIdentityHandler;
-use Psr\Container\ContainerInterface;
+use GpsLab\Component\Tests\Fixture\Query\Handler\ContestQuerySubscriber;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 class ContainerQueryHandlerLocatorTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ContainerInterface
+     * @var MockObject|ContainerInterface
      */
     private $container;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Query
+     * @var MockObject|Query
      */
     private $query;
 
@@ -39,18 +43,17 @@ class ContainerQueryHandlerLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->query = $this->getMock(Query::class);
-        $this->handler = function (Query $query) {
-            $this->assertEquals($query, $this->query);
+        $this->query = $this->createMock(Query::class);
+        $this->handler = function (Query $query): void {
+            $this->assertSame($query, $this->query);
         };
-        $this->container = $this->getMock(ContainerInterface::class);
-
+        $this->container = $this->createMock(ContainerInterface::class);
         $this->locator = new ContainerQueryHandlerLocator($this->container);
     }
 
-    public function testFindHandler()
+    public function testFindHandler(): void
     {
         $service = 'foo';
 
@@ -58,20 +61,20 @@ class ContainerQueryHandlerLocatorTest extends TestCase
             ->expects($this->exactly(2))
             ->method('get')
             ->with($service)
-            ->will($this->returnValue($this->handler))
+            ->willReturn($this->handler)
         ;
 
         $this->locator->registerService(get_class($this->query), $service);
 
         $handler = $this->locator->findHandler($this->query);
-        $this->assertEquals($this->handler, $handler);
+        $this->assertSame($this->handler, $handler);
 
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($this->query);
-        $this->assertEquals($this->handler, $handler);
+        $this->assertSame($this->handler, $handler);
     }
 
-    public function testFindHandlerServiceInvoke()
+    public function testFindHandlerServiceInvoke(): void
     {
         $service = 'foo';
         $query = new ContactByIdentity();
@@ -82,32 +85,32 @@ class ContainerQueryHandlerLocatorTest extends TestCase
             ->expects($this->exactly(2))
             ->method('get')
             ->with($service)
-            ->will($this->returnValue($handler_obj))
+            ->willReturn($handler_obj)
         ;
 
         $this->locator->registerService(ContactByIdentity::class, $service, $method);
 
         $handler = $this->locator->findHandler($query);
-        $this->assertEquals([$handler_obj, $method], $handler);
+        $this->assertSame([$handler_obj, $method], $handler);
 
         // double call ContainerInterface::get()
         $handler = $this->locator->findHandler($query);
-        $this->assertEquals([$handler_obj, $method], $handler);
+        $this->assertSame([$handler_obj, $method], $handler);
 
         // test exec handler
-        call_user_func($handler, $query);
-        $this->assertEquals($query, $handler_obj->query());
+        $handler($query);
+        $this->assertSame($query, $handler_obj->query());
     }
 
-    public function testNoQueryHandler()
+    public function testNoQueryHandler(): void
     {
         $service = 'foo';
 
         $this->container
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('get')
             ->with($service)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $this->locator->registerService(get_class($this->query), $service);
@@ -116,26 +119,54 @@ class ContainerQueryHandlerLocatorTest extends TestCase
         $this->assertNull($handler);
     }
 
-    public function testNoAnyCommandHandler()
+    public function testNoAnyCommandHandler(): void
     {
         $handler = $this->locator->findHandler($this->query);
         $this->assertNull($handler);
     }
 
-    public function testHandlerIsNotAQueryHandler()
+    public function testHandlerIsNotAQueryHandler(): void
     {
         $service = 'foo';
 
         $this->container
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('get')
             ->with($service)
-            ->will($this->returnValue(new \stdClass()))
+            ->willReturn(new \stdClass())
         ;
 
         $this->locator->registerService(get_class($this->query), $service);
 
         $handler = $this->locator->findHandler($this->query);
         $this->assertNull($handler);
+    }
+
+    public function testRegisterSubscriber(): void
+    {
+        $service = 'foo';
+        $subscriber = new ContestQuerySubscriber();
+
+        $this->container
+            ->expects($this->exactly(3))
+            ->method('get')
+            ->with($service)
+            ->willReturn($subscriber)
+        ;
+
+        $this->locator->registerSubscriberService($service, get_class($subscriber));
+
+        $handler = $this->locator->findHandler(new ContactByIdentity());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'getByIdentity'], $handler);
+
+        // double call ContainerInterface::get()
+        $handler = $this->locator->findHandler(new ContactByIdentity());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'getByIdentity'], $handler);
+
+        $handler = $this->locator->findHandler(new ContactByNameQuery());
+        $this->assertIsCallable($handler);
+        $this->assertSame([$subscriber, 'getByNameQuery'], $handler);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -22,12 +23,12 @@ class MemoryPullCommandQueueTest extends TestCase
      */
     private $queue;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->queue = new MemoryPullCommandQueue();
     }
 
-    public function testQueue()
+    public function testQueue(): void
     {
         $queue = [
             new CreateContact(),
@@ -42,10 +43,10 @@ class MemoryPullCommandQueueTest extends TestCase
         $expected = array_reverse($queue);
         $i = count($expected);
         while ($command = $this->queue->pull()) {
-            $this->assertEquals($expected[--$i], $command);
+            $this->assertSame($expected[--$i], $command);
         }
 
-        $this->assertEquals(0, $i, 'Queue cleared');
+        $this->assertSame(0, $i, 'Queue cleared');
         $this->assertNull($command, 'No commands in queue');
     }
 }

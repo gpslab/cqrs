@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -12,14 +13,14 @@ namespace GpsLab\Component\Command\Exception;
 
 use GpsLab\Component\Command\Command;
 
-class HandlerNotFoundException extends \RuntimeException
+final class HandlerNotFoundException extends \RuntimeException
 {
     /**
      * @param Command $command
      *
      * @return self
      */
-    public static function notFound(Command $command)
+    public static function notFound(Command $command): self
     {
         $parts = explode('\\', get_class($command));
 

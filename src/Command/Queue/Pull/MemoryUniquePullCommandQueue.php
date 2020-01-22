@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -26,7 +27,7 @@ class MemoryUniquePullCommandQueue implements PullCommandQueue
      *
      * @return bool
      */
-    public function publish(Command $command)
+    public function publish(Command $command): bool
     {
         $index = array_search($command, $this->commands);
 
@@ -45,7 +46,7 @@ class MemoryUniquePullCommandQueue implements PullCommandQueue
      *
      * @return Command|null
      */
-    public function pull()
+    public function pull(): ?Command
     {
         return array_shift($this->commands);
     }

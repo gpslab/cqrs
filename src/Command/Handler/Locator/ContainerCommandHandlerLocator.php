@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * GpsLab component.
@@ -11,6 +12,7 @@
 namespace GpsLab\Component\Command\Handler\Locator;
 
 use GpsLab\Component\Command\Command;
+use GpsLab\Component\Command\Handler\CommandSubscriber;
 use Psr\Container\ContainerInterface;
 
 class ContainerCommandHandlerLocator implements CommandHandlerLocator
@@ -21,7 +23,7 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
     private $container;
 
     /**
-     * @var array
+     * @var array[]
      */
     private $command_handler_ids = [];
 
@@ -38,7 +40,7 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
      *
      * @return callable|null
      */
-    public function findHandler(Command $command)
+    public function findHandler(Command $command): ?callable
     {
         return $this->lazyLoad(get_class($command));
     }
@@ -48,9 +50,23 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
      * @param string $service
      * @param string $method
      */
-    public function registerService($command_name, $service, $method = '__invoke')
+    public function registerService(string $command_name, string $service, string $method = '__invoke'): void
     {
         $this->command_handler_ids[$command_name] = [$service, $method];
+    }
+
+    /**
+     * @param string $service_name
+     * @param string $class_name
+     */
+    public function registerSubscriberService(string $service_name, string $class_name): void
+    {
+        $get_subscribed_commands = [$class_name, 'getSubscribedCommands'];
+        if (is_callable($get_subscribed_commands) && is_a($class_name, CommandSubscriber::class, true)) {
+            foreach ($get_subscribed_commands() as $command_name => $method) {
+                $this->registerService($command_name, $service_name, $method);
+            }
+        }
     }
 
     /**
@@ -58,10 +74,10 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
      *
      * @return callable|null
      */
-    private function lazyLoad($command_name)
+    private function lazyLoad(string $command_name): ?callable
     {
         if (isset($this->command_handler_ids[$command_name])) {
-            list($service, $method) = $this->command_handler_ids[$command_name];
+            [$service, $method] = $this->command_handler_ids[$command_name];
 
             return $this->resolve($this->container->get($service), $method);
         }
@@ -75,14 +91,16 @@ class ContainerCommandHandlerLocator implements CommandHandlerLocator
      *
      * @return callable|null
      */
-    private function resolve($service, $method)
+    private function resolve($service, string $method): ?callable
     {
         if (is_callable($service)) {
             return $service;
         }
 
-        if (is_callable([$service, $method])) {
-            return [$service, $method];
+        $handler = [$service, $method];
+
+        if (is_callable($handler)) {
+            return $handler;
         }
 
         return null;
